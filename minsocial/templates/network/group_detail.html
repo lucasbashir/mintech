@@ -1,0 +1,65 @@
+{% extends "network/layout.html" %}
+{% block body %}
+
+<div class="container">
+    {% if user.is_authenticated %}
+    <p style="background-color: black; color: white;">If you registered before this update, kindly set your first and last name</p>
+      <!-- Check if the user is authenticated -->
+      <div class="input-group mb-3" id="create-post-field-container">
+        <input style="margin-top: 20px; height: 50px; border-radius: 1rem;" type="text" id="create-post-field" class="form-control" placeholder="Share a thought" onclick="openModal()">
+      </div>
+  
+      <!-- Modal -->
+      <div id="postModal" class="modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <form action="{% url 'newPost' %}" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="form-group">
+                <textarea style="height: 300px;" id="new-post" class="form-control" name="post_content" placeholder="Share a thought..." required></textarea>
+              </div>
+              <div class="form-group">
+                <input type="file" name="post_image" class="form-control-file" accept="image/*" multiple>
+              </div>
+              <div class="text-right">
+                <button id="post-btn" type="submit" class="btn btn-primary">Post</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+<!-- Display group posts -->
+{% for post in page_group_posts %}
+  <div class="post">
+    <!-- Post content -->
+    <div class="post-content">
+      <p>{{ post.postContent }}</p>
+      {% if post.post_image %}
+        <img src="{{ post.post_image.url }}" alt="Post Image">
+      {% endif %}
+    </div>
+
+    <!-- Reactions buttons -->
+    <!-- Add your buttons here for like, love, haha, sad, shock, and no reactions -->
+
+    <!-- Comments section -->
+    <div class="comments">
+      {% for comment in comments %}
+        {% if comment.post == post %}
+          <p>{{ comment.author.username }}: {{ comment.message }}</p>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <!-- Comment form -->
+    <form method="post" action="{% url 'add_group_comment' post.id %}">
+      {% csrf_token %}
+      <textarea name="newComment" placeholder="Write a comment..."></textarea>
+      <button type="submit">Comment</button>
+    </form>
+  </div>
+{% endfor %}
+
+{% endblock %}

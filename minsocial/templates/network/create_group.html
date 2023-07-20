@@ -1,0 +1,8 @@
+{% extends "network/layout.html" %}
+{% block body %}
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create Group</button>
+  </form>
+{% endblock %}

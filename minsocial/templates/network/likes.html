@@ -25,8 +25,8 @@
     {% endif %}
 
     {% if user.is_authenticated %}
-      {% if request.user in posts.postMaashaa.all %}
-        <form action="{% url 'remove_maashaa' post_id=posts.id %}" method="post">
+      {% if request.user in posts.postLove.all %}
+        <form action="{% url 'remove_love' post_id=posts.id %}" method="post">
           {% csrf_token %}
           <input type="hidden" name="unlikePost" value="{{ posts.id }}" />
           <button>
@@ -34,7 +34,7 @@
           </button>
         </form>
       {% else %}
-        <form action="{% url 'add_maashaa' post_id=posts.id %}" method="post">
+        <form action="{% url 'add_love' post_id=posts.id %}" method="post">
           {% csrf_token %}
           <input type="hidden" name="likePost" value="{{ posts.id }}" />
           <button style="background: none; border: none;">
@@ -43,6 +43,26 @@
         </form>
       {% endif %}
     {% endif %}
+
+    {% if user.is_authenticated %}
+    {% if request.user in posts.postSad.all %}
+      <form action="{% url 'remove_sad' post_id=posts.id %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="unlike_sad" value="{{ posts.id }}" />
+        <button>
+          <i class="fa fa-thumbs-down"></i> Unlike
+        </button>
+      </form>
+    {% else %}
+      <form action="{% url 'add_sad' post_id=posts.id %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="likePost" value="{{ posts.id }}" />
+        <button style="background: none; border: none;">
+          <img src="/media/post_image/allah.gif" width="50" height="50" alt="Allah akbar"/>
+        </button>
+      </form>
+    {% endif %}
+  {% endif %}
 
     {% if user.is_authenticated %}
       {% if request.user in posts.postHaha.all %}
@@ -65,38 +85,18 @@
     {% endif %}
 
     {% if user.is_authenticated %}
-      {% if request.user in posts.postAllah.all %}
-        <form action="{% url 'remove_akbar' post_id=posts.id %}" method="post">
+      {% if request.user in posts.postShock.all %}
+        <form action="{% url 'remove_shock' post_id=posts.id %}" method="post">
           {% csrf_token %}
-          <input type="hidden" name="unlike_akbar" value="{{ posts.id }}" />
+          <input type="hidden" name="unlike_shock" value="{{ posts.id }}" />
           <button>
             <i class="fa fa-thumbs-down"></i> Unlike
           </button>
         </form>
       {% else %}
-        <form action="{% url 'add_akbar' post_id=posts.id %}" method="post">
+        <form action="{% url 'add_shock' post_id=posts.id %}" method="post">
           {% csrf_token %}
-          <input type="hidden" name="likePost" value="{{ posts.id }}" />
-          <button style="background: none; border: none;">
-            <img src="/media/post_image/allah.gif" width="50" height="50" alt="Allah akbar"/>
-          </button>
-        </form>
-      {% endif %}
-    {% endif %}
-
-    {% if user.is_authenticated %}
-      {% if request.user in posts.postSubhanallah.all %}
-        <form action="{% url 'remove_subhanallah' post_id=posts.id %}" method="post">
-          {% csrf_token %}
-          <input type="hidden" name="unlike_subhanallah" value="{{ posts.id }}" />
-          <button>
-            <i class="fa fa-thumbs-down"></i> Unlike
-          </button>
-        </form>
-      {% else %}
-        <form action="{% url 'add_subhanallah' post_id=posts.id %}" method="post">
-          {% csrf_token %}
-          <input type="hidden" name="subhanallahPost" value="{{ posts.id }}" />
+          <input type="hidden" name="shockPost" value="{{ posts.id }}" />
           <button style="background: none; border: none;">
             <img src="/media/post_image/shock.gif" class="rounded-circle" width="50" height="50" alt="Subhanallah"/>
           </button>
@@ -106,31 +106,31 @@
 
 
   </div>
-
   <h3 class="like-btn" data-post-id="{{ posts.id }}"><i class="fa fa-thumbs-up"></i></h3>
 
-  {% with total_count=posts.postMaashaa.count|add:posts.postHaha.count|add:posts.postAllah.count|add:posts.postSubhanallah.count|add:posts.post_like.count %}
-  {% if posts.post_like.count > 0 and posts.postHaha.count < 1 and posts.postAllah.count < 1 and posts.postMaashaa.count < 1 and posts.postSubhanallah.count < 1 %}
-      <h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍 {{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
-  {% elif posts.post_like.count < 1 and posts.postHaha.count < 1 and posts.postAllah.count < 1 and posts.postMaashaa.count > 0 and posts.postSubhanallah.count < 1 %}
-    <h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">❤️ {{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
-  {% elif posts.post_like.count < 1 and posts.postHaha.count < 1 and posts.postAllah.count > 0 and posts.postMaashaa.count < 1 and posts.postSubhanallah.count < 1 %}
-    <h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">☝️ {{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
-    {% elif posts.post_like.count < 1 and posts.postHaha.count > 0 and posts.postAllah.count < 1 and posts.postMaashaa.count < 1 and posts.postSubhanallah.count < 1 %}
-    <h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">😂{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
-    {% elif posts.post_like.count < 1 and posts.postHaha.count < 1 and posts.postAllah.count < 1 and posts.postMaashaa.count < 1 and posts.postSubhanallah.count > 0 %}
-    <h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">😲{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
-    {% elif posts.post_like.count > 0 and posts.postHaha.count < 1 and posts.postAllah.count > 0 and posts.postMaashaa.count < 1 and posts.postSubhanallah.count < 1 %}
-    <h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍☝️{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
-    {% elif posts.post_like.count > 0 and posts.postHaha.count > 0 and posts.postAllah.count < 1 and posts.postMaashaa.count < 1 and posts.postSubhanallah.count < 1 %}
-    <h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍😂{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
-     {% elif posts.postMaashaa.count > 0 and posts.postHaha.count > 0 and posts.postSubhanallah.count > 0 and posts.post_like.count > 0 and posts.postAllah.count < 1%}
-    <h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍❤️😂😮{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
-    {% elif posts.postMaashaa.count > 0 and posts.postHaha.count < 1 and posts.postSubhanallah.count < 1 and posts.post_like.count > 0 and posts.postAllah.count < 1%}
-    <h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍❤️{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
-  {% elif posts.postMaashaa.count > 0 and posts.postHaha.count > 0 and posts.postSubhanallah.count > 0 and posts.post_like.count > 0 and posts.postAllah.count > 0%}
-    <h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍❤️😂😮☝️{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
-  {% else %}
+{% with total_count=posts.postLove.count|add:posts.postHaha.count|add:posts.postSad.count|add:posts.postShock.count|add:posts.post_like.count %}
+{% if posts.post_like.count > 0 and posts.postHaha.count < 1 and posts.postSad.count < 1 and posts.postLove.count < 1 and posts.postShock.count < 1 %}
+<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍 {{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
+{% elif posts.post_like.count < 1 and posts.postHaha.count < 1 and posts.postSad.count < 1 and posts.postLove.count > 0 and posts.postShock.count < 1 %}
+<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">❤️ {{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
+{% elif posts.post_like.count < 1 and posts.postHaha.count < 1 and posts.postSad.count > 0 and posts.postLove.count < 1 and posts.postShock.count < 1 %}
+<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">😢 {{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
+{% elif posts.post_like.count < 1 and posts.postHaha.count > 0 and posts.postSad.count < 1 and posts.postLove.count < 1 and posts.postShock.count < 1 %}
+<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">😂{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
+{% elif posts.post_like.count < 1 and posts.postHaha.count < 1 and posts.postSad.count < 1 and posts.postLove.count < 1 and posts.postShock.count > 0 %}
+<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">😲{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
+{% elif posts.post_like.count > 0 and posts.postHaha.count < 1 and posts.postSad.count > 0 and posts.postLove.count < 1 and posts.postShock.count < 1 %}
+<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍😢{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
+{% elif posts.post_like.count > 0 and posts.postHaha.count > 0 and posts.postSad.count < 1 and posts.postLove.count < 1 and posts.postShock.count < 1 %}
+<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍😂{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
+{% elif posts.postLove.count > 0 and posts.postHaha.count > 0 and posts.postShock.count > 0 and posts.post_like.count > 0 and posts.postSad.count < 1%}
+<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍❤️😂😮{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
+{% elif posts.postLove.count > 0 and posts.postHaha.count < 1 and posts.postShock.count < 1 and posts.post_like.count > 0 and posts.postSad.count < 1%}
+<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍❤️{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
+{% elif posts.postLove.count > 0 and posts.postHaha.count > 0 and posts.postShock.count > 0 and posts.post_like.count > 0 and posts.postSad.count > 0%}
+<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍❤️😂😮😢{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
+{% else %}
+
    <h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
   {% endif %}
 {% endwith %}

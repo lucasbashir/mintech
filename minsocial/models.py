@@ -68,32 +68,65 @@ class Shock(models.Model):
 
 # Define the Group model and GroupPost model
 class Group(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField()
+    name = models.CharField(max_length=100)  # Default value for 'name'
+    description = models.TextField(blank=True, null=True,)  # Default value for 'description'
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     members = models.ManyToManyField(User, related_name='group_members')
 
     def __str__(self):
         return f"{self.name}"
 
-class GroupPost(Post):
+class GroupPost(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="group_posts")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="group_post_user")
+    postContent = models.TextField(blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    post_image = models.ImageField(upload_to='post_image/', null=True, blank=True)
 
-class GroupComment(Comment):
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="group_comments")
+    def __str__(self):
+        return f"{self.postContent}"
+    
+class GroupComment(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="group_userComment")
+    post = models.ForeignKey(GroupPost, on_delete=models.CASCADE, blank=True, null=True, related_name="group_postComment")
+    message = models.CharField(max_length=10000)
 
-# Group post reactions
-class GroupLike(Like):
-    group_post = models.ForeignKey(GroupPost, on_delete=models.CASCADE, related_name="group_post_likes")
+    def __str__(self):
+        return f"{str(self.author)} commented on {self.post}"
+    
 
-class GroupSad(Sad):
-    group_post = models.ForeignKey(GroupPost, on_delete=models.CASCADE, related_name="group_post_sads")
 
-class GroupLove(Love):
-    group_post = models.ForeignKey(GroupPost, on_delete=models.CASCADE, related_name="group_post_loves")
+class GroupLike(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="group_user_like")
+    post = models.ForeignKey(GroupPost, on_delete=models.CASCADE, related_name="group_post_like")
 
-class GroupHaha(Haha):
-    group_post = models.ForeignKey(GroupPost, on_delete=models.CASCADE, related_name="group_post_hahas")
+    def __str__(self):
+        return f"{self.user} likes {self.post}"
 
-class GroupShock(Shock):
-    group_post = models.ForeignKey(GroupPost, on_delete=models.CASCADE, related_name="group_post_shocks")
+class GroupSad(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="group_userSad")
+    post = models.ForeignKey(GroupPost, on_delete=models.CASCADE, related_name="group_postSad")
+
+    def __str__(self):
+        return f"{self.user} reacts Sad on {self.post}"
+
+class GroupLove(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="group_userLove")
+    post = models.ForeignKey(GroupPost, on_delete=models.CASCADE, related_name="group_postLove")
+
+    def __str__(self):
+        return f"{self.user} reacts Love on {self.post}"
+
+class GroupHaha(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="group_userHaha")
+    post = models.ForeignKey(GroupPost, on_delete=models.CASCADE, related_name="group_postHaha")
+
+    def __str__(self):
+        return f"{self.user} reacts Haha on {self.post}"
+
+class GroupShock(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="group_userShock")
+    post = models.ForeignKey(GroupPost, on_delete=models.CASCADE, related_name="group_postShock")
+
+    def __str__(self):
+        return f"{self.user} reacts Shock on {self.post}"

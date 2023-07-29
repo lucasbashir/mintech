@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView
@@ -39,6 +40,7 @@ def index(request):
     page_number = request.GET.get('page')
     page_post = paginator.get_page(page_number)
     user = request.user
+    groups = Group.objects.all()
     profile_pics = user.profile_pics
     # Get comments for the posts displayed on the page
     comments = Comment.objects.filter(post__in=page_post)
@@ -47,11 +49,11 @@ def index(request):
 
         "post": post,
         "page_post": page_post,
-
+        "groups":groups,
         "profile_pics": profile_pics,
         "comments": comments,
+        "user": user,
     })
-
 def create_group(request):
     if request.method == 'POST':
         form = GroupForm(request.POST)
@@ -59,22 +61,51 @@ def create_group(request):
             group = form.save(commit=False)
             group.creator = request.user
             group.save()
+
+            # Automatically add the creator to the members field
+            group.members.add(request.user)
+
             return redirect('group_detail', group_id=group.pk)
     else:
         form = GroupForm()
     
     return render(request, 'network/create_group.html', {'form': form})
 
+
 def join_group(request, group_id):
     group = get_object_or_404(Group, pk=group_id)
     user = request.user
     group.members.add(request.user)
-    message = "Welcome"
-    return render(request, 'network/group_detail.html', {
-        "message": message,
-    })
+    
+    # Add a welcome message to the user's session
+    welcome_message = "Welcome to the group!"
+    messages.success(request, welcome_message)
+    
+    # Redirect to the group detail page
+    return redirect('group_detail', group_id=group.pk)
+
+@login_required
+def group_newPost(request, group_id):
+    if request.method == "POST":
+        group_id = request.POST.get("group_id")  # Assuming the group_id is passed as a form field in the request
+        group = get_object_or_404(Group, pk=group_id)
+        post = request.POST["post_content"]
+        post_image = request.FILES.get("post_image")
+        user = User.objects.get(pk=request.user.id)
+
+        # Assign the group to the new GroupPost instance
+        postContent = GroupPost(group=group, postContent=post, user=user, post_image=post_image)
+        postContent.save()
+
+        return render(request, "network/group_detail.html", {
+            "postContent": postContent,
+            "test": "test"
+        })
+
+    return render(request, "network/group_newPost.html")
 
 
+    
 @login_required
 def group_detail(request, group_id):
     group = get_object_or_404(Group, pk=group_id)
@@ -82,9 +113,13 @@ def group_detail(request, group_id):
     paginator = Paginator(group_posts, 10)
     page_number = request.GET.get('page')
     page_group_posts = paginator.get_page(page_number)
-    comments = GroupComment.objects.filter(post__in=group_posts)
+
+    # Filter GroupComment based on related Post objects (not GroupPost)
+    post_ids = group_posts.values_list('id', flat=True)
+    comments = GroupComment.objects.filter(post__in=post_ids)
     user = request.user
     profile_pics = user.profile_pics
+    is_group_member = group.members.filter(id=user.id).exists()
 
     return render(request, "network/group_detail.html", {
         "group": group,
@@ -92,7 +127,44 @@ def group_detail(request, group_id):
         "page_group_posts": page_group_posts,
         "profile_pics": profile_pics,
         "comments": comments,
+        "group_id": group_id,
+        "is_group_member": is_group_member,
     })
+
+
+
+@login_required
+def group_newPost(request, group_id):
+    if not request.user.is_authenticated:
+        error_message = "You need to log in to access this page."
+        return render(request, "network/register.html")
+    
+    if request.method == "POST":
+        group = Group.objects.get(pk=group_id)  # Get the Group object based on group_id
+        post = request.POST["post_content"]
+        post_image = request.FILES.get("post_image")
+        user = User.objects.get(pk=request.user.id)
+        postContent = GroupPost(group=group, user=user, postContent=post, post_image=post_image)
+        postContent.save()
+        return redirect('group_detail', group_id=group_id)  # Redirect to the group detail page
+        
+    return render(request, "network/group_newPost.html", {'group_id': group_id})
+
+
+@login_required
+def group_addComment(request, post_id):
+    if request.method == 'POST':
+        message = request.POST.get('newComment')
+        if not message.strip():
+            messages.error(request, "Comment cannot be empty.")
+        else:
+            post = GroupPost.objects.get(id=post_id)
+            author = request.user
+            comment = GroupComment.objects.create(author=author, post=post, message=message)
+            # Optionally, you can add a success message here.
+            messages.success(request, "Comment added successfully.")
+            
+    return redirect('group_detail', group_id=post.group.id)  # Redirect to the group detail page
 
 
 @login_required

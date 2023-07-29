@@ -36,15 +36,11 @@
         <p>{{ paragraph|urlize }}</p>
         {% endfor %}
         <div class="card-body">
-          {% if posts.user.profile_pics %}
-      <a href="{% url 'profile' user_id=posts.user.id %}">
-        <img src="{{ posts.user.profile_pics.url }}" class="rounded-circle" width="70" height="70">
-      </a>
-      {% else %}
-      <a href="{% url 'profile' user_id=posts.user.id %}">
-        <img src="/media/post_image/hand.gif" class="rounded-circle" width="70" height="70">
-      </a>
-      {% endif %}
+          {% if posts.post_image %}
+            <div class="image-container">
+              <img src="{{ posts.post_image.url }}" class="img-fluid desktop-image" alt="Post Image">
+            </div>
+          {% endif %}
         </div>
       </div>
 

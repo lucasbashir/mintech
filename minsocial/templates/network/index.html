@@ -5,6 +5,16 @@
 {% block body %}
 
 <div class="container">
+  <ul>
+    {% for group in groups %}
+        <li>
+          <a href="{% url 'group_detail' group_id=group.id %}">{{ group.name }}</a>
+          <a href="{% url 'group_detail' group_id=group.id %}" class="btn btn-primary">View Details</a>
+          <a href="{% url 'join_group' group_id=group.id %}">Join Group</a>
+        </li>
+    {% endfor %}
+  </ul>
+</div>
   {% if user.is_authenticated %}
   <p style="background-color: black; color: white;">If you registered before this update, kindly set your first and last name</p>
     <!-- Check if the user is authenticated -->

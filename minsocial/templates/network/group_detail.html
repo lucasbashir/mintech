@@ -1,6 +1,14 @@
 {% extends "network/layout.html" %}
 {% block body %}
 
+<ul>
+  {% for group in groups %}
+    <li>
+      <a href="{% url 'group_detail' group_id=group.id %}">{{ group.name }}</a>
+      <a href="{% url 'group_detail' group_id=group.id %}" class="btn btn-primary">View Details</a>
+    </li>
+  {% endfor %}
+</ul>
 <div class="container">
     {% if user.is_authenticated %}
     <p style="background-color: black; color: white;">If you registered before this update, kindly set your first and last name</p>
@@ -14,7 +22,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <form action="{% url 'newPost' %}" method="POST" enctype="multipart/form-data">
+            <form action="{% url 'group_newPost' group_id=group_id %}" method="POST" enctype="multipart/form-data">
               {% csrf_token %}
               <div class="form-group">
                 <textarea style="height: 300px;" id="new-post" class="form-control" name="post_content" placeholder="Share a thought..." required></textarea>
@@ -45,21 +53,22 @@
     <!-- Add your buttons here for like, love, haha, sad, shock, and no reactions -->
 
     <!-- Comments section -->
-    <div class="comments">
-      {% for comment in comments %}
-        {% if comment.post == post %}
-          <p>{{ comment.author.username }}: {{ comment.message }}</p>
-        {% endif %}
-      {% endfor %}
-    </div>
+ <!-- Comments section -->
+<div class="comments">
+  {% for comment in post.group_postComment.all %}
+    <p>{{ comment.author.username }}: {{ comment.message }}</p>
+  {% empty %}
+    <p>No comments yet.</p>
+  {% endfor %}
+</div>
 
-    <!-- Comment form -->
-    <form method="post" action="{% url 'add_group_comment' post.id %}">
-      {% csrf_token %}
-      <textarea name="newComment" placeholder="Write a comment..."></textarea>
-      <button type="submit">Comment</button>
-    </form>
-  </div>
+<!-- Comment form -->
+<form method="post" action="{% url 'group_addComment' post_id=post.id %}">
+  {% csrf_token %}
+  <textarea name="newComment" placeholder="Write a comment..."></textarea>
+  <button type="submit">Comment</button>
+</form>
+
 {% endfor %}
 
 {% endblock %}

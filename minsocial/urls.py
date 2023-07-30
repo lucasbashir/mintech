@@ -32,6 +32,7 @@ urlpatterns = [
     path("add_haha/<int:post_id>", views.add_haha, name="add_haha"),
     path("remove_sad/<int:post_id>", views.remove_sad, name="remove_sad"),
     path("add_sad/<int:post_id>", views.add_sad, name="add_sad"),
+    path("group_add_or_remove_reaction/<int:post_id>/<str:reaction_type>/", views.group_add_or_remove_reaction, name="group_add_or_remove_reaction"),
     path("login", views.login_view, name="network_login"),
     path("logout", views.logout_view, name="network_logout"),
     path("register", views.register, name="network_register"),

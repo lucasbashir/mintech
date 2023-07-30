@@ -158,13 +158,46 @@ def group_addComment(request, post_id):
         if not message.strip():
             messages.error(request, "Comment cannot be empty.")
         else:
-            post = GroupPost.objects.get(id=post_id)
+            post = get_object_or_404(GroupPost, id=post_id)
             author = request.user
             comment = GroupComment.objects.create(author=author, post=post, message=message)
-            # Optionally, you can add a success message here.
-            messages.success(request, "Comment added successfully.")
-            
-    return redirect('group_detail', group_id=post.group.id)  # Redirect to the group detail page
+            group_id = post.group.id  # Store the group ID
+            return redirect('group_detail', group_id=group_id)  # Redirect to the group detail page
+
+    # If the request method is not POST or the message is empty, redirect to the same page
+    return redirect('group_detail', group_id=post_id)
+
+
+
+@login_required
+def group_add_or_remove_reaction(request, post_id, reaction_type):
+    post = get_object_or_404(GroupPost, id=post_id)
+    user = request.user
+
+    if request.method == 'POST':
+        if reaction_type == 'love':
+            ReactionModel = GroupLove
+        elif reaction_type == 'haha':
+            ReactionModel = GroupHaha
+        elif reaction_type == 'like':
+            ReactionModel = GroupLike
+        elif reaction_type == 'shock':
+            ReactionModel = GroupShock
+        elif reaction_type == 'sad':
+            ReactionModel = GroupSad
+        else:
+            raise Http404("Invalid reaction type.")
+
+        try:
+            reaction = ReactionModel.objects.get(post=post, user=user)
+            reaction.delete()
+            messages.success(request, f'You removed {reaction_type} reaction on this post.')
+        except ReactionModel.DoesNotExist:
+            reaction = ReactionModel.objects.create(post=post, user=user)
+            messages.success(request, f'You added {reaction_type} reaction on this post.')
+
+    return HttpResponseRedirect(reverse('group_detail', kwargs={'group_id': post.group.id}))
+
 
 
 @login_required

@@ -1,4 +1,7 @@
 {% extends "network/layout.html" %}
+{% load custom_tags %}
+{% load my_filters %}
+{% load static %}
 {% block body %}
 
 <ul>
@@ -38,37 +41,70 @@
         </div>
       </div>
     {% endif %}
-<!-- Display group posts -->
-{% for post in page_group_posts %}
-  <div class="post">
-    <!-- Post content -->
-    <div class="post-content">
-      <p>{{ post.postContent }}</p>
-      {% if post.post_image %}
-        <img src="{{ post.post_image.url }}" alt="Post Image">
-      {% endif %}
+    <!-- Display group posts -->
+    {% for posts in page_group_posts %}
+    <div class="card-text" id="content_{{ posts.id }}">
+      {% for paragraph in posts.postContent|split_paragraphs %}
+      <p>{{ paragraph|urlize }}</p>
+      {% endfor %}
+      <div class="card-body">
+        {% if posts.post_image %}
+          <div class="image-container">
+            <img src="{{ posts.post_image.url }}" class="img-fluid desktop-image" alt="Post Image">
+          </div>
+        {% endif %}
+      </div>
     </div>
 
-    <!-- Reactions buttons -->
-    <!-- Add your buttons here for like, love, haha, sad, shock, and no reactions -->
+    <!-- Display the timestamp of the post -->
+    <p class="card-text"><small class="text-muted">{{ posts.timestamp }}</small></p>
 
-    <!-- Comments section -->
- <!-- Comments section -->
-<div class="comments">
-  {% for comment in post.group_postComment.all %}
-    <p>{{ comment.author.username }}: {{ comment.message }}</p>
-  {% empty %}
-    <p>No comments yet.</p>
-  {% endfor %}
-</div>
+  
+      <!-- Reactions buttons -->
+      <!-- Add your buttons here for like, love, haha, sad, shock, and no reactions -->
+    {% include "network/group_likes.html" %}
+      <!-- Comments section -->
+      <ul class="list-group">
+        {% for comment in posts.group_postComment.all %}
+          <li class="list-group-item">
+            {% if comment.author.profile_pics %}
+              <a href="{% url 'profile' user_id=comment.author.id %}">
+                <img src="{{ comment.author.profile_pics.url }}" class="rounded-circle" width="70" height="70">
+              </a>
+            {% else %}
+              <a href="{% url 'profile' user_id=comment.author.id %}">
+                <img src="/media/post_image/hand.gif" class="rounded-circle" width="70" height="70">
+              </a>
+            {% endif %}
+            <strong><a href="{% url 'profile' user_id=comment.author.id %}">@{{ comment.author.username }}</a> wrote:</strong>
+            <div class="card-text" id="content_{{ comment.id }}">
+              {% for paragraph in comment.message|split_paragraphs %}
+                <p>{{ paragraph|urlize }}</p>
+              {% endfor %}
+            </div>
+          </li>
+        {% empty %}
+          <li class="list-group-item">No comments yet.</li>
+        {% endfor %}
+      </ul>
 
-<!-- Comment form -->
-<form method="post" action="{% url 'group_addComment' post_id=post.id %}">
-  {% csrf_token %}
-  <textarea name="newComment" placeholder="Write a comment..."></textarea>
-  <button type="submit">Comment</button>
-</form>
-
-{% endfor %}
-
+      <br>
+      
+      <form action="{% url 'group_addComment' post_id=posts.id %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <span class="comment-field">
+            <textarea type="text" id="new-comment" name="newComment" class="form-control rounded-0 shadow-none" rows="3" placeholder="Write a comment..."></textarea>
+          </span>
+        </div>
+        <div class="form-group">
+          <span class="btn-comment">
+            <button type="submit" class="btn btn-primary btn-sm" style="background-color: #1877f2; border-color: #1877f2;" id="comment-btn">
+              <i class="fas fa-paper-plane"></i> Comment
+            </button>
+          </span>
+        </div>
+      </form>
+          
+{% endfor %} 
 {% endblock %}

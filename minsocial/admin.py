@@ -1,9 +1,15 @@
 from django.contrib import admin
-from .models import User, Post, Follow, Comment, Like, Sad, Love, Haha, Shock, Group, GroupPost, GroupComment, GroupLike, GroupSad, GroupLove, GroupHaha, GroupShock
-
+from .models import *
 # Register your models here
 
 admin.site.register(User)
+admin.site.register(Announcement),
+admin.site.register(LibraryDocument)
+admin.site.register(Video)
+admin.site.register(FavoriteDocument),
+admin.site.register(FavoriteVideo),
+admin.site.register(ForumPost),
+admin.site.register(ForumTopic)
 admin.site.register(Follow),
 admin.site.register(Post)
 admin.site.register(Comment)

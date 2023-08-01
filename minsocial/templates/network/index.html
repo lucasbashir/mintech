@@ -19,7 +19,16 @@
   <p style="background-color: black; color: white;">If you registered before this update, kindly set your first and last name</p>
     <!-- Check if the user is authenticated -->
     <div class="input-group mb-3" id="create-post-field-container">
-      <input style="margin-top: 20px; height: 50px; border-radius: 1rem;" type="text" id="create-post-field" class="form-control" placeholder="Share a thought" onclick="openModal()">
+      {% if user.profile_pics %}
+      <a href="{% url 'profile' user_id=user.id %}">
+        <img src="{{ user.profile_pics.url }}" class="rounded-circle" width="70" height="70"> <input style="margin-top: 20px; height: 50px; border-radius: 1rem;" type="text" id="create-post-field" placeholder="Share a thought" onclick="openModal()">
+      </a>
+      {% else %}
+      <a href="{% url 'profile' user_id=user.id %}">
+        <img src="/media/post_image/hand.gif" class="rounded-circle" width="70" height="70"> <input style="margin-top: 20px; height: 50px; border-radius: 1rem;" type="text" id="create-post-field" placeholder="Share a thought" onclick="openModal()">
+      </a>
+      {% endif %}
+      
     </div>
 
     <!-- Modal -->

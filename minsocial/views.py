@@ -25,7 +25,7 @@ from django.contrib.auth.views import (
     PasswordResetConfirmView,
     PasswordResetCompleteView,
 )
-from .forms import GroupForm
+from .forms import GroupForm, LibraryDocumentForm, VideoForm, RegistrationForm
 
 
 def index(request):
@@ -198,7 +198,121 @@ def group_add_or_remove_reaction(request, post_id, reaction_type):
 
     return HttpResponseRedirect(reverse('group_detail', kwargs={'group_id': post.group.id}))
 
+@login_required
+def upload_document(request):
+    if request.method == 'POST':
+        form = LibraryDocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            document = form.save(commit=False)
+            document.uploader = request.user
+            document.save()
+            return redirect('general_library')
+    else:
+        form = LibraryDocumentForm()
 
+    return render(request, 'network/general_library.html', {'doc_form': form})
+
+@login_required
+def upload_video(request):
+
+    if request.method == 'POST':
+        form = VideoForm(request.POST, request.FILES)
+        if form.is_valid():
+            video = form.save(commit=False)
+            video.uploader = request.user
+            video.save()
+            return redirect('general_library')
+    else:
+        form = VideoForm()
+
+    return render(request, 'network/general_library.html', {'vid_form': form})
+
+
+
+def general_library(request):
+    it_documents = LibraryDocument.objects.filter(category='IT')
+    history_documents = LibraryDocument.objects.filter(category='History')
+    science_documents = LibraryDocument.objects.filter(category='Science')
+    videos = Video.objects.all()
+    return render(request, 'network/general_library.html', {
+        'it_documents': it_documents,
+        'history_documents': history_documents,
+        'science_documents': science_documents,
+        'videos': videos,
+    })
+
+def add_to_favorites(request, item_id, item_type):
+    user = request.user
+
+    if item_type == 'document':
+        item = get_object_or_404(LibraryDocument, pk=item_id)
+        FavoriteDocument.objects.get_or_create(user=user, document=item)
+    elif item_type == 'video':
+        item = get_object_or_404(Video, pk=item_id)
+        FavoriteVideo.objects.get_or_create(user=user, video=item)
+
+    return redirect('general_library')
+
+def my_library(request):
+    user = request.user
+    favorite_documents = FavoriteDocument.objects.filter(user=user)
+    favorite_videos = FavoriteVideo.objects.filter(user=user)
+    return render(request, 'network/my_library.html', {
+        'favorite_documents': favorite_documents,
+        'favorite_videos': favorite_videos,
+    })
+
+
+def view_video(request, video_id):
+    video = get_object_or_404(Video, pk=video_id)
+    video.views += 1
+    video.save()
+    return redirect(video.file.url)
+
+
+
+@login_required
+def forum(request):
+    topics = ForumTopic.objects.all().order_by('-created_at')
+    return render(request, 'network/forum.html', {'topics': topics})
+
+@login_required
+def create_topic(request):
+    if request.method == 'POST':
+        title = request.POST['title']
+        topic = ForumTopic.objects.create(title=title, creator=request.user)
+        post_content = request.POST['post_forum_content']
+        ForumPost.objects.create(content=post_content, topic=topic, creator=request.user)
+        return redirect('forum')
+    return render(request, 'network/create_topic.html')
+
+@login_required
+def view_topic(request, topic_id):
+    topic = ForumTopic.objects.get(pk=topic_id)
+    posts = topic.posts.all().order_by('created_at')
+    return render(request, 'network/view_topic.html', {'topic': topic, 'posts': posts})
+
+@login_required
+def add_forum_post(request, topic_id):
+    if request.method == 'POST':
+        post_content = request.POST['forum_post_content']
+        topic = ForumTopic.objects.get(pk=topic_id)
+        ForumPost.objects.create(content=post_content, topic=topic, creator=request.user)
+        return redirect('view_topic', topic_id=topic_id)
+
+def new_announcement(request):
+    if request.method == "POST":
+        title = request.POST["announcement_title"]
+        content = request.POST["announcement_content"]
+        announcement_image = request.FILES.get("announcement_image")
+        poster = request.user
+        Announcement.objects.create(poster=poster, title=title, content=content, announcement_image=announcement_image)
+        return redirect("announcements")
+    
+def announcements(request):
+    announcement = Announcement.objects.all().order_by('-created_at')
+    return render(request, 'network/announcements.html', {'announcements': announcement})
+    
 
 @login_required
 def like_count(request):
@@ -558,46 +672,29 @@ def logout_view(request):
     logout(request)
     return render(request, "network/login.html")
 
-
+def terms(request):
+    return render(request, "terms.html")
 def register(request):
     if request.method == "POST":
-        first_name = request.POST["first_name"]
-        last_name = request.POST["last_name"]
-        username = request.POST["username"]
-        email = request.POST["email"]
-        password = request.POST["password"]
-        confirmation = request.POST["confirmation"]
-        profile_pics = request.FILES.get("profile_pic")
+        form = RegistrationForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = form.save(commit=False)
+            password = form.cleaned_data['password']
+            user.set_password(password)
 
-        if password != confirmation:
-            return render(request, "network/register.html", {
-                "message": "Passwords must match."
-            })
+            # Save the profile picture if provided
+            profile_pic = form.cleaned_data.get('profile_pic')
+            if profile_pic:
+                user.profile_pic = profile_pic
 
-        try:
-            user = User.objects.create_user(username=username, email=email, password=password)
-            user.first_name = first_name
-            user.last_name = last_name
             user.save()
-
-            if profile_pics:
-                user.profile_pics.save(profile_pics.name, profile_pics, save=True)
-        except IntegrityError:
-            return render(request, "network/register.html", {
-                "message": "Username already taken."
-            })
-        except ValidationError as e:
-            return render(request, "network/register.html", {
-                "message": e.message
-            })
-
-        login(request, user)
-        return HttpResponseRedirect(reverse("index"))
+            login(request, user)
+            return redirect('index')
     else:
-        return render(request, "network/register.html")
+        form = RegistrationForm()
+    return render(request, "network/register.html", {'form': form})
 
-def terms(request):
-    return render(request, "network/terms.html")
+
 
 class CustomPasswordResetView(PasswordResetView):
     template_name = 'registration/password_reset_form.html'

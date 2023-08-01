@@ -130,3 +130,66 @@ class GroupShock(models.Model):
 
     def __str__(self):
         return f"{self.user} reacts Shock on {self.post}"
+    
+
+class LibraryDocument(models.Model):
+    CATEGORY_CHOICES = (
+        ('IT', 'IT'),
+        ('History', 'History'),
+        ('Science', 'Science'),
+    )
+
+    title = models.CharField(max_length=100)
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    file = models.FileField(upload_to='library/documents/')
+    upload_date = models.DateTimeField(auto_now_add=True)
+    uploader = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
+
+class Video(models.Model):
+    title = models.CharField(max_length=100)
+    file = models.FileField(upload_to='library/videos/')
+    views = models.PositiveIntegerField(default=0)
+    uploader = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
+    
+class FavoriteDocument(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    document = models.ForeignKey('LibraryDocument', on_delete=models.CASCADE)
+
+class FavoriteVideo(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    video = models.ForeignKey('Video', on_delete=models.CASCADE)
+
+
+
+class ForumTopic(models.Model):
+    title = models.CharField(max_length=200)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+class ForumPost(models.Model):
+    content = models.TextField()
+    topic = models.ForeignKey(ForumTopic, on_delete=models.CASCADE, related_name='posts')
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Post by {self.creator.username} in {self.topic.title}"
+
+class Announcement(models.Model):
+    poster = models.ForeignKey(User, on_delete=models.CASCADE, related_name="announcement_poster")
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    announcement_image = models.ImageField(upload_to='post_image/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.title} announced by {self.poster}"

@@ -1,0 +1,14 @@
+<!-- forum/forum.html -->
+{% extends "network/layout.html" %}
+{% block body %}
+  <h1>Forum</h1>
+  <a href="{% url 'create_topic' %}">Create New Topic</a>
+  <ul>
+    {% for topic in topics %}
+      <li>
+        <a href="{% url 'view_topic' topic.id %}">{{ topic.title }}</a>
+        - Created by {{ topic.creator.username }} on {{ topic.created_at }}
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

@@ -5,46 +5,46 @@
 <div class="img-fluid react_space" id="react_space">
   <div class="reaction-button" id="reaction-buttons-{{ posts.id }}">
     {% if user.is_authenticated %}
-      {% if request.user in posts.post_like.all %}
-        <form action="{% url 'remove_like' post_id=posts.id %}" method="post">
-          {% csrf_token %}
-          <input type="hidden" name="unlikePost" value="{{ posts.id }}" />
-          <button>
-            <i class="fa fa-thumbs-down"></i> Unlike
-          </button>
-        </form>
-      {% else %}
-        <form action="{% url 'add_like' post_id=posts.id %}" method="post">
-          {% csrf_token %}
-          <input type="hidden" name="likePost" value="{{ posts.id }}"/>
-          <button style="background: none; border: none;">
-            <img src="/media/post_image/hand.gif" class="rounded-circle" width="50" height="50" alt="Maa Shaa Allah"/>
-          </button>
-        </form>
-      {% endif %}
+    {% if request.user in posts.post_like.all %}
+      <form action="{% url 'remove_like' post_id=posts.id %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="unlikePost" value="{{ posts.id }}" />
+        <button>
+          <i class="fa fa-thumbs-down"></i> Unlike
+        </button>
+      </form>
+    {% else %}
+      <form action="{% url 'add_like' post_id=posts.id %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="likePost" value="{{ posts.id }}"/>
+        <button style="background: none; border: none;">
+          <img src="/media/post_image/hand.gif" class="rounded-circle" width="50" height="50" alt="Like"/>
+        </button>
+      </form>
     {% endif %}
-
-    {% if user.is_authenticated %}
-      {% if request.user in posts.postLove.all %}
-        <form action="{% url 'remove_love' post_id=posts.id %}" method="post">
-          {% csrf_token %}
-          <input type="hidden" name="unlikePost" value="{{ posts.id }}" />
-          <button>
-            <i class="fa fa-thumbs-down"></i> Unlike
-          </button>
-        </form>
-      {% else %}
-        <form action="{% url 'add_love' post_id=posts.id %}" method="post">
-          {% csrf_token %}
-          <input type="hidden" name="likePost" value="{{ posts.id }}" />
-          <button style="background: none; border: none;">
-            <img src="/media/post_image/mashaa.gif" class="rounded-circle" width="50" height="50" alt="Maa Shaa Allah"/>
-          </button>
-        </form>
-      {% endif %}
+  {% endif %}
+  
+  {% if user.is_authenticated %}
+    {% if request.user in posts.postLove.all %}
+      <form action="{% url 'remove_love' post_id=posts.id %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="unlikePost" value="{{ posts.id }}" />
+        <button>
+          <i class="fa fa-thumbs-down"></i> Unlike
+        </button>
+      </form>
+    {% else %}
+      <form action="{% url 'add_love' post_id=posts.id %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="likePost" value="{{ posts.id }}" />
+        <button style="background: none; border: none;">
+          <img src="/media/post_image/mashaa.gif" class="rounded-circle" width="50" height="50" alt="Love"/>
+        </button>
+      </form>
     {% endif %}
-
-    {% if user.is_authenticated %}
+  {% endif %}
+  
+  {% if user.is_authenticated %}
     {% if request.user in posts.postSad.all %}
       <form action="{% url 'remove_sad' post_id=posts.id %}" method="post">
         {% csrf_token %}
@@ -58,51 +58,51 @@
         {% csrf_token %}
         <input type="hidden" name="likePost" value="{{ posts.id }}" />
         <button style="background: none; border: none;">
-          <img src="/media/post_image/allah.gif" width="50" height="50" alt="Allah akbar"/>
+          <img src="/media/post_image/allah.gif" width="50" height="50" alt="Sad"/>
         </button>
       </form>
     {% endif %}
   {% endif %}
-
-    {% if user.is_authenticated %}
-      {% if request.user in posts.postHaha.all %}
-        <form action="{% url 'remove_haha' post_id=posts.id %}" method="post">
-          {% csrf_token %}
-          <input type="hidden" name="unlikePost" value="{{ posts.id }}" />
-          <button>
-            <i class="fa fa-thumbs-down"></i> Unlike
-          </button>
-        </form>
-      {% else %}
-        <form action="{% url 'add_haha' post_id=posts.id %}" method="post">
-          {% csrf_token %}
-          <input type="hidden" name="likePost" value="{{ posts.id }}" />
-          <button style="background: none; border: none;">
-            <img src="/media/post_image/funny.gif" class="rounded-circle" width="50" height="50" alt="Maa Shaa Allah"/>
-          </button>
-        </form>
-      {% endif %}
+  
+  {% if user.is_authenticated %}
+    {% if request.user in posts.postHaha.all %}
+      <form action="{% url 'remove_haha' post_id=posts.id %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="unlikePost" value="{{ posts.id }}" />
+        <button>
+          <i class="fa fa-thumbs-down"></i> Unlike
+        </button>
+      </form>
+    {% else %}
+      <form action="{% url 'add_haha' post_id=posts.id %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="likePost" value="{{ posts.id }}" />
+        <button style="background: none; border: none;">
+          <img src="/media/post_image/funny.gif" class="rounded-circle" width="50" height="50" alt="Haha"/>
+        </button>
+      </form>
     {% endif %}
-
-    {% if user.is_authenticated %}
-      {% if request.user in posts.postShock.all %}
-        <form action="{% url 'remove_shock' post_id=posts.id %}" method="post">
-          {% csrf_token %}
-          <input type="hidden" name="unlike_shock" value="{{ posts.id }}" />
-          <button>
-            <i class="fa fa-thumbs-down"></i> Unlike
-          </button>
-        </form>
-      {% else %}
-        <form action="{% url 'add_shock' post_id=posts.id %}" method="post">
-          {% csrf_token %}
-          <input type="hidden" name="shockPost" value="{{ posts.id }}" />
-          <button style="background: none; border: none;">
-            <img src="/media/post_image/shock.gif" class="rounded-circle" width="50" height="50" alt="Subhanallah"/>
-          </button>
-        </form>
-      {% endif %}
+  {% endif %}
+  
+  {% if user.is_authenticated %}
+    {% if request.user in posts.postShock.all %}
+      <form action="{% url 'remove_shock' post_id=posts.id %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="unlike_shock" value="{{ posts.id }}" />
+        <button>
+          <i class="fa fa-thumbs-down"></i> Unlike
+        </button>
+      </form>
+    {% else %}
+      <form action="{% url 'add_shock' post_id=posts.id %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="shockPost" value="{{ posts.id }}" />
+        <button style="background: none; border: none;">
+          <img src="/media/post_image/shock.gif" class="rounded-circle" width="50" height="50" alt="Shock"/>
+        </button>
+      </form>
     {% endif %}
+  {% endif %}
 
 
   </div>
@@ -146,52 +146,52 @@
       <div class="reaction-column">
         <p class="desktop-only">Like</p>
         <button onclick="showColumn('like-column-{{ posts.id }}')" style="background: none; border: none;">
-          <img src="/media/post_image/hand.gif" class="rounded-circle" width="30" height="30" alt="Maa Shaa Allah"/>{{posts.post_like.count}}
+          <img src="/media/post_image/hand.gif" class="rounded-circle" width="30" height="30" alt="Like reaction"/>{{posts.post_like.count}}
         </button>
         <div id="like-column-{{ posts.id }}">
           {% for like_reactions in posts.post_like.all %}
-            <a href="{% url 'profile' user_id=like_reactions.user.id %}">{{ like_reactions.user }}</a><br>
+            <a href="{% url 'profile' user_id=like_reactions.user.id %}">{{ like_reactions.user.username }}</a><br>
           {% endfor %}
         </div>
       </div>
       <div class="reaction-column">
-        <p class="desktop-only">Maa Shaa Allah</p>
+        <p class="desktop-only">Love</p>
         <button onclick="showColumn('love-column-{{ posts.id }}')" style="background: none; border: none;">
-          <img src="/media/post_image/mashaa.gif" class="rounded-circle" width="30" height="30" alt="Maa Shaa Allah"/>{{posts.postMaashaa.count}}
+          <img src="/media/post_image/mashaa.gif" class="rounded-circle" width="30" height="30" alt="Love reaction"/>{{posts.postLove.count}}
         </button>
 
         <div id="love-column-{{ posts.id }}">
-          {% for love_reactions in posts.postMaashaa.all %}
+          {% for love_reactions in posts.postLove.all %}
             <a href="{% url 'profile' user_id=love_reactions.user.id %}">{{ love_reactions.user }}</a><br>
           {% endfor %}
         </div>
       </div>
       <div class="reaction-column">
-        <p class="desktop-only">Subhanallah</p>
+        <p class="desktop-only">Shock</p>
         <button onclick="showColumn('shock-column-{{ posts.id }}')" style="background: none; border: none;">
-          <img src="/media/post_image/shock.gif" class="rounded-circle" width="30" height="30" alt="Subhanallah"/>{{posts.postSubhanallah.count}}
+          <img src="/media/post_image/shock.gif" class="rounded-circle" width="30" height="30" alt="Shock reaction"/>{{posts.postShock.count}}
         </button>
         <div id="shock-column-{{ posts.id }}">
-          {% for shock_reactions in posts.postSubhanallah.all %}
+          {% for shock_reactions in posts.postShock.all %}
             <a href="{% url 'profile' user_id=shock_reactions.user.id %}">{{ shock_reactions.user }}</a><br>
           {% endfor %}
         </div>
       </div>
       <div class="reaction-column">
-        <p class="desktop-only">Allahu Akbar</p>
+        <p class="desktop-only">Sad</p>
         <button onclick="showColumn('akbar-column-{{ posts.id }}')" style="background: none; border: none;">
-          <img src="/media/post_image/allah.gif" width="30" height="30" alt="Allah akbar"/>{{posts.postAllah.count}}
+          <img src="/media/post_image/sad.gif" width="30" height="30" alt="Sad reaction"/>{{posts.postSad.count}}
         </button>
         <div id="akbar-column-{{ posts.id }}">
-          {% for akbar_reactions in posts.postAllah.all %}
-            <a href="{% url 'profile' user_id=akbar_reactions.user.id %}">{{ akbar_reactions.user }}</a><br>
+          {% for sad_reactions in posts.postSad.all %}
+            <a href="{% url 'profile' user_id=sad_reactions.user.id %}">{{ sad_reactions.user }}</a><br>
           {% endfor %}
         </div>
       </div>
       <div class="reaction-column">
         <p class="desktop-only">Haha</p>
         <button onclick="showColumn('laugh-column-{{ posts.id }}')" style="background: none; border: none;">
-          <img src="/media/post_image/funny.gif" class="rounded-circle" width="30" height="30" alt="Maa Shaa Allah"/>{{posts.postHaha.count}}
+          <img src="/media/post_image/funny.gif" class="rounded-circle" width="30" height="30" alt="Laugh Reaction"/>{{posts.postHaha.count}}
         </button>
         <div id="laugh-column-{{ posts.id }}">
           {% for laugh_reactions in posts.postHaha.all %}

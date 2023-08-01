@@ -1,0 +1,116 @@
+{% extends "network/layout.html" %}
+{% block body %} 
+<h1>General Library</h1>
+
+<h1>Upload Document</h1>
+<form method="post" enctype="multipart/form-data" action="{% url 'upload_document' %}">
+    {% csrf_token %}
+    {{ doc_form.as_p }}
+    <button type="submit">Upload</button>
+</form>
+
+<h1>Upload Video</h1>
+<form method="post" enctype="multipart/form-data" action="{% url 'upload_video' %}">
+    {% csrf_token %}
+    {{ vid_form.as_p }}
+    <button type="submit">Upload</button>
+</form>
+
+<h2>IT Section</h2>
+{% for document in it_documents %}
+    <p>{{ document.title }} - Uploaded by {{ document.uploader.username }} on {{ document.upload_date }}</p>
+    <a href="{{ document.file.url }}" download>Download</a>
+    <p>Times Uploaded: {{ document.uploader.librarydocument_set.count }}</p>
+    {% if user.is_authenticated %}
+        <a href="{% url 'add_to_favorites' item_id=document.id item_type='document' %}">Add to Favorites</a>
+        <button onclick="shareFile('{{ document.file.url }}')">Share</button>
+    {% endif %}
+{% endfor %}
+
+<h2>History Section</h2>
+{% for document in history_documents %}
+    <p>{{ document.title }} - Uploaded by {{ document.uploader.username }} on {{ document.upload_date }}</p>
+    <a href="{{ document.file.url }}" download>Download</a>
+    <p>Times Uploaded: {{ document.uploader.librarydocument_set.count }}</p>
+    {% if user.is_authenticated %}
+        <a href="{% url 'add_to_favorites' item_id=document.id item_type='document' %}">Add to Favorites</a>
+        <button onclick="shareFile('{{ document.file.url }}')">Share</button>
+    {% endif %}
+{% endfor %}
+
+<h2>Science Section</h2>
+{% for document in science_documents %}
+    <p>{{ document.title }} - Uploaded by {{ document.uploader.username }} on {{ document.upload_date }}</p>
+    <a href="{{ document.file.url }}" download>Download</a>
+    <p>Times Uploaded: {{ document.uploader.librarydocument_set.count }}</p>
+    {% if user.is_authenticated %}
+        <a href="{% url 'add_to_favorites' item_id=document.id item_type='document' %}">Add to Favorites</a>
+        <button onclick="shareFile('{{ document.file.url }}')">Share</button>
+    {% endif %}
+{% endfor %}
+
+<h2>Videos</h2>
+{% for video in videos %}
+    <p>{{ video.title }} - Uploaded by {{ video.uploader.username }}</p>
+    <video width="320" height="240" controls>
+        <source src="{{ video.file.url }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <p>Views: {{ video.views }}</p>
+    {% if user.is_authenticated %}
+        <a href="{% url 'add_to_favorites' item_id=video.id item_type='video' %}">Add to Favorites</a>
+        <button onclick="shareFile('{{ video.file.url }}')">Share</button>
+    {% endif %}
+{% endfor %}
+
+<!-- Modal for Sharing -->
+<div id="shareModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Share File</h3>
+        <button onclick="copyLink()">Copy Link</button>
+        <button onclick="shareWithinWebsite()">Share Within Website</button>
+        <div id="linkCopiedAlert" style="display: none;">Link Copied to Clipboard!</div>
+    </div>
+</div>
+
+<script>
+    let fileUrl; // Variable to store the file URL
+
+    function shareFile(url) {
+        fileUrl = url; // Set the file URL to the variable
+        const modal = document.getElementById("shareModal");
+        modal.style.display = "block";
+        const closeModalBtn = modal.querySelector(".close");
+        closeModalBtn.onclick = function() {
+            modal.style.display = "none";
+        };
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
+    }
+
+    function copyLink() {
+        if (fileUrl) {
+            navigator.clipboard.writeText(fileUrl);
+            const linkCopiedAlert = document.getElementById("linkCopiedAlert");
+            linkCopiedAlert.style.display = "block";
+            setTimeout(function() {
+                linkCopiedAlert.style.display = "none";
+            }, 2000);
+        }
+    }
+
+    function shareWithinWebsite() {
+        if (fileUrl) {
+            // Your custom logic to share the file within the website goes here
+            // For example, you can use an API to notify other users about the shared file
+            // and display a success message after sharing.
+            alert("Shared within the website!");
+        }
+    }
+</script>
+   
+{% endblock %}

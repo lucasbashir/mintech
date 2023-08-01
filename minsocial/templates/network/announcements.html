@@ -1,0 +1,44 @@
+{% extends "network/layout.html" %}
+{% block body %}
+<h1>Announcements</h1>
+
+<div class="input-group mb-3" id="create-post-field-container">
+    <input style="margin-top: 20px; height: 50px; border-radius: 1rem;" type="text" id="create-post-field" placeholder="New Announcement" onclick="openModal()">
+  </div>
+
+  <!-- Modal -->
+  <div id="postModal" class="modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <form action="{% url 'new_announcement' %}" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="form-group">
+            <input name="announcement_title" placeholder="Enter Title" required>
+            <br>
+            <br>
+            <textarea style="height: 300px;" id="new-post" class="form-control" name="announcement_content" placeholder="Make Announcement" required></textarea>
+          </div>
+          <div class="form-group">
+            <input type="file" name="announcement_image" class="form-control-file" accept="image/*" multiple>
+          </div>
+          <div class="text-right">
+            <button id="post-btn" type="submit" class="btn btn-primary">Post</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  {% for announcement in announcements %}
+  <h1>{{announcement.title}} By {{announcement.poster}}</h1>
+  <p>{{announcement.content}}</p>
+  <div class="card-body">
+    {% if announcement.announcement_image %}
+      <div class="image-container">
+        <img src="{{ announcement.announcement_image.url }}" class="img-fluid desktop-image" alt="Post Image">
+      </div>
+    {% endif %}
+  {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "network/layout.html" %}
+{% block body %} 
+<h1>My Library</h1>
+
+<h2>Favorite Documents</h2>
+{% for favorite_document in favorite_documents %}
+    <p>{{ favorite_document.document.title }} - Uploaded by {{ favorite_document.document.uploader.username }} on {{ favorite_document.document.upload_date }}</p>
+    <a href="{{ favorite_document.document.file.url }}" download>Download</a>
+{% endfor %}
+
+<h2>Favorite Videos</h2>
+{% for favorite_video in favorite_videos %}
+    <p>{{ favorite_video.video.title }} - Uploaded by {{ favorite_video.video.uploader.username }}</p>
+    <video width="320" height="240" controls>
+        <source src="{{ favorite_video.video.file.url }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <p>Views: {{ favorite_video.video.views }}</p>
+{% endfor %}
+{% endblock %}

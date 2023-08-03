@@ -38,6 +38,7 @@ urlpatterns = [
     path("view_video/<int:video_id>/", views.view_video, name="view_video"),
     path("upload_document/", views.upload_document, name="upload_document"),
     path("upload_video/", views.upload_video, name="upload_video"),
+    path('category/<str:category_name>/', views.category_detail, name='category_detail'),
     path('add_to_favorites/<int:item_id>/<str:item_type>/', views.add_to_favorites, name='add_to_favorites'),
     path('forum/', views.forum, name='forum'),
     path('forum/create_topic/', views.create_topic, name='create_topic'),

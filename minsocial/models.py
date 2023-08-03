@@ -132,15 +132,27 @@ class GroupShock(models.Model):
         return f"{self.user} reacts Shock on {self.post}"
     
 
-class LibraryDocument(models.Model):
-    CATEGORY_CHOICES = (
-        ('IT', 'IT'),
-        ('History', 'History'),
-        ('Science', 'Science'),
-    )
 
+class LibraryCategory(models.Model):
+    CATEGORY_CHOICES = [
+        ('Science', 'Science'),
+        ('IT', 'IT'),
+        ('Math', 'Math'),
+        ('Skills and Self-growth', 'Skills and Self-growth'),
+        ('Agriculture', 'Agriculture'),
+        ('Finance', 'Finance'),
+        ('Economics', 'Economics'),
+        ('Philosophy', 'Philosophy'),
+    ]
+
+    categoryName = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+
+    def __str__(self):
+        return self.categoryName
+
+class LibraryDocument(models.Model):
     title = models.CharField(max_length=100)
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    category = models.ForeignKey(LibraryCategory, on_delete=models.CASCADE, blank=True, null=True)
     file = models.FileField(upload_to='library/documents/')
     upload_date = models.DateTimeField(auto_now_add=True)
     uploader = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -150,12 +162,15 @@ class LibraryDocument(models.Model):
 
 class Video(models.Model):
     title = models.CharField(max_length=100)
+    category = models.ForeignKey(LibraryCategory, on_delete=models.CASCADE, blank=True, null=True)
     file = models.FileField(upload_to='library/videos/')
     views = models.PositiveIntegerField(default=0)
+    upload_date = models.DateTimeField(auto_now_add=True)
     uploader = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
+
     
 class FavoriteDocument(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

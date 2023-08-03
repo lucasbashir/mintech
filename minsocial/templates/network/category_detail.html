@@ -1,0 +1,90 @@
+{% extends "network/layout.html" %}
+{% block body %}
+
+
+<div class="index-container center-content">
+<div class="card">
+<div class="card-body">
+<h3>{{category_name}} Category</h3>
+
+        <hr style="border-color: white;">
+        <h2>Documents</h2>
+        {% for document in documents %}
+            <div class="document-border">
+                <p>Uploaded by {{ document.uploader.username }} on {{ document.upload_date }}</p>
+                <a href="{{ document.file.url }}"><span style="color: white;">{{document.title}}</span> </a>
+                <p>Times Uploaded: {{ document.uploader.librarydocument_set.count }}</p>
+                    <a href="{% url 'add_to_favorites' item_id=document.id item_type='document' %}"><span style="color: white;"> Add to Favorites</span></a>
+                    <button class="btn-primary" onclick="shareFile('{{ document.file.url }}')">Share</button>           
+            </div>
+        {% endfor %} 
+
+        <h2>Videos</h2>
+        {% for video in videos %}
+            <div class="video-border">
+                <p>{{ video.title }} - {{ video.uploader.username }} {{ video.upload_date }}</p>
+                
+                <video width="400" height="240" controls>
+                    <source src="{{ video.file.url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p>Views: {{ video.views }}</p>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'add_to_favorites' item_id=video.id item_type='video' %}"><span style="color: white;">Add to Favorites</span></a>
+                    <button class="btn-primary" onclick="shareFile('{{ video.file.url }}')">Share</button>
+                {% endif %}
+            </div>
+        {% endfor %}
+<!-- Modal for Sharing -->
+<div id="shareModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Share File</h3>
+        <button onclick="copyLink()">Copy Link</button>
+        <button onclick="shareWithinWebsite()">Share Within Website</button>
+        <div id="linkCopiedAlert" style="display: none;">Link Copied to Clipboard!</div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+<script>
+    let fileUrl; // Variable to store the file URL
+
+    function shareFile(url) {
+        fileUrl = url; // Set the file URL to the variable
+        const modal = document.getElementById("shareModal");
+        modal.style.display = "block";
+        const closeModalBtn = modal.querySelector(".close");
+        closeModalBtn.onclick = function() {
+            modal.style.display = "none";
+        };
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
+    }
+
+    function copyLink() {
+        if (fileUrl) {
+            navigator.clipboard.writeText(fileUrl);
+            const linkCopiedAlert = document.getElementById("linkCopiedAlert");
+            linkCopiedAlert.style.display = "block";
+            setTimeout(function() {
+                linkCopiedAlert.style.display = "none";
+            }, 2000);
+        }
+    }
+
+    function shareWithinWebsite() {
+        if (fileUrl) {
+            // Your custom logic to share the file within the website goes here
+            // For example, you can use an API to notify other users about the shared file
+            // and display a success message after sharing.
+            alert("Shared within the website!");
+        }
+    }
+</script>
+   
+{% endblock %}

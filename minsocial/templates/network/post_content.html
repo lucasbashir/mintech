@@ -4,6 +4,11 @@
 {% load static %}
 {% block body %}
 
+<div class="index-container center-content">
+  <label style="margin-top: 15px;" class="switch">
+    <input type="checkbox">
+    <span class="slider round" id="toggleButton" onclick="toggleBackgroundColor()"></span>
+  </label>
 <div class="container">
   <div class="card">
     <div class="card-body">
@@ -20,7 +25,7 @@
         <div class="ml-3">
           <h5 class="card-title mb-1">
           <!-- Display a link to the user's profile -->
-          <a class="card-title" style="text-decoration: none; color: black;" href="{% url 'profile' user_id=posts.user.id %}">{{posts.user.first_name}} {{posts.user.last_name}}
+          <a class="card-title" style="text-decoration: none;" href="{% url 'profile' user_id=posts.user.id %}">{{posts.user.first_name}} {{posts.user.last_name}}
           </h5>
           <p class="mb-0">
             <p>@{{posts.user.username}}</p></a>
@@ -61,10 +66,10 @@
         <img src="/media/post_image/hand.gif" class="rounded-circle" width="70" height="70">
       </a>
       {% endif %}
-          <strong><a href="{% url 'profile' user_id=comment.author.id %}">@{{ comment.author.username }}</a> wrote:</strong>
+          <strong style="color: black;"><a href="{% url 'profile' user_id=comment.author.id %}"><span style="color: black;">@{{ comment.author.username }}</span></a> wrote:</strong>
           <div class="card-text" id="content_{{ comment.id }}">
             {% for paragraph in comment.message|split_paragraphs %}
-            <p>{{ paragraph|urlize }}</p>
+            <p style="color: black;">{{ paragraph|urlize }}</p>
             {% endfor %}
           </div>
         </li>
@@ -91,7 +96,7 @@
         </div>
       </form>
       {% endif %}
-
+    </div>
       
 
 {% endblock %}

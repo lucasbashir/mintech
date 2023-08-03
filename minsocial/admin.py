@@ -3,14 +3,15 @@ from .models import *
 # Register your models here
 
 admin.site.register(User)
-admin.site.register(Announcement),
+admin.site.register(Announcement)
+admin.site.register(LibraryCategory)
 admin.site.register(LibraryDocument)
 admin.site.register(Video)
-admin.site.register(FavoriteDocument),
-admin.site.register(FavoriteVideo),
-admin.site.register(ForumPost),
+admin.site.register(FavoriteDocument)
+admin.site.register(FavoriteVideo)
+admin.site.register(ForumPost)
 admin.site.register(ForumTopic)
-admin.site.register(Follow),
+admin.site.register(Follow)
 admin.site.register(Post)
 admin.site.register(Comment)
 admin.site.register(Like)

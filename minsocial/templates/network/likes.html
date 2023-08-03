@@ -58,7 +58,7 @@
         {% csrf_token %}
         <input type="hidden" name="likePost" value="{{ posts.id }}" />
         <button style="background: none; border: none;">
-          <img src="/media/post_image/allah.gif" width="50" height="50" alt="Sad"/>
+          <img src="/media/post_image/sad.gif" width="50" height="50" alt="Sad"/>
         </button>
       </form>
     {% endif %}
@@ -106,34 +106,41 @@
 
 
   </div>
-  <h3 class="like-btn" data-post-id="{{ posts.id }}"><i class="fa fa-thumbs-up"></i></h3>
+</div>
+<div class="horizontal-container">
+  <div class="">
+    <h3 class="like-btn" data-post-id="{{ posts.id }}">
+      <img src="/media/post_image/react.png" class="rounded-circle" alt="Shock" width="80" height="50">
+    </h3>
+  </div>
 
 {% with total_count=posts.postLove.count|add:posts.postHaha.count|add:posts.postSad.count|add:posts.postShock.count|add:posts.post_like.count %}
 {% if posts.post_like.count > 0 and posts.postHaha.count < 1 and posts.postSad.count < 1 and posts.postLove.count < 1 and posts.postShock.count < 1 %}
-<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍 {{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
+<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍 <span style="color:#FFCF70;">{{ total_count }}</span></button> 💬 {{ posts.postComment.count }}</h3>
 {% elif posts.post_like.count < 1 and posts.postHaha.count < 1 and posts.postSad.count < 1 and posts.postLove.count > 0 and posts.postShock.count < 1 %}
-<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">❤️ {{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
+<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">❤️ <span style="color:#FFCF70;">{{ total_count }}</span></button> 💬 {{ posts.postComment.count }}</h3>
 {% elif posts.post_like.count < 1 and posts.postHaha.count < 1 and posts.postSad.count > 0 and posts.postLove.count < 1 and posts.postShock.count < 1 %}
-<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">😢 {{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
+<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">😢 <span style="color:#FFCF70 ;">{{ total_count }}</span></button> 💬 {{ posts.postComment.count }}</h3>
 {% elif posts.post_like.count < 1 and posts.postHaha.count > 0 and posts.postSad.count < 1 and posts.postLove.count < 1 and posts.postShock.count < 1 %}
-<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">😂{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
+<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">😂<span style="color:#FFCF70 ;">{{ total_count }}</span></button> 💬 {{ posts.postComment.count }}</h3>
 {% elif posts.post_like.count < 1 and posts.postHaha.count < 1 and posts.postSad.count < 1 and posts.postLove.count < 1 and posts.postShock.count > 0 %}
-<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">😲{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
+<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">😲<span style="color:#FFCF70 ;">{{ total_count }}</span></button> 💬 {{ posts.postComment.count }}</h3>
 {% elif posts.post_like.count > 0 and posts.postHaha.count < 1 and posts.postSad.count > 0 and posts.postLove.count < 1 and posts.postShock.count < 1 %}
-<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍😢{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
+<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍😢<span style="color:#FFCF70 ;">{{ total_count }}</span></button> 💬 {{ posts.postComment.count }}</h3>
 {% elif posts.post_like.count > 0 and posts.postHaha.count > 0 and posts.postSad.count < 1 and posts.postLove.count < 1 and posts.postShock.count < 1 %}
-<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍😂{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
+<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍😂<span style="color:#FFCF70 ;">{{ total_count }}</span></button> 💬 {{ posts.postComment.count }}</h3>
 {% elif posts.postLove.count > 0 and posts.postHaha.count > 0 and posts.postShock.count > 0 and posts.post_like.count > 0 and posts.postSad.count < 1%}
-<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍❤️😂😮{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
+<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍❤️😂😮<span style="color:#FFCF70 ;">{{ total_count }}</span></button> 💬 {{ posts.postComment.count }}</h3>
 {% elif posts.postLove.count > 0 and posts.postHaha.count < 1 and posts.postShock.count < 1 and posts.post_like.count > 0 and posts.postSad.count < 1%}
-<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍❤️{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
+<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍❤️<span style="color:#FFCF70;">{{ total_count }}</span></button> 💬 {{ posts.postComment.count }}</h3>
 {% elif posts.postLove.count > 0 and posts.postHaha.count > 0 and posts.postShock.count > 0 and posts.post_like.count > 0 and posts.postSad.count > 0%}
-<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍❤️😂😮😢{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
+<h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍❤️😂😮😢<span style="color:#FFCF70;">{{ total_count }}</span></button> 💬 {{ posts.postComment.count }}</h3>
 {% else %}
 
-   <h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍{{ total_count }}</button> 💬 {{ posts.postComment.count }}</h3>
+   <h3 onclick="opensModal('{{ posts.id }}')"><button class="like-button">👍<span style="color:#FFCF70;">{{ total_count }}</span></button> 💬 {{ posts.postComment.count }}</h3>
   {% endif %}
 {% endwith %}
+</div>
 
 
 

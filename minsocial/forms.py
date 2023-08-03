@@ -10,12 +10,12 @@ class GroupForm(forms.ModelForm):
 class LibraryDocumentForm(forms.ModelForm):
     class Meta:
         model = LibraryDocument
-        fields = ['title', 'category', 'file']
+        fields = ['title', 'file', 'category']  
 
 class VideoForm(forms.ModelForm):
     class Meta:
         model = Video
-        fields = ['title', 'file']
+        fields = ['title', 'file', 'category']  
 
 
 

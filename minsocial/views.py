@@ -230,15 +230,22 @@ def upload_video(request):
 
 
 def general_library(request):
-    it_documents = LibraryDocument.objects.filter(category='IT')
-    history_documents = LibraryDocument.objects.filter(category='History')
-    science_documents = LibraryDocument.objects.filter(category='Science')
+    documents = LibraryDocument.objects.all()
     videos = Video.objects.all()
+    categories = LibraryCategory.objects.all()
     return render(request, 'network/general_library.html', {
-        'it_documents': it_documents,
-        'history_documents': history_documents,
-        'science_documents': science_documents,
+        'documents': documents,
         'videos': videos,
+        'categories': categories,
+    })
+
+def category_detail(request, category_name):
+    documents = LibraryDocument.objects.filter(category__categoryName=category_name)
+    videos = Video.objects.filter(category__categoryName=category_name)
+    return render(request, 'network/category_detail.html', {
+        'documents': documents,
+        'videos': videos,
+        'category_name': category_name,
     })
 
 def add_to_favorites(request, item_id, item_type):

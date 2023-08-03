@@ -99,8 +99,16 @@ mainButton.addEventListener('mousedown', () => {
 
 
 
-
-
+function toggleBackgroundColor() {
+  const indexContainer = document.querySelector('.index-container');
+  if (indexContainer.style.backgroundColor === 'black') {
+    indexContainer.style.backgroundColor = 'white';
+    indexContainer.style.color = 'black'; // Adjust the text color for better contrast
+  } else {
+    indexContainer.style.backgroundColor = 'black';
+    indexContainer.style.color = 'white'; // Adjust the text color for better contrast
+  }
+}
 
 
 

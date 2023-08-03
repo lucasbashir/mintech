@@ -1,8 +1,147 @@
+body {
+  background-color: white;
+  color: black;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.sidebar {
+  width: 250px;
+}
+
+/* Add media query for smaller screens (e.g., max-width: 768px) */
+@media screen and (max-width: 768px) {
+  /* Hide the sidebars on smaller screens */
+  .sidebar {
+    display: none;
+  }
+}
+* Styling for the left sidebar */
+.sidebar-left {
+  background-color: #f0f0f0; 
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+
+/* Styling for the right sidebar */
+.sidebar-right {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+}
+
 
 .like-button {
   background: none;
   border: none;
   padding: 0;
+}
+
+.read-more {
+  color: white;
+}
+.card {
+  background-color: #00308F;
+  color: #FFCF70;
+  border-color: #FFCF70;;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* Base styles for .index-container */
+.index-container {
+  background-color: white;
+  color: black;
+  min-height: 100vh; 
+}
+
+/* Styles for desktop screens (min-width: 769px) */
+@media screen and (min-width: 769px) {
+  .index-container {
+    margin: 0 /*270px*/;
+  }
+}
+
+
+.card-body {
+  color: #FFCF70;
+}
+
+.submit-button {
+  color: #FFCF70;
+  border-color: #FFCF70;;
+}
+
+.card-title {
+  color: #FFCF70;
 }
 
 /* followers and follow count */
@@ -197,8 +336,19 @@
   width: 100%;
   background-color: #f2f2f2;
   padding: 10px;
+  color: #FFCF70;
+  font-weight: 500;
   border-radius: 5px;
 }
+
+.input-group {
+  background-color: #00308F;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+
 
 .create-post-text {
   width: 100%;
@@ -255,4 +405,80 @@
         position: relative;
         display: block;
     }
+}
+
+.horizontal-container {
+  display: flex;
+  align-items: center; /* Align items vertically in the center */
+  gap: 10px;
+}
+
+/* CSS for cropping the image from the right */
+  .crop-image-from-right {
+    overflow: hidden;
+    width: 70px; /* Width of the cropped image */
+    height: 50px; /* Height of the cropped image */
+  }
+
+  .crop-image-from-right img {
+    object-fit: cover;
+    object-position: right; /* Crop from the right side */
+    width: 100%;
+    height: 100%;
+  }
+
+  .library-upload {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    color: white;
+  }
+
+  @media screen and (max-width: 767px) {
+    .library-upload {
+      display: block;
+      text-align: center;
+  }
+
+  .library-upload p,
+  .library-upload form {
+      margin-bottom: 10px;
+  }
+
+  .library-upload form {
+      display: inline-block;
+  }
+
+  video {
+    height: 240px;
+    width: 300px;
+  }
+
+  .document-border {
+    border: 0px solid #ccc;
+    border-radius: 0px;
+    padding: 0px;
+    margin-bottom: 0px;
+}
+
+.video-border {
+    border: 0px solid #ccc;
+    border-radius: 0px;
+    padding: 0px;
+    margin-bottom: 00px;
+}
+  }
+
+  .document-border {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.video-border {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
 }

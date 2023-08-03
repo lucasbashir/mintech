@@ -25,7 +25,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="{% url 'index' %}">iNetwork</a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -38,7 +38,7 @@
             
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: black;">
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Actions
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -52,7 +52,6 @@
                         <a class="dropdown-item" href="{% url 'my_library' %}">My Library</a>
                         <a class="dropdown-item" href="{% url 'create_group' %}">Create Group</a>
                         <a class="dropdown-item" href="{% url 'forum' %}">Forum</a>
-                        <a class="dropdown-item" href="{% url 'announcements' %}">Announcements</a>
                         <a class="dropdown-item" href="{% url 'network_logout' %}">Log Out</a>
                         {% else %}
                         <a class="dropdown-item" href="{% url 'network_login' %}">Log In</a>

@@ -156,7 +156,7 @@
       <div class="ml-3">
         <h5 class="card-title mb-1">
         <!-- Display a link to the user's profile -->
-        <a class="card-title" style="text-decoration: none; color: black;" href="{% url 'profile' user_id=posts.user.id %}">{{posts.user.first_name}} {{posts.user.last_name}}</a>
+        <a class="card-title" style="text-decoration: none;" href="{% url 'profile' user_id=posts.user.id %}">{{posts.user.first_name}} {{posts.user.last_name}}</a>
         </h5>
         <p class="mb-0">
           <p>@{{posts.user.username}}</p>

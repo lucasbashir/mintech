@@ -1,6 +1,9 @@
 <!-- forum/view_topic.html -->
 {% extends "network/layout.html" %}
 {% block body %}
+<div class="index-container center-content">
+  <div class="card">
+  <div class="card-body">
   <h1>{{ topic.title }}</h1>
   <p>Created by {{ topic.creator.username }} on {{ topic.created_at }}</p>
   <ul>
@@ -13,9 +16,21 @@
   </ul>
   <form method="post" action="{% url 'add_forum_post' topic_id=topic.id %}">
     {% csrf_token %}
-    <label for="forum_post_content">Comment: </label>
-    <textarea name="forum_post_content" required></textarea><br>
-    <button type="submit">Add Comment</button>
+    <div class="form-group">
+      <span class="comment-field">
+      <textarea type="text" id="new-comment" name="forum_post_content" class="form-control rounded-0 shadow-none" rows="3" placeholder="Write a comment..."></textarea>
+    </span>
+    </div>
+    
+      <span class="btn-comment">
+      <button class="submit-button" type="submit" id="comment-btn">
+        Comment
+      </button>
+    </span>
   </form>
   <a href="{% url 'forum' %}">Back to Forum</a>
+  </div>
+  </div>
+</div>
+
 {% endblock %}

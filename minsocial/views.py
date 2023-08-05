@@ -30,10 +30,7 @@ from .forms import GroupForm, LibraryDocumentForm, VideoForm, RegistrationForm
 
 def index(request):
     if not request.user.is_authenticated:
-        error_message = "You need to log in to access this page."
-        return render(request, "network/login.html", {
-            "error_message": error_message,
-        })
+        return render(request, "network/login.html")
 
     post = Post.objects.all().order_by("id").reverse().select_related("user")
     paginator = Paginator(post, 10) # Show 10 contacts per page.
@@ -55,6 +52,8 @@ def index(request):
         "user": user,
     })
 def create_group(request):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     if request.method == 'POST':
         form = GroupForm(request.POST)
         if form.is_valid():
@@ -73,6 +72,8 @@ def create_group(request):
 
 
 def join_group(request, group_id):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     group = get_object_or_404(Group, pk=group_id)
     user = request.user
     group.members.add(request.user)
@@ -86,6 +87,8 @@ def join_group(request, group_id):
 
 @login_required
 def group_newPost(request, group_id):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     if request.method == "POST":
         group_id = request.POST.get("group_id")  # Assuming the group_id is passed as a form field in the request
         group = get_object_or_404(Group, pk=group_id)
@@ -108,6 +111,8 @@ def group_newPost(request, group_id):
     
 @login_required
 def group_detail(request, group_id):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     group = get_object_or_404(Group, pk=group_id)
     group_posts = GroupPost.objects.filter(group=group).order_by("-timestamp").select_related("user")
     paginator = Paginator(group_posts, 10)
@@ -136,8 +141,7 @@ def group_detail(request, group_id):
 @login_required
 def group_newPost(request, group_id):
     if not request.user.is_authenticated:
-        error_message = "You need to log in to access this page."
-        return render(request, "network/register.html")
+        return render(request, "network/error.html")
     
     if request.method == "POST":
         group = Group.objects.get(pk=group_id)  # Get the Group object based on group_id
@@ -153,6 +157,8 @@ def group_newPost(request, group_id):
 
 @login_required
 def group_addComment(request, post_id):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     if request.method == 'POST':
         message = request.POST.get('newComment')
         if not message.strip():
@@ -171,6 +177,8 @@ def group_addComment(request, post_id):
 
 @login_required
 def group_add_or_remove_reaction(request, post_id, reaction_type):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     post = get_object_or_404(GroupPost, id=post_id)
     user = request.user
 
@@ -200,6 +208,8 @@ def group_add_or_remove_reaction(request, post_id, reaction_type):
 
 @login_required
 def upload_document(request):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     if request.method == 'POST':
         form = LibraryDocumentForm(request.POST, request.FILES)
         if form.is_valid():
@@ -214,7 +224,8 @@ def upload_document(request):
 
 @login_required
 def upload_video(request):
-
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     if request.method == 'POST':
         form = VideoForm(request.POST, request.FILES)
         if form.is_valid():
@@ -230,6 +241,8 @@ def upload_video(request):
 
 
 def general_library(request):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     documents = LibraryDocument.objects.all()
     videos = Video.objects.all()
     categories = LibraryCategory.objects.all()
@@ -240,6 +253,8 @@ def general_library(request):
     })
 
 def category_detail(request, category_name):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     documents = LibraryDocument.objects.filter(category__categoryName=category_name)
     videos = Video.objects.filter(category__categoryName=category_name)
     return render(request, 'network/category_detail.html', {
@@ -249,6 +264,8 @@ def category_detail(request, category_name):
     })
 
 def add_to_favorites(request, item_id, item_type):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     user = request.user
 
     if item_type == 'document':
@@ -261,6 +278,8 @@ def add_to_favorites(request, item_id, item_type):
     return redirect('general_library')
 
 def my_library(request):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     user = request.user
     favorite_documents = FavoriteDocument.objects.filter(user=user)
     favorite_videos = FavoriteVideo.objects.filter(user=user)
@@ -271,6 +290,8 @@ def my_library(request):
 
 
 def view_video(request, video_id):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     video = get_object_or_404(Video, pk=video_id)
     video.views += 1
     video.save()
@@ -280,11 +301,15 @@ def view_video(request, video_id):
 
 @login_required
 def forum(request):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     topics = ForumTopic.objects.all().order_by('-created_at')
     return render(request, 'network/forum.html', {'topics': topics})
 
 @login_required
 def create_topic(request):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     if request.method == 'POST':
         title = request.POST['title']
         topic = ForumTopic.objects.create(title=title, creator=request.user)
@@ -295,12 +320,16 @@ def create_topic(request):
 
 @login_required
 def view_topic(request, topic_id):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     topic = ForumTopic.objects.get(pk=topic_id)
     posts = topic.posts.all().order_by('created_at')
     return render(request, 'network/view_topic.html', {'topic': topic, 'posts': posts})
 
 @login_required
 def add_forum_post(request, topic_id):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     if request.method == 'POST':
         post_content = request.POST['forum_post_content']
         topic = ForumTopic.objects.get(pk=topic_id)
@@ -308,6 +337,8 @@ def add_forum_post(request, topic_id):
         return redirect('view_topic', topic_id=topic_id)
 
 def new_announcement(request):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     if request.method == "POST":
         title = request.POST["announcement_title"]
         content = request.POST["announcement_content"]
@@ -317,12 +348,16 @@ def new_announcement(request):
         return redirect("announcements")
     
 def announcements(request):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     announcement = Announcement.objects.all().order_by('-created_at')
     return render(request, 'network/announcements.html', {'announcements': announcement})
     
 
 @login_required
 def like_count(request):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     post = Post.objects.all().order_by("id").reverse().select_related("user")
     return render(request, "network/likecount.html", {
         "posts": post
@@ -332,8 +367,7 @@ def like_count(request):
 @login_required
 def profile(request, user_id):
     if not request.user.is_authenticated:
-        error_message = "You need to log in to access this page."
-        return render(request, "network/register.html")
+        return render(request, "network/error.html")
     user = User.objects.get(pk=user_id)
     post = Post.objects.filter(user=user).order_by("id").reverse()
     paginator = Paginator(post, 10) # Show 10 contacts per page.
@@ -367,6 +401,8 @@ def profile(request, user_id):
 
 @login_required
 def edit_profile(request, user_id):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     if request.method == "POST":
         user = User.objects.get(pk=user_id)
         user.first_name = request.POST["1"]
@@ -382,6 +418,8 @@ def edit_profile(request, user_id):
 
 @login_required
 def post_content(request, post_id):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     post = Post.objects.get(pk=post_id)
     allComments = Comment.objects.filter(post=post)
     user = request.user
@@ -401,6 +439,8 @@ class CustomPasswordResetView(PasswordResetView):
 
 @login_required
 def addComment(request, post_id):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     if request.method == 'POST':
         message = request.POST.get('newComment')
         if not message.strip():
@@ -418,6 +458,8 @@ def addComment(request, post_id):
 @login_required
 def profile_pic(request, user_id):
     if not request.user.is_authenticated:
+        return render(request, "network/error.html")
+    if not request.user.is_authenticated:
         error_message = "You need to log in to access this page"
         return render(request, "network/register.html")
 
@@ -425,15 +467,13 @@ def profile_pic(request, user_id):
 @login_required
 def post_image(request, post_id):
     if not request.user.is_authenticated:
-        error_message = "You need to log in to access this page"
-        return render(request, "network/register.html")
+        return render(request, "network/error.html")
 
 
 @login_required
 def newPost(request):
     if not request.user.is_authenticated:
-        error_message = "You need to log in to access this page."
-        return render(request, "network/register.html")
+        return render(request, "network/error.html")
     if request.method == "POST":
         post = request.POST["post_content"]
         post_image = request.FILES.get("post_image")
@@ -445,6 +485,8 @@ def newPost(request):
 
 @login_required
 def remove_love(request, post_id):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     post = get_object_or_404(Post, id=post_id)
     try:
         maashaa = Love.objects.get(post=post, user=request.user)
@@ -456,6 +498,8 @@ def remove_love(request, post_id):
 
 @login_required
 def add_love(request, post_id):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
     post = get_object_or_404(Post, id=post_id)
     if request.method == 'POST':
         user = request.user
@@ -594,8 +638,7 @@ def remove_sad(request, post_id):
 @login_required
 def follow(request):
    if not request.user.is_authenticated:
-        error_message = "You need to log in to access this page."
-        return render(request, "network/register.html")
+        return render(request, "network/error.html")
    user_follow = request.POST["followUser"]
    current_user = User.objects.get(pk=request.user.id)
    userFollowData =User.objects.get(username=user_follow)
@@ -610,8 +653,7 @@ def follow(request):
 @login_required
 def unfollow(request):
    if not request.user.is_authenticated:
-        error_message = "You need to log in to access this page."
-        return render(request, "network/register.html")
+        return render(request, "network/error.html")
    user_follow = request.POST["followUser"]
    current_user = User.objects.get(pk=request.user.id)
    userFollowData =User.objects.get(username=user_follow)
@@ -624,8 +666,7 @@ def unfollow(request):
 @login_required
 def following(request):
     if not request.user.is_authenticated:
-        error_message = "You need to log in to access this page."
-        return render(request, "network/register.html")
+        return render(request, "network/error.html")
 
     current_user = User.objects.get(pk=request.user.id)
     following = Follow.objects.filter(following=current_user)
@@ -645,8 +686,7 @@ def following(request):
 @login_required
 def edit(request, post_id):
     if not request.user.is_authenticated:
-        error_message = "You need to log in to access this page."
-        return render(request, "network/register.html")
+        return render(request, "network/error.html")
     if request.method == "POST":
         data = json.loads(request.body)
         edit_post = Post.objects.get(pk=post_id)

@@ -110,6 +110,14 @@ function toggleBackgroundColor() {
   }
 }
 
+function showColumn(columnId) {
+  const column = document.getElementById(columnId);
+  if (column.style.display === 'block') {
+    column.style.display = 'none';
+  } else {
+    column.style.display = 'block';
+  }
+}
 
 
 // This function gets the value of the cookie with the specified name

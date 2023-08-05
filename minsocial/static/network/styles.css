@@ -407,6 +407,10 @@ input:checked + .slider:before {
     }
 }
 
+.container {
+  margin-bottom: 20px
+}
+
 .horizontal-container {
   display: flex;
   align-items: center; /* Align items vertically in the center */

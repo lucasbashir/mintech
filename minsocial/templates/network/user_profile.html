@@ -178,16 +178,16 @@
 </a>
 {% endif %}
 
-        </div>
-        <div class="card-body">
+       
+        
           {% if posts.post_image %}
+          <div class="card-body">
           <div class="image-container">
   <img src="{{ posts.post_image.url }}" class="img-fluid desktop-image" alt="Post Image">
 </div>
-
-          
+</div>      
           {% endif %}
-        </div>
+        
 </div>
 <p class="card-text"><small class="text-muted">{{ posts.timestamp }}</small></p>
 
@@ -201,6 +201,7 @@
   </div>
   </div>
   </div>
+</div>
   <!-- End of the for loop -->
   {% endfor %}
 

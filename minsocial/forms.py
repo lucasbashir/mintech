@@ -22,11 +22,11 @@ class VideoForm(forms.ModelForm):
 class RegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
     confirmation = forms.CharField(widget=forms.PasswordInput)
-    profile_pic = forms.ImageField(required=False)
+    profile_pics = forms.ImageField(required=False)
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'password', 'confirmation', 'profile_pic']
+        fields = ['first_name', 'last_name', 'username', 'email', 'password', 'confirmation', 'profile_pics']
 
     def clean_first_name(self):
         first_name = self.cleaned_data['first_name']

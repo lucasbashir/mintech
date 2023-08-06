@@ -4,8 +4,20 @@
 {% load static %}
 {% block body %}
 
+{% if is_member %}
 <ul>
   {% for group in groups %}
+    <li>
+      <a href="{% url 'group_detail' group_id=group.id %}">{{ group.name }}</a>
+      <a href="{% url 'group_detail' group_id=group.id %}" class="btn btn-primary">View Details</a>
+      
+    </li>
+  {% endfor %}
+</ul>
+<hr>
+{% else %}
+<ul>
+  {% for group in suggested_groups %}
     <li>
       <a href="{% url 'group_detail' group_id=group.id %}">{{ group.name }}</a>
       <a href="{% url 'group_detail' group_id=group.id %}" class="btn btn-primary">View Details</a>
@@ -13,6 +25,7 @@
     </li>
   {% endfor %}
 </ul>
+{% endif %}
 <div class="index-container center-content">
   
   

@@ -37,20 +37,54 @@ def index(request):
     page_number = request.GET.get('page')
     page_post = paginator.get_page(page_number)
     user = request.user
-    groups = Group.objects.all()
+    suggested_groups = Group.objects.all()
+    groups = Group.objects.filter(members=user)
+    is_member = groups.exists()  # Check if the user is a member of at least one group
+    is_not_member = not is_member  # Check if the user is not a member of any group
     profile_pics = user.profile_pics
     # Get comments for the posts displayed on the page
     comments = Comment.objects.filter(post__in=page_post)
 
     return render(request, "network/index.html", {
-
+        "is_member": is_member,
+        "is_not_member": is_not_member,
         "post": post,
+        "suggested_groups": suggested_groups,
         "page_post": page_post,
-        "groups":groups,
+        "groups": groups,
         "profile_pics": profile_pics,
         "comments": comments,
         "user": user,
     })
+
+def my_groups_view(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    user = request.user
+    groups = Group.objects.filter(creator=user)
+    return render(request, 'network/my_groups.html', {'groups': groups})
+
+def joined_groups_view(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    user = request.user
+    groups = Group.objects.filter(members=user)
+    return render(request, 'network/joined_groups.html', {'groups': groups})
+
+def delete_group_view(request, group_id):
+    group = get_object_or_404(Group, id=group_id)
+    if request.method == 'POST' and request.user == group.creator:
+        group.delete()
+    return redirect('my_groups')
+
+def exit_group_view(request, group_id):
+    group = get_object_or_404(Group, id=group_id)
+    if request.method == 'POST' and request.user in group.members.all():
+        group.members.remove(request.user)
+    return redirect('joined_groups')
+
 def create_group(request):
     if not request.user.is_authenticated:
         return render(request, "network/error.html")
@@ -369,6 +403,8 @@ def profile(request, user_id):
     if not request.user.is_authenticated:
         return render(request, "network/error.html")
     user = User.objects.get(pk=user_id)
+    my_groups = Group.objects.filter(creator=request.user)
+    groups_i_joined = request.user.group_members.all()
     post = Post.objects.filter(user=user).order_by("id").reverse()
     paginator = Paginator(post, 10) # Show 10 contacts per page.
     page_number = request.GET.get('page')
@@ -395,7 +431,9 @@ def profile(request, user_id):
         "following": following,
         "follower": follower,
         "username": user.username,
-        "isFollowing": newFollowing
+        "isFollowing": newFollowing,
+        "my_groups": my_groups,
+        "groups_i_joined": groups_i_joined,
     })
 
 

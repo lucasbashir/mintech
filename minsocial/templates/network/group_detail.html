@@ -4,7 +4,14 @@
 {% load static %}
 {% block body %}
 
-
+{% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+    <li{% if message.success %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+  
 <div class="container">
     {% if user.is_authenticated %}
       <!-- Check if the user is authenticated -->

@@ -3,6 +3,118 @@
 {% load my_filters %}
 {% block body %}
 
+<br>
+{% if user == userProfile %}
+<a href="#" id="my-groups-btn" class="btn btn-primary">My Groups</a>
+<a href="#" id="groups-i-joined-btn" class="btn btn-primary">Groups I Have Joined</a>
+
+<script>
+  $(document).ready(function() {
+    // Initialize the modals
+    var myGroupsModal = document.getElementById('my-groups-modal');
+    var groupsIJoinedModal = document.getElementById('groups-i-joined-modal');
+
+    myGroupsModal.style.display = 'none';
+    groupsIJoinedModal.style.display = 'none';
+
+    // Open the modal when the button is clicked
+    $('#my-groups-btn').click(function() {
+      myGroupsModal.style.display = 'block';
+    });
+
+    $('#groups-i-joined-btn').click(function() {
+      groupsIJoinedModal.style.display = 'block';
+    });
+  });
+
+  $(document).ready(function() {
+  // Initialize the modals
+  var myGroupsModal = document.getElementById('my-groups-modal');
+  var groupsIJoinedModal = document.getElementById('groups-i-joined-modal');
+
+  myGroupsModal.style.display = 'none';
+  groupsIJoinedModal.style.display = 'none';
+
+  // Open the modal when the button is clicked
+  $('#my-groups-btn').click(function() {
+    myGroupsModal.style.display = 'block';
+  });
+
+  $('#groups-i-joined-btn').click(function() {
+    groupsIJoinedModal.style.display = 'block';
+  });
+
+  // Load more groups when the user scrolls to the bottom of the modal
+  var modalBody = document.getElementById('my-groups-modal-body');
+  modalBody.addEventListener('scroll', function() {
+    if (modalBody.scrollHeight - modalBody.scrollTop <= 50) {
+      // Load more groups
+      var ajaxRequest = new XMLHttpRequest();
+      ajaxRequest.open('GET', '/api/groups/?offset=15', true);
+      ajaxRequest.onload = function() {
+        if (ajaxRequest.status === 200) {
+          var groups = JSON.parse(ajaxRequest.responseText);
+          for (var i = 0; i < groups.length; i++) {
+            var li = document.createElement('li');
+            li.innerHTML = '<a href="/groups/' + groups[i].pk + '">' + groups[i].name + '</a>';
+            modalBody.appendChild(li);
+          }
+        }
+      };
+      ajaxRequest.send();
+    }
+  });
+});
+
+</script>
+
+
+<!-- My Groups Modal -->
+<div class="modal" id="my-groups-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">My Groups</h5>
+        <button type="button" class="close" data-dismiss="modal" onclick="closeModal('my-groups-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <ul>
+          {% for group in my_groups %}
+            <li><a href="{% url 'group_detail' group.pk %}">{{ group.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Groups I Joined Modal -->
+<div class="modal" id="groups-i-joined-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Groups I Have Joined</h5>
+        <button type="button" class="close" data-dismiss="modal" onclick="closeModal('groups-i-joined-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <ul>
+          {% for group in groups_i_joined %}
+            <li><a href="{% url 'group_detail' group.pk %}">{{ group.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function closeModal(modalId) {
+    var modal = document.getElementById(modalId);
+    modal.style.display = 'none'; /* Hide the modal */
+  }
+</script>
+{% endif %}
+
 <div class="container">
   <div class="row mb-3">
     <div class="col-6 text-center">
@@ -86,6 +198,18 @@
 </style>
 
 <script>
+
+function openMyGroupsModal() {
+    // Initialize the modal
+    var modal = document.getElementById('my-groups-modal');
+    modal.style.display = 'block';
+  }
+
+  function openGroupsIJoinedModal() {
+    // Initialize the modal
+    var modal = document.getElementById('groups-i-joined-modal');
+    modal.style.display = 'block';
+  }
   function openEditBioModal() {
     var modal = document.getElementById('editBioModal');
     modal.style.display = 'block';
@@ -101,10 +225,10 @@
   <div class="card">
     <div class="card-body">
       <div class="d-flex align-items-center">
-        {% if userProfile.profile.pics %}
+        {% if userProfile.profile_pics %}
           <img src="{{ userProfile.profile_pics.url }}" class="rounded-circle" width="150" height="150"> 
           {% else %} 
-          <img src="/media/post_image/hand.gif" class="rounded-circle" width="70" height="70">
+          <img src="/media/post_image/hand.gif" class="rounded-circle" width="70" height="70" style="margin-top: 1px;">
           {% endif %}
         <div class="ml-3">
           <h4 class="card-title mb-0">
@@ -113,6 +237,7 @@
           <p class="mb-0">
            Username: {{ userProfile.username }}
           </p>
+          <br>
           <p class="mb-0">
            Email: {{ userProfile.email }}
           </p>

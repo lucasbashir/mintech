@@ -9,6 +9,7 @@ from django.views.generic import TemplateView
 from django.urls import reverse, reverse_lazy
 from django.core.paginator import Paginator
 import json
+from django.db.models import Q
 from django.http import Http404
 from django.contrib import messages
 from django.http import JsonResponse
@@ -56,6 +57,58 @@ def index(request):
         "comments": comments,
         "user": user,
     })
+
+def search(request):
+    query = request.GET.get('q')
+    if query:
+        # Perform the search using Q objects to query all relevant fields
+
+        users = User.objects.filter(
+            Q(username__icontains=query) |
+            Q(first_name__icontains=query) |
+            Q(last_name__icontains=query)
+        ).distinct()
+
+        posts = Post.objects.filter(
+            Q(postContent__icontains=query) |
+            Q(user__username__icontains=query) |
+            Q(postComment__message__icontains=query)
+        ).distinct()
+
+        group_posts = GroupPost.objects.filter(
+            Q(postContent__icontains=query) |
+            Q(user__username__icontains=query)
+        )
+
+        forum_posts = ForumPost.objects.filter(
+            Q(content__icontains=query) |
+            Q(creator__username__icontains=query)
+        )
+
+        announcements = Announcement.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(poster__username__icontains=query)
+        )
+
+        library_documents = LibraryDocument.objects.filter(
+            Q(title__icontains=query) |
+            Q(uploader__username__icontains=query)
+        )
+
+        return render(request, "network/search_results.html", {
+            'posts': posts,
+            'group_posts': group_posts,
+            'forum_posts': forum_posts,
+            'announcements': announcements,
+            'library_documents': library_documents,
+            'query': query,
+            'users': users,
+        })
+    else:
+        # If no query is provided, show an empty result page
+        return render(request, "network/search_results.html")
+
 
 def my_groups_view(request):
     if not request.user.is_authenticated:

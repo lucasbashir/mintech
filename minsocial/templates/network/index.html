@@ -27,7 +27,11 @@
 </ul>
 {% endif %}
 <div class="index-container center-content">
-  
+  <form action="{% url 'search' %}" method="get" class="search-form">
+    <input type="text" name="q" placeholder="Search..." />
+    <button type="submit">Search</button>
+</form>
+
   
 
   {% if user.is_authenticated %}

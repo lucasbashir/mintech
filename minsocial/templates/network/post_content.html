@@ -47,6 +47,10 @@
               <img src="{{ posts.post_image.url }}" class="img-fluid desktop-image" alt="Post Image">
             </div>
           </div>
+          {% else %}
+                        <a href="{% url 'profile' user_id=posts.user.id %}">
+                            <img src="/media/post_image/hand.gif" class="rounded-circle" width="70" height="70">
+                        </a>
           {% endif %}
         
       

@@ -3,6 +3,23 @@ body {
   color: black;
 }
 
+.search-form {
+  margin-bottom: 20px;
+}
+
+.search-form input[type="text"] {
+  padding: 5px;
+  width: 200px;
+}
+
+.search-form button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
 * {
   margin: 0;
   padding: 0;

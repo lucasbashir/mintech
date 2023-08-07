@@ -14,6 +14,7 @@ urlpatterns = [
     path('my_groups/', views.my_groups_view, name='my_groups'),
     path('joined_groups/', views.joined_groups_view, name='joined_groups'),
     path('group/<int:group_id>/delete/', views.delete_group_view, name='delete_group'),
+    path('search/', views.search, name='search'),
     path('group/<int:group_id>/exit/', views.exit_group_view, name='exit_group'),
     path("post_content/<int:post_id>", views.post_content, name="post_content"),
     path("post_image/<int:post_id>", views.post_image, name="post_image"),

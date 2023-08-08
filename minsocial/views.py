@@ -75,13 +75,17 @@ def search(request):
             Q(postComment__message__icontains=query)
         ).distinct()
 
+        groups = Group.objects.filter(
+            Q(name__icontains=query)
+        ).distinct()
+
         group_posts = GroupPost.objects.filter(
             Q(postContent__icontains=query) |
             Q(user__username__icontains=query)
         )
 
-        forum_posts = ForumPost.objects.filter(
-            Q(content__icontains=query) |
+        forum_posts = ForumTopic.objects.filter(
+            Q(title__icontains=query) |
             Q(creator__username__icontains=query)
         )
 
@@ -96,6 +100,11 @@ def search(request):
             Q(uploader__username__icontains=query)
         )
 
+        library_videos = Video.objects.filter(
+            Q(title__icontains=query) |
+            Q(uploader__username__icontains=query)
+        )
+
         return render(request, "network/search_results.html", {
             'posts': posts,
             'group_posts': group_posts,
@@ -104,6 +113,8 @@ def search(request):
             'library_documents': library_documents,
             'query': query,
             'users': users,
+            'groups': groups,
+            'videos': library_videos, 
         })
     else:
         # If no query is provided, show an empty result page
@@ -260,9 +271,22 @@ def group_addComment(request, post_id):
     # If the request method is not POST or the message is empty, redirect to the same page
     return redirect('group_detail', group_id=post_id)
 
-
-
 @login_required
+def group_post_content(request, post_id):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
+    post = GroupPost.objects.get(pk=post_id)
+    allComments = GroupComment.objects.filter(post=post)
+    user = request.user
+    
+
+    return render(request, "network/group_post_content.html", {
+        "posts": post,
+        "allComments": allComments,
+        
+    })
+
+
 def group_add_or_remove_reaction(request, post_id, reaction_type):
     if not request.user.is_authenticated:
         return render(request, "network/error.html")
@@ -291,7 +315,10 @@ def group_add_or_remove_reaction(request, post_id, reaction_type):
             reaction = ReactionModel.objects.create(post=post, user=user)
             messages.success(request, f'You added {reaction_type} reaction on this post.')
 
-    return HttpResponseRedirect(reverse('group_detail', kwargs={'group_id': post.group.id}))
+        return HttpResponseRedirect(reverse('group_post_content', kwargs={'post_id': post_id}))
+
+
+
 
 @login_required
 def upload_document(request):
@@ -521,6 +548,9 @@ def post_content(request, post_id):
         "allComments": allComments,
         
     })
+
+
+
 
 class CustomPasswordResetView(PasswordResetView):
     email_template_name = 'network/reset_password_email.html'

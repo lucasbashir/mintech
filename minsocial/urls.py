@@ -17,6 +17,7 @@ urlpatterns = [
     path('search/', views.search, name='search'),
     path('group/<int:group_id>/exit/', views.exit_group_view, name='exit_group'),
     path("post_content/<int:post_id>", views.post_content, name="post_content"),
+    path("group_post_content/<int:post_id>", views.group_post_content, name="group_post_content"),
     path("post_image/<int:post_id>", views.post_image, name="post_image"),
     path('profile_pic/<int:user_id/', views.profile_pic, name="profile_pic"),
     path('profile/<int:user_id>/', views.profile, name="profile"),

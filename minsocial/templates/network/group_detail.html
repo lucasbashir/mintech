@@ -15,6 +15,7 @@
 <div class="container">
     {% if user.is_authenticated %}
       <!-- Check if the user is authenticated -->
+      {% if is_group_member %}
       <div class="" id="create-post-field-container">
         <input style="margin-top: 20px; height: 50px; border-radius: 1rem;" type="text" id="create-post-field" class="form-control" placeholder="Say something to the group..." onclick="openModal()">
       </div>
@@ -39,7 +40,7 @@
           </div>
         </div>
       </div>
-    {% endif %}
+      
     <br>
     <!-- Display group posts -->
     {% for posts in page_group_posts %}
@@ -144,5 +145,12 @@
     </div>
     </section>
   {% endfor %}
+  {% else %}
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
+    <a href="{% url 'join_group' group_id=group.id %}" class="btn btn-primary ml-2">Join Group to get involved</a>
+</div>
+
+      {% endif %}
+    {% endif %}
 
 {% endblock %}

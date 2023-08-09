@@ -52,6 +52,7 @@ urlpatterns = [
     path('forum/topic/<int:topic_id>/add_post/', views.add_forum_post, name='add_forum_post'),
     path('new_announcement', views.new_announcement, name="new_announcement"),
     path("announcements", views.announcements, name="announcements"),
+    path('all_groups/', views.all_groups, name='all_groups'),
     path("login", views.login_view, name="network_login"),
     path("logout", views.logout_view, name="network_logout"),
     path("register", views.register, name="network_register"),

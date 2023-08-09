@@ -5,70 +5,6 @@
 
 <br>
 {% if user == userProfile %}
-<a href="#" id="my-groups-btn" class="btn btn-primary">My Groups</a>
-<a href="#" id="groups-i-joined-btn" class="btn btn-primary">Groups I Have Joined</a>
-
-<script>
-  $(document).ready(function() {
-    // Initialize the modals
-    var myGroupsModal = document.getElementById('my-groups-modal');
-    var groupsIJoinedModal = document.getElementById('groups-i-joined-modal');
-
-    myGroupsModal.style.display = 'none';
-    groupsIJoinedModal.style.display = 'none';
-
-    // Open the modal when the button is clicked
-    $('#my-groups-btn').click(function() {
-      myGroupsModal.style.display = 'block';
-    });
-
-    $('#groups-i-joined-btn').click(function() {
-      groupsIJoinedModal.style.display = 'block';
-    });
-  });
-
-  $(document).ready(function() {
-  // Initialize the modals
-  var myGroupsModal = document.getElementById('my-groups-modal');
-  var groupsIJoinedModal = document.getElementById('groups-i-joined-modal');
-
-  myGroupsModal.style.display = 'none';
-  groupsIJoinedModal.style.display = 'none';
-
-  // Open the modal when the button is clicked
-  $('#my-groups-btn').click(function() {
-    myGroupsModal.style.display = 'block';
-  });
-
-  $('#groups-i-joined-btn').click(function() {
-    groupsIJoinedModal.style.display = 'block';
-  });
-
-  // Load more groups when the user scrolls to the bottom of the modal
-  var modalBody = document.getElementById('my-groups-modal-body');
-  modalBody.addEventListener('scroll', function() {
-    if (modalBody.scrollHeight - modalBody.scrollTop <= 50) {
-      // Load more groups
-      var ajaxRequest = new XMLHttpRequest();
-      ajaxRequest.open('GET', '/api/groups/?offset=15', true);
-      ajaxRequest.onload = function() {
-        if (ajaxRequest.status === 200) {
-          var groups = JSON.parse(ajaxRequest.responseText);
-          for (var i = 0; i < groups.length; i++) {
-            var li = document.createElement('li');
-            li.innerHTML = '<a href="/groups/' + groups[i].pk + '">' + groups[i].name + '</a>';
-            modalBody.appendChild(li);
-          }
-        }
-      };
-      ajaxRequest.send();
-    }
-  });
-});
-
-</script>
-
-
 <!-- My Groups Modal -->
 <div class="modal" id="my-groups-modal">
   <div class="modal-dialog">
@@ -257,6 +193,19 @@ function openMyGroupsModal() {
         {% else %}
         <p>About: ...</p>
         {%endif%}
+        {% if user == userProfile %}
+        <br>
+        <button id="popit" onclick="pop()" class="btn-primary">Groups Info</button>
+        <br>
+        <div>
+<button href="#" id="my-groups-btn" class="btn btn-primary">My Groups</button>
+<br>
+<button href="#" id="groups-i-joined-btn" class="btn btn-primary">Joined Groups</button>
+<br>
+<button href="{% url 'all_groups' %}" class="btn btn-primary" id="all-btn">Check other groups</button>
+</div>
+{% endif %}
+        
       </div>
     </div>
   </div>
@@ -293,15 +242,15 @@ function openMyGroupsModal() {
         <!-- Display the content of the post -->
         <div class="card-text" id="content_{{ posts.id }}">
           {% for paragraph in posts.postContent|split_paragraphs %}
-  {% if forloop.counter <= 10 %}
-    <p>{{ paragraph|urlize }}</p>
-  {% endif %}
-{% endfor %}
-{% if posts.postContent|split_paragraphs|length > 2 %}
-<a href="{% url 'post_content' post_id=posts.id %}">
-  <p class="btn btn-link read-more" data-post="{{ posts.id }}">Read full content >>></p>
-</a>
-{% endif %}
+                
+                  <p>{{ paragraph|urlize }}</p>
+               
+              {% endfor %}
+              {% if posts.postContent|split_paragraphs|length >= 5 %}
+                <a href="{% url 'post_content' post_id=posts.id %}">
+                  <p class="read-more" data-post="{{ posts.id }}">Read full content >>></p>
+                </a>
+              {% endif %}
 
        
         
@@ -331,6 +280,115 @@ function openMyGroupsModal() {
   {% endfor %}
 
 
+  <style>
+    #my-groups-btn {
+      display: none;
+    }
+  
+    #groups-i-joined-btn {
+      display: none;
+    }
+  
+    #all-btn {
+      display: none;
+    }
+  </style>
+  
+  <script>
+  myGroups = document.getElementById('my-groups-btn');
+  joined = document.getElementById('groups-i-joined-btn');
+  aller = document.getElementById('all-btn');
+  
+  function pop() {
+    myGroups.style.display = 'block';
+    joined.style.display = 'block';
+    aller.style.display = 'block';
+  }
+    
+    $(document).ready(function() {
+      // Initialize the modals
+      var myGroupsModal = document.getElementById('my-groups-modal');
+      var groupsIJoinedModal = document.getElementById('groups-i-joined-modal');
+  
+      myGroupsModal.style.display = 'none';
+      groupsIJoinedModal.style.display = 'none';
+  
+      // Open the modal when the button is clicked
+      $('#my-groups-btn').click(function() {
+        myGroupsModal.style.display = 'none';
+      });
+  
+      $('#groups-i-joined-btn').click(function() {
+        groupsIJoinedModal.style.display = 'none';
+      });
+    });
+  
+    $(document).ready(function() {
+    // Initialize the modals
+    var myGroupsModal = document.getElementById('my-groups-modal');
+    var groupsIJoinedModal = document.getElementById('groups-i-joined-modal');
+  
+    myGroupsModal.style.display = 'none';
+    groupsIJoinedModal.style.display = 'none';
+  
+    // Open the modal when the button is clicked
+    $('#my-groups-btn').click(function() {
+      myGroupsModal.style.display = 'block';
+    });
+  
+    $('#groups-i-joined-btn').click(function() {
+      groupsIJoinedModal.style.display = 'block';
+    });
+  
+    // Load more groups when the user scrolls to the bottom of the modal
+    var modalBody = document.getElementById('my-groups-modal-body');
+    modalBody.addEventListener('scroll', function() {
+      if (modalBody.scrollHeight - modalBody.scrollTop <= 50) {
+        // Load more groups
+        var ajaxRequest = new XMLHttpRequest();
+        ajaxRequest.open('GET', '/api/groups/?offset=15', true);
+        ajaxRequest.onload = function() {
+          if (ajaxRequest.status === 200) {
+            var groups = JSON.parse(ajaxRequest.responseText);
+            for (var i = 0; i < groups.length; i++) {
+              var li = document.createElement('li');
+              li.innerHTML = '<a href="/groups/' + groups[i].pk + '">' + groups[i].name + '</a>';
+              modalBody.appendChild(li);
+            }
+          }
+        };
+        ajaxRequest.send();
+      }
+    });
+  });
+  
+  </script>
+  <style>
+  /* Additional CSS for mobile responsiveness */
+  #my-groups-btn,
+  #groups-i-joined-btn,
+  #all-btn {
+    display: none;
+    margin-top: 10px;
+  }
+
+  #popit {
+    margin-top: 10px;
+  }
+
+  @media (max-width: 576px) {
+    #popit {
+      margin-top: 0;
+    }
+
+    #my-groups-btn,
+    #groups-i-joined-btn,
+    #all-btn {
+      display: inline-block;
+    }
+  }
+</style>
+  
   <!-- Pagination for navigating through the posts -->
   <nav aria-label="Page navigation example">
   <ul class="pagination d-flex justify-content-center">

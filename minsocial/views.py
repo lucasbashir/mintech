@@ -58,6 +58,11 @@ def index(request):
         "user": user,
     })
 
+def all_groups(request):
+    user = request.user
+    groups_not_belonged = Group.objects.exclude(members=user)
+    return render(request, 'network/not_belonged_groups.html', {'groups_not_belonged': groups_not_belonged})
+
 def search(request):
     query = request.GET.get('q')
     if query:

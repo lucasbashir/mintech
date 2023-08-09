@@ -4,28 +4,9 @@
 {% load static %}
 {% block body %}
 
-{% if is_member %}
-<ul>
-  {% for group in groups %}
-    <li>
-      <a href="{% url 'group_detail' group_id=group.id %}">{{ group.name }}</a>
-      <a href="{% url 'group_detail' group_id=group.id %}" class="btn btn-primary">View Details</a>
-      
-    </li>
-  {% endfor %}
-</ul>
-<hr>
-{% else %}
-<ul>
-  {% for group in suggested_groups %}
-    <li>
-      <a href="{% url 'group_detail' group_id=group.id %}">{{ group.name }}</a>
-      <a href="{% url 'group_detail' group_id=group.id %}" class="btn btn-primary">View Details</a>
-      <a href="{% url 'join_group' group_id=group.id %}">Join Group</a>
-    </li>
-  {% endfor %}
-</ul>
-{% endif %}
+
+
+
 <div class="index-container center-content">
   <form action="{% url 'search' %}" method="get" class="search-form">
     <input type="text" name="q" placeholder="Search..." />
@@ -105,11 +86,11 @@
             <br>
             <div class="card-text" id="content_{{ posts.id }}">
               {% for paragraph in posts.postContent|split_paragraphs %}
-                {% if forloop.counter <= 10 %}
+                
                   <p>{{ paragraph|urlize }}</p>
-                {% endif %}
+               
               {% endfor %}
-              {% if posts.postContent|split_paragraphs|length > 2 %}
+              {% if posts.postContent|split_paragraphs|length >= 5 %}
                 <a href="{% url 'post_content' post_id=posts.id %}">
                   <p class="read-more" data-post="{{ posts.id }}">Read full content >>></p>
                 </a>

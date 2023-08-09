@@ -20,7 +20,7 @@
   <ul>
     {% for topic in topics %}
       <li>
-      <strong> <a href="{% url 'view_topic' topic.id %}"><span style="color: black;"> {{ topic.title }}</span></a></strong>
+      <strong> <a href="{% url 'view_topic' topic.id %}">{{ topic.title }}</a></strong>
         - Created by {{ topic.creator.username }} on {{ topic.created_at }}
       </li>
     {% endfor %}

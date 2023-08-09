@@ -1,0 +1,34 @@
+{% extends "network/layout.html" %}
+{% load custom_tags %}
+{% load my_filters %}
+{% load static %}
+{% block body %}
+
+<div class="index-container center-content">
+<label style="margin-top: 15px;" class="switch">
+    <input type="checkbox">
+    <span class="slider round" id="toggleButton" onclick="toggleBackgroundColor()"></span>
+  </label>
+    {% for group in groups_not_belonged %}
+    <div class="container">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+                <h3><a href="{% url 'group_detail' group.id %}" style="color: white;">{{ group.name }}</a></h3>
+                <a href="{% url 'join_group' group_id=group.id %}" class="btn btn-primary ml-2">Join Group</a>
+            </div>
+            
+            <br>
+            {% if group.description %}
+            {% for paragraph in group.description|split_paragraphs %}
+                
+                  <p style="color: white; border: 1px solid white; padding: 5px;">{{ paragraph|urlize }}</p>
+               
+              {% endfor %}
+              {% endif %}
+          </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

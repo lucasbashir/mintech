@@ -40,11 +40,6 @@
         {% for paragraph in posts.postContent|split_paragraphs %}
         <p>{{ paragraph|urlize }}</p>
         {% endfor %}
-        {% if posts.postContent|split_paragraphs|length > 2 %}
-                <a href="{% url 'post_content' post_id=posts.id %}">
-                  <p class="read-more" data-post="{{ posts.id }}">Read full content >>></p>
-                </a>
-              {% endif %}
           {% if posts.post_image %}
           <div class="card-body">
             <div class="image-container">

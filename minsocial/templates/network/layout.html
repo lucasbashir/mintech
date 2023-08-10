@@ -32,9 +32,9 @@
             <button type="submit">Search</button>
         </form>
         <label style="margin-top: 15px; margin-left: 10px;" class="switch">
-            <input type="checkbox">
-            <span class="slider round" id="toggleButton" onclick="toggleBackgroundColor()"></span>
-          </label>
+            <input onclick="toggleBackgroundColor()" type="checkbox" id="toggleSwitch">
+            <span class="slider round"></span>
+        </label>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,6 +75,38 @@
     <div class="body">
         {% block body %}{% endblock %}
     </div>
+</div>
+
+<script>
+    const body = document.getElementById('body');
+    const toggleSwitch = document.getElementById('toggleSwitch');
+
+    function toggleBackgroundColor() {
+        if (toggleSwitch.checked) {
+            body.style.backgroundColor = 'black';
+            body.style.color = 'white';
+            localStorage.setItem('backgroundColor', 'black');
+        } else {
+            body.style.backgroundColor = 'white';
+            body.style.color = 'black';
+            localStorage.setItem('backgroundColor', 'white');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedBackgroundColor = localStorage.getItem('backgroundColor');
+
+        if (savedBackgroundColor === 'black') {
+            body.style.backgroundColor = 'black';
+            body.style.color = 'white';
+            toggleSwitch.checked = true;
+        } else {
+            body.style.backgroundColor = 'white';
+            body.style.color = 'black';
+            toggleSwitch.checked = false;
+        }
+    });
+</script>
 </body>
 
 </html>

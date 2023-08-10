@@ -3,7 +3,7 @@
 {% load my_filters %}
 {% load static %}
 {% block body %}
-<div class="index-container center-content">
+
 {% if messages %}
 <ul class="messages">
   {% for message in messages %}
@@ -148,7 +148,6 @@
   {% else %}
   <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
     <a href="{% url 'join_group' group_id=group.id %}" class="btn btn-primary ml-2">Join Group to get involved</a>
-</div>
 </div>
 
       {% endif %}

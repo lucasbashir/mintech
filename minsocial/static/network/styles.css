@@ -408,15 +408,18 @@ input:checked + .slider:before {
     color: #333;
 }
 
+.navbar-nav .nav-item.dropdown {
+  display: block;
+  margin-right: 200px;
+}
+
 /* Custom CSS for mobile-only dropdown */
 @media (max-width: 767px) {
     .navbar-nav .nav-item {
         display: none;
     }
 
-    .navbar-nav .nav-item.dropdown {
-        display: block;
-    }
+   
 
     .navbar-nav .nav-item.dropdown .dropdown-menu {
         position: relative;

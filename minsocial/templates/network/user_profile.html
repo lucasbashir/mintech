@@ -3,7 +3,7 @@
 {% load my_filters %}
 {% block body %}
 
-<br>
+<div class="index-container center-content">
 {% if user == userProfile %}
 <!-- My Groups Modal -->
 <div class="modal" id="my-groups-modal">
@@ -202,7 +202,11 @@ function openMyGroupsModal() {
 <br>
 <button href="#" id="groups-i-joined-btn" class="btn btn-primary">Joined Groups</button>
 <br>
-<button href="{% url 'all_groups' %}" class="btn btn-primary" id="all-btn">Check other groups</button>
+<button onclick="navigateToAllGroups()" class="btn btn-primary" id="all-btn">Check other groups</button>
+
+
+
+
 </div>
 {% endif %}
         
@@ -292,6 +296,8 @@ function openMyGroupsModal() {
     #all-btn {
       display: none;
     }
+
+    
   </style>
   
   <script>
@@ -299,6 +305,10 @@ function openMyGroupsModal() {
   joined = document.getElementById('groups-i-joined-btn');
   aller = document.getElementById('all-btn');
   
+   function navigateToAllGroups() {
+    window.location.href = '{% url "all_groups" %}';
+  }
+
   function pop() {
     myGroups.style.display = 'block';
     joined.style.display = 'block';
@@ -376,17 +386,7 @@ function openMyGroupsModal() {
     margin-top: 10px;
   }
 
-  @media (max-width: 576px) {
-    #popit {
-      margin-top: 0;
-    }
-
-    #my-groups-btn,
-    #groups-i-joined-btn,
-    #all-btn {
-      display: inline-block;
-    }
-  }
+  
 </style>
   
   <!-- Pagination for navigating through the posts -->
@@ -402,5 +402,5 @@ function openMyGroupsModal() {
   {% endif %}
   </ul>
   </nav>
-
+</div>
   {% endblock %}

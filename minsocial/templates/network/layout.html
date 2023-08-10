@@ -24,9 +24,17 @@
     
 </head>
 
-<body>
+<body id="body">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="{% url 'index' %}">M I N T E C H</a>
+        <form action="{% url 'search' %}" method="get" class="search-form">
+            <input style="margin-top: 20px;" type="text" name="q" placeholder="Search..." />
+            <button type="submit">Search</button>
+        </form>
+        <label style="margin-top: 15px; margin-left: 10px;" class="switch">
+            <input type="checkbox">
+            <span class="slider round" id="toggleButton" onclick="toggleBackgroundColor()"></span>
+          </label>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +47,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Actions
+                        Menu
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         {% if user.is_authenticated %}

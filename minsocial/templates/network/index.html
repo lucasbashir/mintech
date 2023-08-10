@@ -8,11 +8,6 @@
 
 
 <div class="index-container center-content">
-  <form action="{% url 'search' %}" method="get" class="search-form">
-    <input type="text" name="q" placeholder="Search..." />
-    <button type="submit">Search</button>
-</form>
-
   
 
   {% if user.is_authenticated %}
@@ -28,10 +23,7 @@
         </a> 
       {% endif %}
       <input style="margin-top: 10px; height: 50px; border-radius: 1rem;" type="text" id="create-post-field" placeholder="Share a thought" onclick="openModal()">
-      <label style="margin-top: 15px;" class="switch">
-        <input type="checkbox">
-        <span class="slider round" id="toggleButton" onclick="toggleBackgroundColor()"></span>
-      </label>
+      
       
     </div>
 

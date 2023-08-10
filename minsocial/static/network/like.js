@@ -100,15 +100,34 @@ mainButton.addEventListener('mousedown', () => {
 
 
 function toggleBackgroundColor() {
-  const indexContainer = document.querySelector('.index-container');
-  if (indexContainer.style.backgroundColor === 'black') {
-    indexContainer.style.backgroundColor = 'white';
-    indexContainer.style.color = 'black'; // Adjust the text color for better contrast
-  } else {
-    indexContainer.style.backgroundColor = 'black';
-    indexContainer.style.color = 'white'; // Adjust the text color for better contrast
-  }
+    const body = document.getElementById('body');
+    const toggleSwitch = document.getElementById('toggleSwitch');
+
+    if (toggleSwitch.checked) {
+        body.style.backgroundColor = 'black';
+        body.style.color = 'white';
+        localStorage.setItem('backgroundColor', 'black');
+    } else {
+        body.style.backgroundColor = 'white';
+        body.style.color = 'black';
+        localStorage.setItem('backgroundColor', 'white');
+    }
 }
+
+// Check local storage and set background color on page load
+document.addEventListener('DOMContentLoaded', () => {
+    const savedBackgroundColor = localStorage.getItem('backgroundColor');
+
+    if (savedBackgroundColor === 'black') {
+        body.style.backgroundColor = 'black';
+        body.style.color = 'white';
+        toggleSwitch.checked = true;
+    } else {
+        body.style.backgroundColor = 'white';
+        body.style.color = 'black';
+        toggleSwitch.checked = false;
+    }
+});
 
 function showColumn(columnId) {
   const column = document.getElementById(columnId);

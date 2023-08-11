@@ -36,7 +36,8 @@
                 <a href="{{ document.file.url }}"><span style="color: white;">{{document.title}}</span> </a>
                 <p>Times Uploaded: {{ document.uploader.librarydocument_set.count }}</p>
                     <a href="{% url 'add_to_favorites' item_id=document.id item_type='document' %}"><span style="color: white;"> Add to Favorites</span></a>
-                    <button class="btn-primary" onclick="shareFile('{{ document.file.url }}')">Share</button>           
+                    <button class="btn-primary" onclick="shareFile('https:\//mintechy.pythonanywhere.com{{ document.file.url }}')">Share</button>
+           
             </div>
         {% endfor %} 
 
@@ -54,7 +55,7 @@
                 <p>Views: {{ video.views }}</p>
                 {% if user.is_authenticated %}
                     <a href="{% url 'add_to_favorites' item_id=video.id item_type='video' %}"><span style="color: white;">Add to Favorites</span></a>
-                    <button class="btn-primary" onclick="shareFile('{{ video.file.url }}')">Share</button>
+                    <button class="btn-primary" onclick="shareFile('https:\//mintechy.pythonanywhere.com{{ video.file.url }}')">Share</button>
                 {% endif %}
             </div>
         {% endfor %}

@@ -8,7 +8,7 @@ from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmVie
 from django.views.generic import TemplateView
 from django.urls import reverse, reverse_lazy
 from django.core.paginator import Paginator
-import json
+import json, time, asyncio
 from django.db.models import Q
 from django.http import Http404
 from django.contrib import messages
@@ -49,7 +49,7 @@ def index(request):
     return render(request, "network/index.html", {
         "is_member": is_member,
         "is_not_member": is_not_member,
-        "post": post,
+       
         "suggested_groups": suggested_groups,
         "page_post": page_post,
         "groups": groups,
@@ -58,16 +58,49 @@ def index(request):
         "user": user,
     })
 
+def load_posts(request):
+    start = int(request.GET.get("start") or 0)
+    end = int(request.GET.get("end") or (start + 9))
+
+    posts = Post.objects.select_related("user").order_by("-id")[start:end]
+    
+    post_data = []
+    for post in posts:
+        user = post.user
+        user_data = {
+            "user": user.id,
+            "username": user.username,
+            "profile_pic": user.profile_pics.url if user.profile_pics else None,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            # Add more user attributes as needed
+        }
+        
+        post_data.append({
+            "scrollContent": post.postContent,
+            "scrollUser": user_data,
+            "scrollTimestamp": post.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+            "scrollImage": post.post_image.url if post.post_image else None,  # Convert ImageFieldFile to URL
+            "scrollPostId": post.id,
+            # Add more post attributes as needed
+        })
+    
+    time.sleep(1)
+    
+    return JsonResponse({
+        "posts": post_data,
+    })
+
+@login_required
 def all_groups(request):
     user = request.user
     groups_not_belonged = Group.objects.exclude(members=user)
     return render(request, 'network/not_belonged_groups.html', {'groups_not_belonged': groups_not_belonged})
 
+@login_required
 def search(request):
     query = request.GET.get('q')
     if query:
-        # Perform the search using Q objects to query all relevant fields
-
         users = User.objects.filter(
             Q(username__icontains=query) |
             Q(first_name__icontains=query) |
@@ -110,7 +143,7 @@ def search(request):
             Q(uploader__username__icontains=query)
         )
 
-        return render(request, "network/search_results.html", {
+        context = {
             'posts': posts,
             'group_posts': group_posts,
             'forum_posts': forum_posts,
@@ -120,9 +153,10 @@ def search(request):
             'users': users,
             'groups': groups,
             'videos': library_videos, 
-        })
+        }
+
+        return render(request, "network/search_results.html", context)
     else:
-        # If no query is provided, show an empty result page
         return render(request, "network/search_results.html")
 
 
@@ -202,11 +236,11 @@ def group_newPost(request, group_id):
         # Assign the group to the new GroupPost instance
         postContent = GroupPost(group=group, postContent=post, user=user, post_image=post_image)
         postContent.save()
-
-        return render(request, "network/group_detail.html", {
+        context = {
             "postContent": postContent,
-            "test": "test"
-        })
+        }
+
+        return render(request, "network/group_detail.html", context)
 
     return render(request, "network/group_newPost.html")
 
@@ -216,6 +250,7 @@ def group_newPost(request, group_id):
 def group_detail(request, group_id):
     if not request.user.is_authenticated:
         return render(request, "network/error.html")
+    user = request.user
     group = get_object_or_404(Group, pk=group_id)
     group_posts = GroupPost.objects.filter(group=group).order_by("-timestamp").select_related("user")
     paginator = Paginator(group_posts, 10)
@@ -225,11 +260,10 @@ def group_detail(request, group_id):
     # Filter GroupComment based on related Post objects (not GroupPost)
     post_ids = group_posts.values_list('id', flat=True)
     comments = GroupComment.objects.filter(post__in=post_ids)
-    user = request.user
     profile_pics = user.profile_pics
     is_group_member = group.members.filter(id=user.id).exists()
 
-    return render(request, "network/group_detail.html", {
+    context = {
         "group": group,
         "group_posts": group_posts,
         "page_group_posts": page_group_posts,
@@ -237,7 +271,9 @@ def group_detail(request, group_id):
         "comments": comments,
         "group_id": group_id,
         "is_group_member": is_group_member,
-    })
+    }
+
+    return render(request, "network/group_detail.html", context)
 
 
 
@@ -254,8 +290,12 @@ def group_newPost(request, group_id):
         postContent = GroupPost(group=group, user=user, postContent=post, post_image=post_image)
         postContent.save()
         return redirect('group_detail', group_id=group_id)  # Redirect to the group detail page
-        
-    return render(request, "network/group_newPost.html", {'group_id': group_id})
+
+    context = {
+        'group_id': group_id,
+    }
+    
+    return render(request, "network/group_newPost.html", context)
 
 
 @login_required

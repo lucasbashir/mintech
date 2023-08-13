@@ -218,8 +218,14 @@ class Announcement(models.Model):
     poster = models.ForeignKey(User, on_delete=models.CASCADE, related_name="announcement_poster")
     title = models.CharField(max_length=100)
     content = models.TextField()
-    announcement_image = models.ImageField(upload_to='post_image/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.title} announced by {self.poster}"
+    
+class AnnouncementPostImage(models.Model):
+    content = models.ForeignKey(Announcement, on_delete=models.CASCADE, related_name="announcement_post_images")
+    post_image = models.ImageField(upload_to='post_image/', null=True, blank=True)
+
+    def __str__(self):
+        return f"Image for {self.content}"

@@ -24,7 +24,7 @@
             <textarea style="height: 300px;" id="new-post" class="form-control" name="announcement_content" placeholder="Make Announcement" required></textarea>
           </div>
           <div class="form-group">
-            <input type="file" name="announcement_image" class="form-control-file" accept="image/*" multiple>
+            <input type="file" name="announcement_image[]" class="form-control-file" accept="image/*" multiple>
           </div>
           <div class="text-right">
             <button id="post-btn" type="submit" class="btn btn-primary">Post</button>
@@ -34,7 +34,7 @@
     </div>
   </div>
 
-  {% for announcement in announcements %}
+  {% for announcement in page_announcements %}
   <section>
     <div class="container">
       <div class="card">
@@ -72,13 +72,16 @@
             
           
           
-            {% if announcement.post_image %}
-            <div class="card-body">
-              <div class="image-container">
-                <img src="{{ announcement.announcement_image.url }}" class="img-fluid desktop-image" alt="Post Image">
-              </div>
-            </div>
-            {% endif %}
+            {% if announcement.announcement_post_images %}
+  <div class="card-body">
+    <div class="image-container">
+      {% for image in announcement.announcement_post_images.all %}
+        <img src="{{ image.post_image.url }}" class="img-fluid desktop-image" alt="Post Image">
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
           
         </div>
         <p class="card-text"><small class="text-muted">{{ announcement.timestamp }}</small></p>
@@ -90,6 +93,25 @@
   </section>
   
 {% endfor %}
+
+<!-- Add pagination links -->
+<div class="pagination">
+  <span class="step-links">
+    {% if page_announcements.has_previous %}
+      <a class="btn btn-primary" href="?page=1">&laquo; first</a>
+      <a class="btn btn-primary" href="?page={{ page_announcements.previous_page_number }}">previous</a>
+    {% endif %}
+
+    <span class="current-page">
+      Page {{ page_announcements.number }} of {{ page_announcements.paginator.num_pages }}.
+    </span>
+
+    {% if page_announcements.has_next %}
+      <a class="btn btn-primary" href="?page={{ page_announcements.next_page_number }}">next</a>
+      <a class="btn btn-primary" href="?page={{ page_announcements.paginator.num_pages }}">last &raquo;</a>
+    {% endif %}
+  </span>
+</div>
 
   
 

@@ -5,6 +5,7 @@ from .models import *
 admin.site.register(User)
 admin.site.register(PostImage)
 admin.site.register(Announcement)
+admin.site.register(AnnouncementPostImage)
 admin.site.register(LibraryCategory)
 admin.site.register(LibraryDocument)
 admin.site.register(Video)

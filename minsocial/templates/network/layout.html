@@ -27,10 +27,12 @@
 <body id="body">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="{% url 'index' %}">M I N T E C H</a>
+        {% if request.user.is_authenticated %}
         <form action="{% url 'search' %}" method="get" class="search-form">
             <input style="margin-top: 20px;" type="text" name="q" placeholder="Search..." />
             <button type="submit">Search</button>
         </form>
+        {% endif %}
         <label style="margin-top: 15px; margin-left: 10px;" class="switch">
             <input onclick="toggleBackgroundColor()" type="checkbox" id="toggleSwitch">
             <span class="slider round"></span>

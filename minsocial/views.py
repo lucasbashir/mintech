@@ -550,16 +550,28 @@ def new_announcement(request):
     if request.method == "POST":
         title = request.POST["announcement_title"]
         content = request.POST["announcement_content"]
-        announcement_image = request.FILES.get("announcement_image")
+        announcement_image = request.FILES.getlist("announcement_image[]")
         poster = request.user
-        Announcement.objects.create(poster=poster, title=title, content=content, announcement_image=announcement_image)
+        announcement = Announcement.objects.create(poster=poster, title=title, content=content)
+
+        for image in announcement_image:
+            AnnouncementPostImage.objects.create(content=announcement, post_image=image)  # Use objects.create
         return redirect("announcements")
+
+    
+
     
 def announcements(request):
     if not request.user.is_authenticated:
         return render(request, "network/error.html")
-    announcement = Announcement.objects.all().order_by('-created_at')
-    return render(request, 'network/announcements.html', {'announcements': announcement})
+    
+    announcement_list = Announcement.objects.all().order_by('-created_at')
+    paginator = Paginator(announcement_list, 10)  # Show 10 announcements per page.
+
+    page_number = request.GET.get('page')
+    page_announcements = paginator.get_page(page_number)
+
+    return render(request, 'network/announcements.html', {'page_announcements': page_announcements})
     
 
 @login_required

@@ -226,71 +226,70 @@ function openMyGroupsModal() {
 <br>
 <br>
 
-{% for posts in page_post %}
-<div class="container">
-<div class="card">
-    <div class="card-body">
-        <div class="d-flex align-items-center">
-          {% if posts.user.profile_pics %}
-          <a href="{% url 'profile' user_id=posts.user.id %}">
-            <img src="{{ posts.user.profile_pics.url }}" class="rounded-circle" width="70" height="70">
-          </a>
-          {% else %}
-          <a href="{% url 'profile' user_id=posts.user.id %}">
-            <img src="/media/post_image/hand.gif" class="rounded-circle" width="70" height="70">
-          </a>
-          {% endif %}
-      <div class="ml-3">
-        <h5 class="card-title mb-1">
-        <!-- Display a link to the user's profile -->
-        <a class="card-title" style="text-decoration: none;" href="{% url 'profile' user_id=posts.user.id %}">{{posts.user.first_name}} {{posts.user.last_name}}</a>
-        </h5>
-        <p class="mb-0">
-          <p>@{{posts.user.username}}</p>
-        </p>
-      </div>
+<div id="posts">
+  {% for posts in page_post %}
+  <section>
+    <div class="container">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            {% if posts.user.profile_pics %}
+              <a href="{% url 'profile' user_id=posts.user.id %}">
+                <img src="{{ posts.user.profile_pics.url }}" class="rounded-circle" width="70" height="70">
+              </a>
+            {% else %}
+              <a href="{% url 'profile' user_id=posts.user.id %}">
+                <img src="/media/post_image/hand.gif" class="rounded-circle" width="70" height="70">
+              </a>
+            {% endif %}
+            <div class="ml-3">
+              <h5 class="card-title mb-1">
+                <!-- Display a link to the user's profile -->
+                <a class="card-title" style="text-decoration: none;" href="{% url 'profile' user_id=posts.user.id %}">{{posts.user.first_name}} {{posts.user.last_name}}</a>
+              </h5>
+              <p class="mb-0">
+                <p>@{{posts.user.username}}</p>
+              </p>
+            </div>
+          </div>
+          <br>
+          <br>
+          <div class="card-text" id="content_{{ posts.id }}">
+            {% for paragraph in posts.postContent|split_paragraphs|slice:":5" %} {# Limit to 5 paragraphs #}
+              <p>{{ paragraph|urlize }}</p>
+            {% endfor %}
+            {% if posts.postContent|split_paragraphs|length >= 5 %}
+              <a href="{% url 'post_content' post_id=posts.id %}">
+                <p class="read-more" data-post="{{ posts.id }}">Read full content >>></p>
+              </a>
+            {% endif %}
+          
+          
+            {% if posts.post_images.all %}
+  <div class="card-body">
+    <div class="image-container">
+      {% for image in posts.post_images.all %}
+        <img src="{{ image.post_image.url }}" class="img-fluid desktop-image" alt="Post Image">
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
         </div>
-        <br>
-        <br>
-        <!-- Display the content of the post -->
-        <div class="card-text" id="content_{{ posts.id }}">
-          {% for paragraph in posts.postContent|split_paragraphs %}
-                
-                  <p>{{ paragraph|urlize }}</p>
-               
-              {% endfor %}
-              {% if posts.postContent|split_paragraphs|length >= 5 %}
-                <a href="{% url 'post_content' post_id=posts.id %}">
-                  <p class="read-more" data-post="{{ posts.id }}">Read full content >>></p>
-                </a>
-              {% endif %}
+        <p class="card-text"><small class="text-muted">{{ posts.timestamp }}</small></p>
 
-       
-        
-          {% if posts.post_image %}
-          <div class="card-body">
-          <div class="image-container">
-  <img src="{{ posts.post_image.url }}" class="img-fluid desktop-image" alt="Post Image">
-</div>
-</div>      
-          {% endif %}
-        
-</div>
-<p class="card-text"><small class="text-muted">{{ posts.timestamp }}</small></p>
+        <!-- Display the number of likes for the post -->
+        {% include 'network/likes.html' %}
+        <hr style="border-color: #FFCF70;">
 
-<!-- Display the number of likes for the post -->
-{% include 'network/likes.html' %}
-
-<!--Urlize comments, read more commets and display comments-->
-{% include 'network/comments.html' %}
-        
-</div>    
+        <!--Urlize comments, read more comments, and display comments-->
+        {% include 'network/comments.html' %}
+      </div>
+    </div>
   </div>
-  </div>
-  </div>
+  </section>
+{% endfor %}
 </div>
-  <!-- End of the for loop -->
-  {% endfor %}
 
 
   <style>
@@ -359,26 +358,7 @@ function openMyGroupsModal() {
       groupsIJoinedModal.style.display = 'block';
     });
   
-    // Load more groups when the user scrolls to the bottom of the modal
-    var modalBody = document.getElementById('my-groups-modal');
-    modalBody.addEventListener('scroll', function() {
-      if (modalBody.scrollHeight - modalBody.scrollTop <= 10) {
-        // Load more groups
-        var ajaxRequest = new XMLHttpRequest();
-        ajaxRequest.open('GET', '/api/my_groups/?offset=15', true);
-        ajaxRequest.onload = function() {
-          if (ajaxRequest.status === 200) {
-            var groups = JSON.parse(ajaxRequest.responseText);
-            for (var i = 0; i < groups.length; i++) {
-              var li = document.createElement('li');
-              li.innerHTML = '<a href="/my_groups/' + my_groups[i].pk + '">' + my_groups[i].name + '</a>';
-              modalBody.appendChild(li);
-            }
-          }
-        };
-        ajaxRequest.send();
-      }
-    });
+    
   });
   
   </script>
@@ -398,18 +378,6 @@ function openMyGroupsModal() {
   
 </style>
   
-  <!-- Pagination for navigating through the posts -->
-  <nav aria-label="Page navigation example">
-  <ul class="pagination d-flex justify-content-center">
-  {% if page_post.has_previous %}
-  <!-- If there is a previous page, display a "previous" button -->
-  <li class="page-item"><a class="page-link" href="?page={{page_post.previous_page_number}}">Previous</a></li>
-  {% endif %}
-  {% if page_post.has_next %}
-  <!-- If there is a next page, display a "next" button -->
-  <li class="page-item"><a class="page-link" href="?page={{page_post.next_page_number}}">Next</a></li>
-  {% endif %}
-  </ul>
-  </nav>
-
+  
+<script src="{% static 'network/post_scroll.js' %}"></script>
   {% endblock %}

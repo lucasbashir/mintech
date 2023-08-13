@@ -30,7 +30,7 @@
           <textarea style="height: 300px;" id="new-post" class="form-control" name="post_content" placeholder="Share a thought..." required></textarea>
         </div>
         <div class="form-group">
-          <input type="file" name="post_image" class="form-control-file" accept="image/*" multiple>
+          <input type="file" name="post_image[]" class="form-control-file" accept="image/*" multiple>
         </div>
         <div class="text-right">
           <button id="post-btn" type="submit" class="btn btn-primary">Post</button>
@@ -70,24 +70,26 @@
           <br>
           <br>
           <div class="card-text" id="content_{{ posts.id }}">
-            {% for paragraph in posts.postContent|split_paragraphs|slice:":3" %} {# Limit to 5 paragraphs #}
+            {% for paragraph in posts.postContent|split_paragraphs|slice:":5" %} {# Limit to 5 paragraphs #}
               <p>{{ paragraph|urlize }}</p>
             {% endfor %}
-            {% if posts.postContent|split_paragraphs|length >= 2 %}
+            {% if posts.postContent|split_paragraphs|length >= 5 %}
               <a href="{% url 'post_content' post_id=posts.id %}">
                 <p class="read-more" data-post="{{ posts.id }}">Read full content >>></p>
               </a>
             {% endif %}
           
           
-            {% if posts.post_image %}
-            <div class="card-body">
-              <div class="image-container">
-                <img src="{{ posts.post_image.url }}" class="img-fluid desktop-image" alt="Post Image">
-              </div>
-            </div>
-            {% endif %}
-          
+            {% if posts.post_images.all %}
+  <div class="card-body">
+    <div class="image-container">
+      {% for image in posts.post_images.all %}
+        <img src="{{ image.post_image.url }}" class="img-fluid desktop-image" alt="Post Image">
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
         </div>
         <p class="card-text"><small class="text-muted">{{ posts.timestamp }}</small></p>
 
@@ -97,6 +99,7 @@
 
         <!--Urlize comments, read more comments, and display comments-->
         {% include 'network/comments.html' %}
+        
       </div>
     </div>
   </div>
@@ -105,113 +108,7 @@
 </div>
 
 
-<script>
+<script src="{% static 'network/post_scroll.js' %}"></script>
 
-  let counter = 1;
-  const quantity = 10;
-
-  document.addEventListener('DOMContentLoaded', load);
-  window.onscroll = () => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-      load();
-    }
-  };
-
-  function load() {
-    const start = counter;
-    const end = start + quantity - 1;
-    counter = end + 1;
-
-    fetch(`/load_posts/?start=${start}&end=${end}`)
-      .then(response => response.json())
-      .then(data => {
-        console.log(data)
-        data.posts.forEach(renderPost);
-      });
-  }
-
-  function renderPost(postData) {
-  const postElement = document.createElement('div');
-  postElement.className = 'post';
-
-  const user = postData.scrollUser;
-  const profilePic = user.profile_pic
-    ? `<img src="${user.profile_pic}" class="rounded-circle" width="70" height="70">`
-    : '<img src="/media/post_image/hand.gif" class="rounded-circle" width="70" height="70">';
-
-    const postContent = postData.scrollContent
-  .split('\n')
-  .slice(0, 3)  // Limit to 5 paragraphs
-  .map(paragraph => `<p>${paragraph}</p>`)
-  .join('');
-
-
-  const postTimestamp = new Date(postData.scrollTimestamp).toLocaleString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true,
-  });
-
-  const postImage = postData.scrollImage
-    ? `<div class="card-body">
-         <div class="image-container">
-           <img src="${postData.scrollImage}" class="img-fluid desktop-image" alt="Post Image">
-         </div>
-       </div>`
-    : '';
-
-  const userProfileLink = `/profile/${user.user}/`; // Use user.id here
-  const userFullName = `${user.first_name} ${user.last_name}`;
-  const userName = `@${user.username}`;
-  const likesSection = document.createElement('div');
-  
-
-  const readMoreLink = postData.scrollPostId
-    ? `<a style="color: white"; href="/post_content/${postData.scrollPostId}">Read full content >>></a>`
-    : '';
-
-  postElement.innerHTML = `
-    <div class="container">
-      <div class="card">
-        <div class="card-body">
-          <div class="d-flex align-items-center">
-            <a href="${userProfileLink}">
-              ${profilePic}
-            </a>
-            <div class="ml-3">
-              <h5 class="card-title mb-1">
-                <a class="card-title" style="text-decoration: none;" href="${userProfileLink}">${userFullName}</a>
-              </h5>
-              <p class="mb-0">
-                <p>${userName}</p>
-              </p>
-            </div>
-          </div>
-          <br>
-          <br>
-          <div class="card-text" id="content_${postData.scrollId}">
-            ${postContent}
-            ${readMoreLink} <!-- Use readMoreLink here -->
-            ${postImage}
-          </div>
-          <p class="card-text"><small class="text-muted">${postTimestamp}</small></p>
-          <!-- ... (your existing code) ... -->
-        </div>
-      </div>
-    </div>
-  `;
-
-  
-
-  document.querySelector('#posts').appendChild(postElement);
-}
-
-
-
- 
-</script>
 
 {% endblock %}

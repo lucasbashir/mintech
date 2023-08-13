@@ -34,7 +34,7 @@ def index(request):
         return render(request, "network/login.html")
 
     post = Post.objects.all().order_by("id").reverse().select_related("user")
-    paginator = Paginator(post, 10) # Show 10 contacts per page.
+    paginator = Paginator(post, 20) # Show 20 contacts per page.
     page_number = request.GET.get('page')
     page_post = paginator.get_page(page_number)
     user = request.user
@@ -62,7 +62,8 @@ def load_posts(request):
     start = int(request.GET.get("start") or 0)
     end = int(request.GET.get("end") or (start + 9))
 
-    posts = Post.objects.select_related("user").order_by("-id")[start:end]
+    # Retrieve posts and related images from the database
+    posts = Post.objects.select_related("user").prefetch_related("post_images").order_by("-id")[start:end]
     
     post_data = []
     for post in posts:
@@ -76,16 +77,58 @@ def load_posts(request):
             # Add more user attributes as needed
         }
         
+        images_data = []
+        for image in post.post_images.all():
+            images_data.append(image.post_image.url)
+        
         post_data.append({
             "scrollContent": post.postContent,
             "scrollUser": user_data,
             "scrollTimestamp": post.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
-            "scrollImage": post.post_image.url if post.post_image else None,  # Convert ImageFieldFile to URL
+            "scrollImages": images_data,  # List of image URLs
             "scrollPostId": post.id,
             # Add more post attributes as needed
         })
     
-    time.sleep(1)
+    time.sleep(1)  # Introducing a delay for demonstration purposes (remove in production)
+    
+    return JsonResponse({
+        "posts": post_data,
+    })
+
+def group_load_posts(request):
+    start = int(request.GET.get("start") or 0)
+    end = int(request.GET.get("end") or (start + 9))
+
+    # Retrieve posts and related images from the database
+    posts = GroupPost.objects.select_related("user").prefetch_related("group_post_images").order_by("-id")[start:end]
+    
+    post_data = []
+    for post in posts:
+        user = post.user
+        user_data = {
+            "user": user.id,
+            "username": user.username,
+            "profile_pic": user.profile_pics.url if user.profile_pics else None,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            # Add more user attributes as needed
+        }
+        
+        images_data = []
+        for image in post.group_post_images.all():
+            images_data.append(image.grouup_post_image.url)
+        
+        post_data.append({
+            "scrollContent": post.postContent,
+            "scrollUser": user_data,
+            "scrollTimestamp": post.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+            "scrollImages": images_data,  # List of image URLs
+            "scrollPostId": post.id,
+            # Add more post attributes as needed
+        })
+    
+    time.sleep(1)  # Introducing a delay for demonstration purposes (remove in production)
     
     return JsonResponse({
         "posts": post_data,
@@ -282,13 +325,18 @@ def group_newPost(request, group_id):
     if not request.user.is_authenticated:
         return render(request, "network/error.html")
     
+    group = Group.objects.get(pk=group_id)  # Get the group instance
     if request.method == "POST":
-        group = Group.objects.get(pk=group_id)  # Get the Group object based on group_id
-        post = request.POST["post_content"]
-        post_image = request.FILES.get("post_image")
+        post_content = request.POST["post_content"]
+        post_images = request.FILES.getlist("post_image[]")
         user = User.objects.get(pk=request.user.id)
-        postContent = GroupPost(group=group, user=user, postContent=post, post_image=post_image)
-        postContent.save()
+        
+        # Create the GroupPost instance with content, user, and group
+        post = GroupPost.objects.create(postContent=post_content, user=user, group=group)
+        
+        # Create the GroupPostImage instances for each image
+        for image in post_images:
+            GroupPostImage.objects.create(postContent=post, post_image=image)
         return redirect('group_detail', group_id=group_id)  # Redirect to the group detail page
 
     context = {
@@ -296,6 +344,7 @@ def group_newPost(request, group_id):
     }
     
     return render(request, "network/group_newPost.html", context)
+
 
 
 @login_required
@@ -531,7 +580,7 @@ def profile(request, user_id):
     my_groups = Group.objects.filter(creator=request.user)
     groups_i_joined = request.user.group_members.all()
     post = Post.objects.filter(user=user).order_by("id").reverse()
-    paginator = Paginator(post, 10) # Show 10 contacts per page.
+    paginator = Paginator(post, 20) # Show 20 contacts per page.
     page_number = request.GET.get('page')
     page_post = paginator.get_page(page_number)
     user_like = request.user
@@ -640,13 +689,20 @@ def post_image(request, post_id):
 def newPost(request):
     if not request.user.is_authenticated:
         return render(request, "network/error.html")
+    
     if request.method == "POST":
-        post = request.POST["post_content"]
-        post_image = request.FILES.get("post_image")
+        post_content = request.POST["post_content"]
+        post_images = request.FILES.getlist("post_image[]")
         user = User.objects.get(pk=request.user.id)
-        postContent = Post(postContent=post, user=user, post_image=post_image)
-        postContent.save()
-        return HttpResponseRedirect(reverse(index))
+        
+        # Create the Post instance with content and user
+        post = Post.objects.create(postContent=post_content, user=user)
+        
+        # Create the PostImage instances for each image
+        for image in post_images:
+            PostImage.objects.create(postContent=post, post_image=image)
+        
+        return HttpResponseRedirect(reverse("index"))
 
 
 @login_required
@@ -840,7 +896,7 @@ def following(request):
     # Get the posts by the users the current user is following
     followingPosts = Post.objects.filter(user__in=[f.follower for f in following]).order_by('-timestamp')
 
-    paginator = Paginator(followingPosts, 10)  # Show 10 contacts per page.
+    paginator = Paginator(followingPosts, 20)  # Show 20 contacts per page.
     page_number = request.GET.get('page')
     page_post = paginator.get_page(page_number)
 

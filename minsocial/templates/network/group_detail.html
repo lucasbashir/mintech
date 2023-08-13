@@ -31,7 +31,7 @@
                 <textarea style="height: 300px;" id="new-post" class="form-control" name="post_content" placeholder="Say something to the group..." required></textarea>
               </div>
               <div class="form-group">
-                <input type="file" name="post_image" class="form-control-file" accept="image/*" multiple>
+                <input type="file" name="post_image[]" class="form-control-file" accept="image/*" multiple>
               </div>
               <div class="text-right">
                 <button id="post-btn" type="submit" class="btn btn-primary">Post</button>
@@ -43,6 +43,7 @@
       
     <br>
     <!-- Display group posts -->
+    <div id="posts">
     {% for posts in page_group_posts %}
     
     <section>
@@ -72,26 +73,25 @@
             <br>
             <br>
             <div class="card-text" id="content_{{ posts.id }}">
-              {% for paragraph in posts.postContent|split_paragraphs %}
-                {% if forloop.counter <= 10 %}
-                  <p>{{ paragraph|urlize }}</p>
-                {% endif %}
-              {% endfor %}
-              {% if posts.postContent|split_paragraphs|length > 2 %}
-                <a href="{% url 'post_content' post_id=posts.id %}">
-                  <p class="read-more" data-post="{{ posts.id }}">Read full content >>></p>
-                </a>
-              {% endif %}
+              {% for paragraph in posts.postContent|split_paragraphs|slice:":5" %} {# Limit to 5 paragraphs #}
+              <p>{{ paragraph|urlize }}</p>
+            {% endfor %}
+            {% if posts.postContent|split_paragraphs|length >= 5 %}
+              <a href="{% url 'group_post_content' post_id=posts.id %}">
+                <p class="read-more" data-post="{{ posts.id }}">Read full content >>></p>
+              </a>
+            {% endif %}
             
             
-              {% if posts.post_image %}
-              <div class="card-body">
-                <div class="image-container">
-                  <img src="{{ posts.post_image.url }}" class="img-fluid desktop-image" alt="Post Image">
-                </div>
-              </div>
-              {% endif %}
-            
+              {% if posts.group_post_images.all %}
+  <div class="card-body">
+    <div class="image-container">
+      {% for image in posts.group_post_images.all %}
+        <img src="{{ image.post_image.url }}" class="img-fluid desktop-image" alt="Post Image">
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
           </div>
           <p class="card-text"><small class="text-muted">{{ posts.timestamp }}</small></p>
 
@@ -153,4 +153,6 @@
       {% endif %}
     {% endif %}
 
+    </div>
+    <script src="{% static 'network/group_post_scroll.js' %}"></script>
 {% endblock %}

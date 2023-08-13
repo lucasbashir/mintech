@@ -10,10 +10,18 @@ class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="post_user")
     postContent = models.TextField(blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
-    post_image = models.ImageField(upload_to='post_image/', null=True, blank=True)
+    
 
     def __str__(self):
         return f"{self.user} {self.postContent} {self.timestamp}"
+
+class PostImage(models.Model):
+    postContent = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="post_images")
+    post_image = models.ImageField(upload_to='post_image/', null=True, blank=True)
+
+    def __str__(self):
+        return f"Image for {self.postContent}"
+
 
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="userComment")
@@ -81,10 +89,17 @@ class GroupPost(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="group_post_user")
     postContent = models.TextField(blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
-    post_image = models.ImageField(upload_to='post_image/', null=True, blank=True)
+    
 
     def __str__(self):
         return f"{self.postContent}"
+    
+class GroupPostImage(models.Model):
+    postContent = models.ForeignKey(GroupPost, on_delete=models.CASCADE, related_name="group_post_images")
+    post_image = models.ImageField(upload_to='post_image/', null=True, blank=True)
+
+    def __str__(self):
+        return f"Image for {self.postContent}"
     
 class GroupComment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="group_userComment")

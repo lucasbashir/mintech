@@ -92,11 +92,11 @@
 
         </div>
         <p class="card-text"><small class="text-muted">{{ posts.timestamp }}</small></p>
-
+        <hr style="border-color: #FFCF70;">
         <!-- Display the number of likes for the post -->
         {% include 'network/likes.html' %}
         <hr style="border-color: #FFCF70;">
-
+        
         <!--Urlize comments, read more comments, and display comments-->
         {% include 'network/comments.html' %}
         
@@ -107,7 +107,7 @@
 {% endfor %}
 </div>
 
-
+{% include "network/share.html" %}
 <script src="{% static 'network/post_scroll.js' %}"></script>
 
 

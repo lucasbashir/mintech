@@ -507,12 +507,19 @@ def view_video(request, video_id):
 
 
 
+
 @login_required
 def forum(request):
     if not request.user.is_authenticated:
         return render(request, "network/error.html")
-    topics = ForumTopic.objects.all().order_by('-created_at')
-    return render(request, 'network/forum.html', {'topics': topics})
+    
+    topic_list = ForumTopic.objects.all().order_by('-created_at')
+    paginator = Paginator(topic_list, 10)  # Show 10 topics per page.
+
+    page_number = request.GET.get('page')
+    page_topics = paginator.get_page(page_number)
+
+    return render(request, 'network/forum.html', {'page_topics': page_topics})
 
 @login_required
 def create_topic(request):
@@ -520,9 +527,12 @@ def create_topic(request):
         return render(request, "network/error.html")
     if request.method == 'POST':
         title = request.POST['title']
-        topic = ForumTopic.objects.create(title=title, creator=request.user)
+        forum_image = request.FILES.getlist("forum_image[]")
         post_content = request.POST['post_forum_content']
+        topic = ForumTopic.objects.create(title=title, creator=request.user)
         ForumPost.objects.create(content=post_content, topic=topic, creator=request.user)
+        for image in forum_image:
+            ForumTopicImage.objects.create(content=topic, post_image=image)
         return redirect('forum')
     return render(request, 'network/create_topic.html')
 
@@ -640,7 +650,7 @@ def edit_profile(request, user_id):
         return render(request, "network/user_profile.html")  # Replace 'user_profile' with the appropriate URL name
 
 
-@login_required
+
 def post_content(request, post_id):
     if not request.user.is_authenticated:
         return render(request, "network/error.html")

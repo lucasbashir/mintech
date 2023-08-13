@@ -123,6 +123,7 @@
     {% endif %}
     {{ total_count }} 💬 {{ posts.group_comment.count }}
   </h3>
+  <button class="btn-primary" onclick="shareFile('https:\//mintechy.pythonanywhere.com/group_post_content/{{ posts.id }}')">Share</button>
 {% endwith %}
     </div>
 

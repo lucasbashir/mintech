@@ -205,6 +205,13 @@ class ForumTopic(models.Model):
     def __str__(self):
         return self.title
 
+class ForumTopicImage(models.Model):
+    content = models.ForeignKey(ForumTopic, on_delete=models.CASCADE, related_name="forum_topic_post_images")
+    post_image = models.ImageField(upload_to='post_image/', null=True, blank=True)
+
+    def __str__(self):
+        return f"Image for {self.content}"
+
 class ForumPost(models.Model):
     content = models.TextField()
     topic = models.ForeignKey(ForumTopic, on_delete=models.CASCADE, related_name='posts')

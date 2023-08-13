@@ -37,17 +37,15 @@
         {% for paragraph in posts.postContent|split_paragraphs %}
         <p>{{ paragraph|urlize }}</p>
         {% endfor %}
-          {% if posts.post_image %}
-          <div class="card-body">
-            <div class="image-container">
-              <img src="{{ posts.post_image.url }}" class="img-fluid desktop-image" alt="Post Image">
-            </div>
+        {% if posts.group_post_images.all %}
+        <div class="card-body">
+          <div class="image-container">
+            {% for image in posts.group_post_images.all %}
+              <img src="{{ image.post_image.url }}" class="img-fluid desktop-image" alt="Post Image">
+            {% endfor %}
           </div>
-          {% else %}
-                        <a href="{% url 'profile' user_id=posts.user.id %}">
-                            <img src="/media/post_image/hand.gif" class="rounded-circle" width="70" height="70">
-                        </a>
-          {% endif %}
+        </div>
+      {% endif %}
         
       
 
@@ -99,5 +97,5 @@
     </div>
 
       
-
+{% include 'network/share.html' %}
 {% endblock %}

@@ -58,7 +58,7 @@
         {% csrf_token %}
         <input type="hidden" name="likePost" value="{{ posts.id }}" />
         <button style="background: none; border: none;">
-          <img src="/media/post_image/sad.gif" width="50" height="50" alt="Sad"/>
+          <img src="/media/post_image/sad_emoji.gif" width="50" height="50" alt="Sad"/>
         </button>
       </form>
     {% endif %}
@@ -98,7 +98,7 @@
         {% csrf_token %}
         <input type="hidden" name="shockPost" value="{{ posts.id }}" />
         <button style="background: none; border: none;">
-          <img src="/media/post_image/shock.gif" class="rounded-circle" width="50" height="50" alt="Shock"/>
+          <img src="/media/post_image/shock-emoji.gif" class="rounded-circle" width="50" height="50" alt="Shock"/>
         </button>
       </form>
     {% endif %}
@@ -109,9 +109,7 @@
 </div>
 <div class="horizontal-container">
   <div class="">
-    <h3 class="like-btn" data-post-id="{{ posts.id }}">
-      <img src="/media/post_image/react.png" class="rounded-circle" alt="Shock" width="80" height="50">
-    </h3>
+    <p style="margin-top: 20px;" class="like-btn btn btn-primary" data-post-id="{{ posts.id }}">React</p>
   </div>
   {% with total_count=posts.postLove.count|add:posts.postHaha.count|add:posts.postSad.count|add:posts.postShock.count|add:posts.post_like.count %}
   <h3 onclick="opensModal('{{ posts.id }}')">
@@ -130,8 +128,11 @@
     {% if posts.postShock.count > 0 %}
       😲
     {% endif %}
-    <span style="color: #FFCF70;">{{ total_count }}</span> 💬 {{ posts.postComment.count }}
+    <small style="color: #FFCF70;">{{ total_count }}</small> 💬 <small>{{ posts.postComment.count }}</small>
   </h3>
+  <button onclick="shareFile('https:\//mintechy.pythonanywhere.com/post_content/{{ posts.id }}')">
+  <img src="media/post_image/share.svg">
+  </button>
 {% endwith %}
 </div>
 

@@ -11,7 +11,15 @@
   <h1>{{ topic.title }}</h1>
   <p>Created by <a href="{% url 'profile' user_id=topic.creator.id %}">{{ topic.creator.username }}</a> on {{ topic.created_at }}</p>
  
-
+  {% if topic.forum_topic_post_images.exists %}
+  <br>
+  <div class="image-container">
+    {% for image in topic.forum_topic_post_images.all %}
+        <img src="{{ image.post_image.url }}" class="img-fluid desktop-image" alt="Topic Image">
+    
+    {% endfor %}
+  </div>
+{% endif %}
 </div>
     {% for post in posts %}
     <div class="container">
@@ -31,7 +39,6 @@
         </div>
       </div>
     </div>
-      
     {% endfor %}
   
   <form method="post" action="{% url 'add_forum_post' topic_id=topic.id %}">

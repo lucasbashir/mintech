@@ -1,25 +1,56 @@
-<!-- forum/forum.html -->
 {% extends "network/layout.html" %}
 {% block body %}
 
-
-  <div class="forum-background" style="display: flex; justify-content: center; align-items: center; text-align: justify; gap: 10px;">
-<h1>Forum</h1> 
+<div class="forum-background" style="display: flex; justify-content: center; align-items: center; text-align: justify; gap: 10px;">
+  <h1>Forum</h1>
 </div>
-  <br>
+<br>
 
 <div class="container">
   <h3>
-  <a href="{% url 'create_topic' %}">Create New Topic</a>
-</h3>
-<br>
+    <a href="{% url 'create_topic' %}">Create New Topic</a>
+  </h3>
+  <br>
   <ul>
-    {% for topic in topics %}
+    {% for topic in page_topics %}
+    <br>
       <li>
-      <strong> <a href="{% url 'view_topic' topic.id %}">{{ topic.title }}</a></strong>
+        <strong><a href="{% url 'view_topic' topic.id %}">{{ topic.title }}</a></strong>
         - Created by {{ topic.creator.username }} on {{ topic.created_at }}
+        <br>
+        {% if topic.forum_topic_post_images.exists %}
+          <div class="image-container">
+            {% for image in topic.forum_topic_post_images.all %}
+              {% if forloop.first %}
+              <br>
+                <img src="{{ image.post_image.url }}" class="img-fluid desktop-image" alt="Topic Image">
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+        
       </li>
     {% endfor %}
   </ul>
-{% endblock %}
+
+  <!-- Add pagination links -->
+  <div class="pagination">
+    <span class="step-links">
+      {% if page_topics.has_previous %}
+        <a class="btn-primary" href="?page=1">&laquo; first</a>
+        <a class="btn btn-primary" href="?page={{ page_topics.previous_page_number }}">previous</a>
+      {% endif %}
+
+      <span class="current-page">
+        Page {{ page_topics.number }} of {{ page_topics.paginator.num_pages }}.
+      </span>
+
+      {% if page_topics.has_next %}
+        <a class="btn btn-primary" href="?page={{ page_topics.next_page_number }}">next</a>
+        <a class="btn btn-primary" href="?page={{ page_topics.paginator.num_pages }}">last &raquo;</a>
+      {% endif %}
+    </span>
+  </div>
 </div>
+
+{% endblock %}

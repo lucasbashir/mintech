@@ -197,11 +197,12 @@ function openMyGroupsModal() {
       </div>
       <hr>
       <div>
-       {% if userProfile.about %}
-        <p>{{ userProfile.about }}</p>
-        {% else %}
+        {% if userProfile.about %}
+        <p>{{ userProfile.about|urlize }}</p>
+      {% else %}
         <p>About: ...</p>
-        {%endif%}
+      {% endif %}
+      
         {% if user == userProfile %}
         <br>
         <button id="popit" onclick="pop()" class="btn-primary">Groups Info</button>

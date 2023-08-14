@@ -4,6 +4,7 @@
 {% load static %}
 {% block body %}
 
+
 {% if user.is_authenticated %}
 <!-- Check if the user is authenticated -->
 <div class="input-group mb-3" id="create-post-field-container">
@@ -92,7 +93,7 @@
 
         </div>
         <p class="card-text"><small class="text-muted">{{ posts.timestamp }}</small></p>
-        <hr style="border-color: #FFCF70;">
+        
         <!-- Display the number of likes for the post -->
         {% include 'network/likes.html' %}
         <hr style="border-color: #FFCF70;">

@@ -117,7 +117,7 @@ def group_load_posts(request):
         
         images_data = []
         for image in post.group_post_images.all():
-            images_data.append(image.grouup_post_image.url)
+            images_data.append(image.post_image.url)  # Use 'post_image' instead of 'group_post_images'
         
         post_data.append({
             "scrollContent": post.postContent,
@@ -637,8 +637,10 @@ def profile(request, user_id):
 def edit_profile(request, user_id):
     if not request.user.is_authenticated:
         return render(request, "network/error.html")
+    
+    user = User.objects.get(pk=user_id)
+    
     if request.method == "POST":
-        user = User.objects.get(pk=user_id)
         user.first_name = request.POST["1"]
         user.last_name = request.POST["2"]
         user.about = request.POST["3"]
@@ -646,8 +648,14 @@ def edit_profile(request, user_id):
         user.phone_number = request.POST["5"]
         user.save()
 
-        # Redirect to the user profile page
-        return render(request, "network/user_profile.html")  # Replace 'user_profile' with the appropriate URL name
+        # Redirect to the user profile page with updated context
+        return HttpResponseRedirect(reverse("profile", args=[user_id]))
+
+    # If the request method is not POST, handle GET request
+    context = {
+        "userProfile": user,
+    }
+    return render(request, "network/user_profile.html", context)
 
 
 

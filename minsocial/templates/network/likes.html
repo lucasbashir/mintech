@@ -2,6 +2,7 @@
 {% load my_filters %}
 {% load static %}
 
+<hr style="border-color: #FFCF70;">
 <div class="img-fluid react_space" id="react_space">
   <div class="reaction-button" id="reaction-buttons-{{ posts.id }}">
     {% if user.is_authenticated %}
@@ -109,13 +110,12 @@
 </div>
 <div class="horizontal-container">
   <div class="">
-    <p style="margin-top: 20px;" class="like-btn btn btn-primary" data-post-id="{{ posts.id }}">React</p>
+    <button class="like-btn" data-post-id="{{ posts.id }}" style="background: none; border: none; padding: 0; width: 30px; height: 40px;">
+      <img src="/media/post_image/white.png" width="100%" height="100%" alt="reaction-button" title="reaction">
+    </button>
   </div>
   {% with total_count=posts.postLove.count|add:posts.postHaha.count|add:posts.postSad.count|add:posts.postShock.count|add:posts.post_like.count %}
   <h3 onclick="opensModal('{{ posts.id }}')">
-    {% if posts.post_like.count > 0 %}
-      👍
-    {% endif %}
     {% if posts.postLove.count > 0 %}
       ❤️
     {% endif %}
@@ -128,11 +128,16 @@
     {% if posts.postShock.count > 0 %}
       😲
     {% endif %}
-    <small style="color: #FFCF70;">{{ total_count }}</small> 💬 <small>{{ posts.postComment.count }}</small>
+    <small class="text-muted" style="color: #FFCF70;">{{ total_count }}</small>
+    <button style="background: none; border: none; padding: 0; width: 24px; height: 35px;">
+      <img src="/media/post_image/comments.png" width="100%" height="100%" alt="Comment" title="Comment">
+    </button> 
+     <small class="text-muted">{{ posts.postComment.count }}</small>
   </h3>
-  <button onclick="shareFile('https:\//mintechy.pythonanywhere.com/post_content/{{ posts.id }}')">
-  <img src="media/post_image/share.svg">
+  <button style="background: none; border: none; padding: 0; width: 24px; height: 35px;" onclick="shareFile('https:\//mintechy.pythonanywhere.com/group_post_content/{{ posts.id }}')">
+    <img src="/media/post_image/shh.png" width="100%" height="100%" alt="Share" title="Share">
   </button>
+  
 {% endwith %}
 </div>
 

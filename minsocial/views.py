@@ -497,13 +497,26 @@ def my_library(request):
     })
 
 
-def view_video(request, video_id):
-    if not request.user.is_authenticated:
-        return render(request, "network/error.html")
+@csrf_exempt  # Disabling CSRF protection for this view
+def update_views(request, video_id):
     video = get_object_or_404(Video, pk=video_id)
+    
+    if request.META.get('HTTP_X_FORWARDED_FOR'):
+        user_ip = request.META['HTTP_X_FORWARDED_FOR'].split(',')[0]
+    else:
+        user_ip = request.META.get('REMOTE_ADDR')
+
+    session_key = f'video_view_{video_id}_{user_ip}'
+
+    if request.session.get(session_key, False):
+        # The session key already exists, meaning the user has already viewed the video
+        return JsonResponse({'views': video.views})
+    
     video.views += 1
     video.save()
-    return redirect(video.file.url)
+    request.session[session_key] = True
+
+    return JsonResponse({'views': video.views})
 
 
 

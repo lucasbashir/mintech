@@ -52,16 +52,38 @@
                     <source src="{{ video.file.ogg }}" type="video/ogg">
                     Your browser does not support the video tag.
                 </video>
-                <p>Views: {{ video.views }}</p>
+                <p>Views: <span id="views-{{ video.id }}">{{ video.views }}</span></p>
                 {% if user.is_authenticated %}
                     <a href="{% url 'add_to_favorites' item_id=video.id item_type='video' %}"><span style="color: white;">Add to Favorites</span></a>
                     <button class="btn-primary" onclick="shareFile('https:\//mintechy.pythonanywhere.com{{ video.file.url }}')">Share</button>
                 {% endif %}
+                <button class="btn-primary" onclick="playVideo('{{ video.id }}', '{{ video.file.url }}')">Play</button>
             </div>
         {% endfor %}
 <!-- Modal for Sharing -->
 {% include "network/share.html" %}
 
-
+<script>
+    function playVideo(videoId, videoUrl) {
+        const videoElement = document.getElementById(`video-${videoId}`);
+        if (videoElement) {
+            videoElement.src = videoUrl;
+            videoElement.play();
+            
+            // Update views count asynchronously
+            fetch(`/update_views/${videoId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    const viewsElement = document.getElementById(`views-${videoId}`);
+                    if (viewsElement) {
+                        viewsElement.textContent = data.views;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating views:', error);
+                });
+        }
+    }
+    </script>
    
 {% endblock %}

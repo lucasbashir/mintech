@@ -506,3 +506,32 @@ input:checked + .slider:before {
     padding: 10px;
     margin-bottom: 10px;
 }
+
+/* Add this CSS to your stylesheet */
+.carousel-item img {
+  max-width: 100%;
+  max-height: 80vh; /* Limit the maximum height of carousel images to 80% of viewport height */
+  width: auto; /* Maintain the aspect ratio of the images */
+  height: auto;
+  margin: 0 auto; /* Center the images horizontally */
+  object-fit: contain; /* Maintain the aspect ratio and fit the image within the container */
+}
+.carousel-counter {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+
+
+/* Adjust the image size for larger screens if needed */
+@media (min-width: 992px) {
+  .carousel-item img {
+    max-width: 70%; /* Limit the maximum width to 70% on larger screens */
+    margin: 0 auto; /* Center the images horizontally */
+  }
+}

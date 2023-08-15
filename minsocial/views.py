@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
+from django.http import HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.http import HttpResponseRedirect
@@ -497,26 +498,20 @@ def my_library(request):
     })
 
 
-@csrf_exempt  # Disabling CSRF protection for this view
-def update_views(request, video_id):
+def view_video(request, video_id):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
+    
     video = get_object_or_404(Video, pk=video_id)
+    user_ip = request.META.get('REMOTE_ADDR')  # Get user's IP address
+
+    # Check if the IP address has already viewed the video
+    if user_ip not in video.viewers_ip:
+        video.views += 1
+        video.viewers_ip += f"{user_ip}\n"  # Store the IP address
+        video.save()
     
-    if request.META.get('HTTP_X_FORWARDED_FOR'):
-        user_ip = request.META['HTTP_X_FORWARDED_FOR'].split(',')[0]
-    else:
-        user_ip = request.META.get('REMOTE_ADDR')
-
-    session_key = f'video_view_{video_id}_{user_ip}'
-
-    if request.session.get(session_key, False):
-        # The session key already exists, meaning the user has already viewed the video
-        return JsonResponse({'views': video.views})
-    
-    video.views += 1
-    video.save()
-    request.session[session_key] = True
-
-    return JsonResponse({'views': video.views})
+    return redirect(video.file.url)
 
 
 

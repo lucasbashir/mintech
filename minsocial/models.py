@@ -180,6 +180,7 @@ class Video(models.Model):
     category = models.ForeignKey(LibraryCategory, on_delete=models.CASCADE, blank=True, null=True)
     file = models.FileField(upload_to='library/videos/')
     views = models.PositiveIntegerField(default=0)
+    viewers_ip = models.TextField(blank=True)
     upload_date = models.DateTimeField(auto_now_add=True)
     uploader = models.ForeignKey(User, on_delete=models.CASCADE)
 

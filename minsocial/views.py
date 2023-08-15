@@ -497,6 +497,20 @@ def my_library(request):
         'favorite_videos': favorite_videos,
     })
 
+def view_document(request, document_id):
+    if not request.user.is_authenticated:
+        return render(request, "network/error.html")
+    
+    document = get_object_or_404(LibraryDocument, pk=document_id)
+    user_ip = request.META.get('REMOTE_ADDR')  # Get user's IP address
+
+    # Check if the IP address has already viewed the video
+    if user_ip not in document.viewers_ip:
+        document.views += 1
+        document.viewers_ip += f"{user_ip}\n"  # Store the IP address
+        document.save()
+    
+    return redirect(document.file.url)
 
 def view_video(request, video_id):
     if not request.user.is_authenticated:

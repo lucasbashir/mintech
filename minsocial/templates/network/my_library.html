@@ -10,7 +10,10 @@
 {% for favorite_document in favorite_documents %}
 <div class="document-border">
     <p>Uploaded by {{ favorite_document.document.uploader.username }} on {{ favorite_document.document.upload_date }}</p>
-    <a href="{{ favorite_document.document.file.url }}"><span style="color: white;">{{ favorite_document.document.title }}</span></a>
+    <a href="{{ favorite_document.document.file.url }}"><span style="color: white;">TITLE: {{ favorite_document.document.title }}</span></a>
+    <br>
+    <p>Views: {{ favorite_document.document.views }}</p>
+    <button class="btn-primary" onclick="shareFile('https:\//mintechy.pythonanywhere.com{{ favorite_document.document.file.url }}')">Share</button>
 </div>
 {% endfor %}
 
@@ -25,9 +28,11 @@
         Your browser does not support the video tag.
     </video>
     <p>Views: {{ favorite_video.video.views }}</p>
+    <button class="btn-primary" onclick="shareFile('https:\//mintechy.pythonanywhere.com{{ favorite_video.video.file.url }}')">Share</button>
 </div>
 {% endfor %}
 </div>
 </div>
-
+<!-- Modal for Sharing -->
+{% include "network/share.html" %}
 {% endblock %}

@@ -33,8 +33,9 @@
         {% for document in documents %}
             <div class="document-border">
                 <p>Uploaded by {{ document.uploader.username }} on {{ document.upload_date }}</p>
-                <a href="{{ document.file.url }}"><span style="color: white;">{{document.title}}</span> </a>
-                <p>Times Uploaded: {{ document.uploader.librarydocument_set.count }}</p>
+                <a href="{% url 'view_document' document.id %}"><span style="color: white;">TITLE: {{document.title}}</span> </a>
+                <br>
+                <p>Views: {{ document.views }}</p>
                     <a href="{% url 'add_to_favorites' item_id=document.id item_type='document' %}"><span style="color: white;"> Add to Favorites</span></a>
                     <button class="btn-primary" onclick="shareFile('https:\//mintechy.pythonanywhere.com{{ document.file.url }}')">Share</button>
            

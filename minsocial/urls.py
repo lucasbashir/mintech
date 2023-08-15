@@ -44,6 +44,7 @@ urlpatterns = [
     path("general_library", views.general_library, name="general_library"),
     path("my_library", views.my_library, name="my_library"),
     path("view_video/<int:video_id>/", views.view_video, name="view_video"),
+    path("view_document/<int:document_id>/", views.view_document, name="view_document"),
     path("upload_document/", views.upload_document, name="upload_document"),
     path("upload_video/", views.upload_video, name="upload_video"),
     path('category/<str:category_name>/', views.category_detail, name='category_detail'),

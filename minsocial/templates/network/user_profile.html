@@ -395,5 +395,22 @@ function openMyGroupsModal() {
 </style>
   
   {% include "network/share.html" %}
-<script src="{% static 'network/post_scroll.js' %}"></script>
+<!-- Add pagination links -->
+<div class="pagination">
+  <span class="step-links">
+    {% if page_post.has_previous %}
+      <a class="btn btn-primary" href="?page=1">&laquo; first</a>
+      <a class="btn btn-primary" href="?page={{ page_post.previous_page_number }}">previous</a>
+    {% endif %}
+
+    <span class="current-page">
+      Page {{ page_post.number }} of {{ page_post.paginator.num_pages }}.
+    </span>
+
+    {% if page_post.has_next %}
+      <a class="btn btn-primary" href="?page={{ page_post.next_page_number }}">next</a>
+      <a class="btn btn-primary" href="?page={{ page_post.paginator.num_pages }}">last &raquo;</a>
+    {% endif %}
+  </span>
+</div>
   {% endblock %}

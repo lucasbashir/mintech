@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-3zkcgwwlprtcd2rul+*i7j2kn^qt33s4-m=c)4omq+ph*u$pdj'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['mintechy.pythonanywhere.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -77,10 +77,15 @@ AUTH_USER_MODEL = "minsocial.User"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'Boolean@int95',
+        'HOST': 'db',
+        'PORT': '5432',  # PostgreSQL default port
     }
 }
+
 
 
 # Password validation

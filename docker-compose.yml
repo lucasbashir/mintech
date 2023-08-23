@@ -1,6 +1,10 @@
 version: '3'
 
 services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=Boolean@int95  # Replace with your desired password
   web:
     build:
       context: .
@@ -12,4 +16,4 @@ services:
       - "8000:8000"
     environment:
       - DJANGO_SETTINGS_MODULE=techschool.settings
-      - ALLOWED_HOSTS=mintechy.pythonanywhere.com  # Set your allowed host here
+      - ALLOWED_HOSTS=[]

@@ -264,8 +264,12 @@ function openMyGroupsModal() {
                 <p class="read-more" data-post="{{ posts.id }}">Read full content >>></p>
               </a>
             {% endif %}
-          
-          
+            {% if request.user == posts.user %}
+            <form method="post" action="{% url 'delete_post' post_id=posts.id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn-primary">Delete</button>
+          </form>
+          {% endif %}
             {% if posts.post_images.all %}
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
               <ol class="carousel-indicators">

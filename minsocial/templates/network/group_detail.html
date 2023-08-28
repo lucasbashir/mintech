@@ -4,13 +4,6 @@
 {% load static %}
 {% block body %}
 
-{% if messages %}
-<ul class="messages">
-  {% for message in messages %}
-    <li{% if message.success %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-  {% endfor %}
-</ul>
-{% endif %}
   
 <div class="container">
     {% if user.is_authenticated %}
@@ -114,7 +107,12 @@
           <!-- Display the number of likes for the post -->
           {% include 'network/group_likes.html' %}
           <hr style="border-color: #FFCF70;">
-
+          {% if request.user == posts.user %}
+          <form method="post" action="{% url 'delete_group_post' post_id=posts.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn-primary">Delete</button>
+        </form>
+        {% endif %}
           <!--Urlize comments, read more comments, and display comments-->
           <ul class="list-group">
             {% for comment in posts.group_postComment.all %}

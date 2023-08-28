@@ -220,6 +220,19 @@ def joined_groups_view(request):
     groups = Group.objects.filter(members=user)
     return render(request, 'network/joined_groups.html', {'groups': groups})
 
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST' and request.user == post.user:
+        post.delete()
+    return redirect('profile', user_id=request.user.id)
+
+def delete_group_post(request, post_id):
+    post = get_object_or_404(GroupPost, id=post_id)
+    if request.method == 'POST' and request.user == post.user:
+        post.delete()
+    return redirect('group_detail', group_id=post.group.id)
+
+
 def delete_group_view(request, group_id):
     group = get_object_or_404(Group, id=group_id)
     if request.method == 'POST' and request.user == group.creator:

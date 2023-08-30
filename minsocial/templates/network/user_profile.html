@@ -264,12 +264,6 @@ function openMyGroupsModal() {
                 <p class="read-more" data-post="{{ posts.id }}">Read full content >>></p>
               </a>
             {% endif %}
-            {% if request.user == posts.user %}
-            <form method="post" action="{% url 'delete_post' post_id=posts.id %}">
-              {% csrf_token %}
-              <button type="submit" class="btn-primary">Delete</button>
-          </form>
-          {% endif %}
             {% if posts.post_images.all %}
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
               <ol class="carousel-indicators">
@@ -297,7 +291,9 @@ function openMyGroupsModal() {
 
         </div>
         <p class="card-text"><small class="text-muted">{{ posts.timestamp }}</small></p>
-
+ {% if request.user == posts.user %}
+        <button class="delete-post" data-delete-post-id="{{ posts.id }}">Delete</button>
+        {% endif %}
         <!-- Display the number of likes for the post -->
         {% include 'network/likes.html' %}
         <hr style="border-color: #FFCF70;">
@@ -417,4 +413,43 @@ function openMyGroupsModal() {
     {% endif %}
   </span>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const deletePostButtons = document.querySelectorAll('.delete-post');
+
+    deletePostButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const post_id = button.getAttribute('data-delete-post-id');
+
+        fetch(`/post/${post_id}/delete/`, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // post deleted successfully
+            const postElement = button.parentElement;
+            if (postElement) {
+              postElement.remove();
+            }
+          } else {
+            // Display error message (data.message) if deletion was not successful
+            console.log(data.message);
+          }
+        })
+        .catch(error => {
+          console.error('An error occurred:', error);
+        });
+      });
+    });
+  });
+
+
+</script>
   {% endblock %}

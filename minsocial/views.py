@@ -221,16 +221,37 @@ def joined_groups_view(request):
     return render(request, 'network/joined_groups.html', {'groups': groups})
 
 def delete_post(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
-    if request.method == 'POST' and request.user == post.user:
+    try:
+        post = Post.objects.get(id=post_id)
         post.delete()
-    return redirect('profile', user_id=request.user.id)
+        return JsonResponse({'success': True})
+    except Post.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Post not found'})
+    
 
-def delete_group_post(request, post_id):
-    post = get_object_or_404(GroupPost, id=post_id)
-    if request.method == 'POST' and request.user == post.user:
+def delete_comment(request, comment_id):
+    try:
+        comment = Comment.objects.get(id=comment_id)
+        comment.delete()
+        return JsonResponse({'success': True})
+    except Comment.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Comment not found'})
+    
+def delete_group_post_comment(request, group_comment_id):
+    try:
+        post = get_object_or_404(GroupComment, id=group_comment_id)
         post.delete()
-    return redirect('group_detail', group_id=post.group.id)
+        return JsonResponse({'Success': True})
+    except GroupComment.DoesNotExist:
+        return JsonResponse({'success': False})
+
+def delete_group_post(request, group_post_id):
+    try:
+        post = GroupPost.objects.get(id=group_post_id)
+        post.delete()
+        return JsonResponse({'Success': True})
+    except GroupComment.DoesNotExist:
+        return JsonResponse({'success': False})
 
 
 def delete_group_view(request, group_id):
@@ -319,6 +340,7 @@ def group_detail(request, group_id):
     comments = GroupComment.objects.filter(post__in=post_ids)
     profile_pics = user.profile_pics
     is_group_member = group.members.filter(id=user.id).exists()
+    is_admin = group.creator == user
 
     context = {
         "group": group,
@@ -328,6 +350,7 @@ def group_detail(request, group_id):
         "comments": comments,
         "group_id": group_id,
         "is_group_member": is_group_member,
+        "is_admin": is_admin,
     }
 
     return render(request, "network/group_detail.html", context)

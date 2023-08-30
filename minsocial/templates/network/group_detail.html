@@ -4,7 +4,9 @@
 {% load static %}
 {% block body %}
 
-  
+
+
+  <h3>{{group.name}}</h3>
 <div class="container">
     {% if user.is_authenticated %}
       <!-- Check if the user is authenticated -->
@@ -107,16 +109,18 @@
           <!-- Display the number of likes for the post -->
           {% include 'network/group_likes.html' %}
           <hr style="border-color: #FFCF70;">
-          {% if request.user == posts.user %}
-          <form method="post" action="{% url 'delete_group_post' post_id=posts.id %}">
-            {% csrf_token %}
-            <button type="submit" class="btn-primary">Delete</button>
-        </form>
+          
+          {% if is_admin or request.user == posts.user %}
+        <button class="delete-group-post" data-delete-group-post-id="{{ posts.id }}">Delete</button>
         {% endif %}
+       
           <!--Urlize comments, read more comments, and display comments-->
           <ul class="list-group">
             {% for comment in posts.group_postComment.all %}
               <li class="list-group-item">
+                
+        <button class="delete-group-comment" data-comment-id="{{ comment.id }}">Delete</button>
+        
                 {% if comment.author.profile_pics %}
                   <a href="{% url 'profile' user_id=comment.author.id %}">
                     <img src="{{ comment.author.profile_pics.url }}" class="rounded-circle" width="70" height="70">
@@ -170,4 +174,82 @@
     </div>
     {% include "network/share.html" %}  
     <script src="{% static 'network/group_post_scroll.js' %}"></script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const deletePostButtons = document.querySelectorAll('.delete-group-post');
+    
+        deletePostButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            const group_post_id = button.getAttribute('data-delete-group-post-id');
+    
+            fetch(`/group_post/${group_post_id}/delete/`, {
+              method: 'POST',
+              headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+              }
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                // post deleted successfully
+                const postElement = button.parentElement;
+                if (postElement) {
+                  postElement.remove();
+                }
+              } else {
+                // Display error message (data.message) if deletion was not successful
+                console.log(data.message);
+              }
+            })
+            .catch(error => {
+              console.error('An error occurred:', error);
+            });
+          });
+        });
+      });
+    
+    
+    </script> 
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const deleteCommentButtons = document.querySelectorAll('.delete-group-comment');
+
+    deleteCommentButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const group_comment_id = button.getAttribute('data-comment-id');
+
+        fetch(`/group_post_comment/${group_comment_id}/delete/`, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Comment deleted successfully
+            const commentElement = button.parentElement;
+            if (commentElement) {
+              commentElement.remove();
+            }
+          } else {
+            // Display error message (data.message) if deletion was not successful
+            console.log(data.message);
+          }
+        })
+        .catch(error => {
+          console.error('An error occurred:', error);
+        });
+      });
+    });
+  });
+
+
+</script>   
 {% endblock %}

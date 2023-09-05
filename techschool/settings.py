@@ -77,10 +77,15 @@ AUTH_USER_MODEL = "minsocial.User"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'Boolean@int95',
+        'HOST': 'db',
+        'PORT': '5432',  # PostgreSQL default port
     }
 }
+
 
 
 # Password validation

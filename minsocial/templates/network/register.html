@@ -1,12 +1,22 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
+<div class="intro-container">
+    <div class="circle-container">
+      <img src="media/post_image/chatlogo.jpg" alt="Chat Logo" class="circle-image">
+    </div>
+    <div class="intro-text-container">
+      <p style="font-weight: 500; font-size: large; font-family: 'Times New Roman', Times, serif;"></p>
+      <button class="signup-button" onclick="openRegisterModal()">Sign-up</button>
+      <br>
+      <div class="login-text-space">
+      <p style="font-weight: 500; font-size: large; font-family: 'Times New Roman', Times, serif;">Already have an account?</p>
+      <button class="login-button"><a href="{% url 'network_login' %}">Login</a></button>
+    </div>
+    </div>
+  </div>
+  
 
-    <h3>Register</h3>
-
-    
-
-    <button style="margin-top: 20px;" type="button" class="btn btn-primary" onclick="openRegisterModal()">Click here to register</button>
 
     <!-- Unique Register Modal -->
     <div class="modal fade" id="registerModalUnique" tabindex="-1" aria-labelledby="registerModalUniqueLabel" aria-hidden="true">
@@ -33,15 +43,18 @@
                         <button type="button" class="btn btn-secondary" onclick="closeRegisterModal()">Cancel</button>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <p>Already have an account? <a href="{% url 'network_login' %}">Log In here.</a></p>
-                </div>
-                <div class="modal-footer">
-                    <p>By registering, you agree to our <a href="{% url 'terms' %}">terms and policy.</a></p>
-                </div>
             </div>
         </div>
     </div>
+    <footer>
+        <div class="intro-footer-buttons">
+          <button class="intro-footer-button">About Us</button>
+          <button class="intro-footer-button">Terms and Conditions</button>
+          <button class="intro-footer-button">Privacy</button>
+          <button class="intro-footer-button">Contact Us</button>
+        </div>
+      </footer>
+      
 
     <script>
         function openRegisterModal() {

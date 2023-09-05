@@ -3,13 +3,15 @@
 {% load my_filters %}
 {% load static %}
 {% block body %}
-<h1>Announcements</h1>
-<div class="input-group mb-3" id="create-post-field-container">
-    <input style="margin-top: 10px; height: 50px; width: auto; border-radius: 1rem;" type="text" id="create-post-field" placeholder="New Announcement" onclick="openModal()">
-    
-    
-  </div>
 
+
+<div class="content">
+<div class="post">
+  <div style="margin-top: -150px; z-index: 2000; position: fixed;" class="announcement-button">
+<div id="create-post-field-container">
+    <input type="text" id="create-post-field" placeholder="New Announcement" onclick="openModal()"> 
+  </div>
+</div>
   <!-- Modal -->
   <div id="postModal" class="modal">
     <div class="modal-dialog">
@@ -33,10 +35,11 @@
       </div>
     </div>
   </div>
-
+<br>
   {% for announcement in page_announcements %}
   <section>
-    <div class="container">
+    <br>
+    <div>
       <div class="card">
         <div class="card-body">
           <div class="d-flex align-items-center">
@@ -108,7 +111,8 @@
   </section>
   
 {% endfor %}
-
+</div>
+</div>
 <!-- Add pagination links -->
 <div class="pagination">
   <span class="step-links">
@@ -128,6 +132,10 @@
   </span>
 </div>
 
-  
+  <style>
+    .share-thought {
+      visibility: hidden;
+    }
+  </style>
 
 {% endblock %}

@@ -22,59 +22,121 @@
     <script src="{% static '/network/share.js' %}"></script>
     <link rel="icon" type="image/png" href="{% static 'network/favicon.png' %}">
 
-    
 </head>
 
 <body id="body">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{% url 'index' %}">M I N T E C H</a>
-        {% if request.user.is_authenticated %}
-        <form action="{% url 'search' %}" method="get" class="search-form">
-            <input style="margin-top: 20px;" type="text" name="q" placeholder="Search..." />
-            <button type="submit">Search</button>
-        </form>
-        {% endif %}
-        <label style="margin-top: 15px; margin-left: 10px;" class="switch">
-            <input onclick="toggleBackgroundColor()" type="checkbox" id="toggleSwitch">
-            <span class="slider round"></span>
-        </label>
-
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-            
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Menu
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        {% if user.is_authenticated %}
-                        <a class="dropdown-item" href="{% url 'profile' user_id=user.id %}"><strong>{{ user.username }}</strong></a>
-                        {% endif %}
-                        <a class="dropdown-item" href="{% url 'index' %}">All Posts</a>
-                        {% if user.is_authenticated %}
-                        <a class="dropdown-item" href="{% url 'following' %}">Following</a>
-                        <a class="dropdown-item" href="{% url 'general_library' %}">General Library</a>
-                        <a class="dropdown-item" href="{% url 'my_library' %}">My Library</a>
-                        <a class="dropdown-item" href="{% url 'create_group' %}">Create Group</a>
-                        <a class="dropdown-item" href="{% url 'announcements' %}">Announcements</a>
-                        <a class="dropdown-item" href="{% url 'forum' %}">Forum</a>
-                        <a class="dropdown-item" href="{% url 'network_logout' %}">Log Out</a>
-                        {% else %}
-                        <a class="dropdown-item" href="{% url 'network_login' %}">Log In</a>
-                        <a class="dropdown-item" href="{% url 'network_register' %}">Register</a>
-                        {% endif %}
-                    </div>
-                </li>
-            </ul>
+    <div class="head-shot">
+        <!-- This prevents the post from showing after the header -->
+        
+    </div>
+    
+    <div class="index-container">
+        <div class="profile-container">
+            {% if user.profile_pics %}
+                <a href="{% url 'profile' user_id=user.id %}">
+                    <img src="{{ user.profile_pics.url }}" class="index-circle-image">
+                </a>
+            {% else %}
+                <a href="{% url 'profile' user_id=user.id %}">
+                    <img src="/media/post_image/nodp.jpg" class="index-circle-image">
+                </a>
+            {% endif %}
+            <button class="profile-button">{{ user.first_name }} {{user.last_name}}</button>
         </div>
-    </nav>
+        <div class="button-container">
+          <div class="feed-and-search-button">
+            <div class="feed-buttons">
+                <a style="color: white;" href="{% url 'index' %}" class="feed-button">My News Feed</a>
+                <a style="color: white;" href="{% url 'following' %}" class="feed-button">Following Feed</a>
+            </div>
+            
+            <div class="search-form">
+                <form action="{% url 'search' %}" method="get">
+                    <input style="padding: 0.2%;" class="feed-button" type="text" name="q" placeholder="Search something" />
+                </form>
+            </div>
+        </div>
+        
+            <div class="share-thought">
+                {% if user.profile_pics %}
+                <a href="{% url 'profile' user_id=user.id %}">
+                    <img src="{{ user.profile_pics.url }}" class="index-post-circle-image">
+                </a>
+            {% else %}
+                <a href="{% url 'profile' user_id=user.id %}">
+                    <img src="/media/post_image/nodp.jpg" class="index-post-circle-image">
+                </a>
+            {% endif %}
+                <input type="text" id="create-post-field" placeholder="Want to share your insight?" onclick="openModal()">
+            </div>
+            
+            
+        </div>
+        <div class="chatlogo-container">
+            <img src="media/post_image/chatlogo.jpg" alt="Chat Logo" class="index-circle-image">
+        </div>
+    </div>
+    
+    
+        <div class="container">
+            <div class="nav-item">
+                <button class="nav-link menu-link" id="open-sidebar">Open menu</button>
 
+            </div>
+            
+            <div class="sidebar" id="sidebar">
+                <!-- Sidebar content here -->
+                <ul class="navbar-nav ml-auto">
+                    
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link"  href="{% url 'profile' user_id=user.id %}">{{ user.first_name }} {{user.last_name}}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"  href="{% url 'profile' user_id=user.id %}">@{{ user.username }}</a>
+                    </li>
+                    <label style="margin-left: 110px;" class="switch">
+                      <input onclick="toggleBackgroundColor()" type="checkbox" id="toggleSwitch">
+                      <span class="slier round">Dark/Light</span>
+                  </label>
+                    <li class="nav-item">
+                        <a class="nav-link">{{follower.count}} followers | {{following.count}} following</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">All Posts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'following' %}">Following</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'create_group' %}">Create Group</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'general_library' %}">General Library</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'my_library' %}">My Library</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'announcements' %}">Announcements</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'forum' %}">Forum</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'network_logout' %}">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'network_login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'network_register' %}">Register</a>
+                    </li>
+                    {% endif %}
+                    <!-- Add more sidebar items here -->
+                </ul>
+            </div>
     <div class="body">
         {% block body %}{% endblock %}
     </div>
@@ -87,12 +149,12 @@
     function toggleBackgroundColor() {
         if (toggleSwitch.checked) {
             body.style.backgroundColor = 'black';
-            body.style.color = 'white';
+            body.style.color = '#f2f2f2';
             localStorage.setItem('backgroundColor', 'black');
         } else {
-            body.style.backgroundColor = 'white';
+            body.style.backgroundColor = '#f2f2f2';
             body.style.color = 'black';
-            localStorage.setItem('backgroundColor', 'white');
+            localStorage.setItem('backgroundColor', '#f2f2f2');
         }
     }
 
@@ -101,14 +163,23 @@
 
         if (savedBackgroundColor === 'black') {
             body.style.backgroundColor = 'black';
-            body.style.color = 'white';
+            body.style.color = '#f2f2f2';
             toggleSwitch.checked = true;
         } else {
-            body.style.backgroundColor = 'white';
+            body.style.backgroundColor = '#f2f2f2';
             body.style.color = 'black';
             toggleSwitch.checked = false;
         }
     });
+
+    
+        const menuLink = document.querySelector('.menu-link');
+        const sidebar = document.getElementById('sidebar');
+
+        menuLink.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
+    
 </script>
 </body>
 

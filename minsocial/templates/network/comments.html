@@ -44,7 +44,7 @@
   {% endif %}
   </ul>
   <br>
-  <hr style="border-color: #FFCF70;">
+  <hr style="border-color: black;">
         {% if user.is_authenticated %}
         <form action="{% url 'addComment' post_id=posts.id %}" method="POST">
           {% csrf_token %}

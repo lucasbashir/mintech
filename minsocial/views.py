@@ -31,8 +31,9 @@ from .forms import GroupForm, LibraryDocumentForm, VideoForm, RegistrationForm
 
 
 def index(request):
+    """This is the index page"""
     if not request.user.is_authenticated:
-        return render(request, "network/login.html")
+        return render(request, "network/register.html")
 
     post = Post.objects.all().order_by("id").reverse().select_related("user")
     paginator = Paginator(post, 20) # Show 20 contacts per page.
@@ -46,6 +47,8 @@ def index(request):
     profile_pics = user.profile_pics
     # Get comments for the posts displayed on the page
     comments = Comment.objects.filter(post__in=page_post)
+    following = Follow.objects.filter(following=user)
+    follower = Follow.objects.filter(follower=user)
 
     return render(request, "network/index.html", {
         "is_member": is_member,
@@ -57,6 +60,8 @@ def index(request):
         "profile_pics": profile_pics,
         "comments": comments,
         "user": user,
+        "following": following,
+        "follower": follower,
     })
 
 def load_posts(request):
@@ -239,9 +244,9 @@ def delete_comment(request, comment_id):
     
 def delete_group_post_comment(request, group_comment_id):
     try:
-        post = get_object_or_404(GroupComment, id=group_comment_id)
-        post.delete()
-        return JsonResponse({'Success': True})
+        comment = get_object_or_404(GroupComment, id=group_comment_id)
+        comment.delete()
+        return JsonResponse({'success': True})
     except GroupComment.DoesNotExist:
         return JsonResponse({'success': False})
 
@@ -249,9 +254,10 @@ def delete_group_post(request, group_post_id):
     try:
         post = GroupPost.objects.get(id=group_post_id)
         post.delete()
-        return JsonResponse({'Success': True})
-    except GroupComment.DoesNotExist:
+        return JsonResponse({'success': True})
+    except GroupPost.DoesNotExist:
         return JsonResponse({'success': False})
+
 
 
 def delete_group_view(request, group_id):

@@ -4,21 +4,48 @@
 {% load static %}
 {% block body %}
 
-<div class="content">
-  <div class="post">
-<br>
 
-  <div class="horizontal-container">
-Posts from users you follow... <label style="margin-top: 15px;" class="switch">
-  
+{% if user.is_authenticated %}
+<!-- Check if the user is authenticated -->
+<div class="input-group mb-3" id="create-post-field-container">
+  {% if user.profile_pics %}
+    <a href="{% url 'profile' user_id=user.id %}">
+      <img src="{{ user.profile_pics.url }}" class="rounded-circle" width="70" height="70"> 
+    </a> 
+  {% else %}
+    <a href="{% url 'profile' user_id=user.id %}">
+      <img src="/media/post_image/hand.gif" class="rounded-circle" width="70" height="70"> 
+    </a> 
+  {% endif %}
+  <input style="margin-top: 10px; height: 50px; border-radius: 1rem;" type="text" id="create-post-field" placeholder="Share a thought" onclick="openModal()">
 </div>
 
-<br>
-<br>
+<!-- Modal -->
+<div id="postModal" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <form action="{% url 'newPost' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+          <textarea style="height: 300px;" id="new-post" class="form-control" name="post_content" placeholder="Share a thought..." required></textarea>
+        </div>
+        <div class="form-group">
+          <input type="file" name="post_image[]" class="form-control-file" accept="image/*" multiple>
+        </div>
+        <div class="text-right">
+          <button id="post-btn" type="submit" class="btn btn-primary">Post</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endif %}
+
 <div id="posts">
   {% for posts in page_post %}
   <section>
-    <div>
+    <div class="container">
       <div class="card">
         <div class="card-body">
           <div class="d-flex align-items-center">
@@ -53,8 +80,7 @@ Posts from users you follow... <label style="margin-top: 15px;" class="switch">
               </a>
             {% endif %}
           
-          
-            {% if posts.post_images.all %}
+           {% if posts.post_images.all %}
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
               <ol class="carousel-indicators">
                 {% for image in posts.post_images.all %}
@@ -78,45 +104,73 @@ Posts from users you follow... <label style="margin-top: 15px;" class="switch">
               </a>
             </div>
             {% endif %}
+            
+            {% if request.user == posts.user %}
+        <button class="delete-post" data-delete-post-id="{{ posts.id }}">Delete</button>
+        {% endif %}
+          
 
+
+
+          
         </div>
         <p class="card-text"><small class="text-muted">{{ posts.timestamp }}</small></p>
-
+        
         <!-- Display the number of likes for the post -->
         {% include 'network/likes.html' %}
         <hr style="border-color: #FFCF70;">
-
+        
         <!--Urlize comments, read more comments, and display comments-->
         {% include 'network/comments.html' %}
+        
       </div>
     </div>
   </div>
   </section>
 {% endfor %}
 </div>
-{% include 'network/newpost-modal.html' %}
-<!-- Add pagination links -->
-<div class="pagination">
-  <span class="step-links">
-    {% if page_post.has_previous %}
-      <a class="btn btn-primary" href="?page=1">&laquo; first</a>
-      <a class="btn btn-primary" href="?page={{ page_post.previous_page_number }}">previous</a>
-    {% endif %}
 
-    <span class="current-page">
-      Page {{ page_post.number }} of {{ page_post.paginator.num_pages }}.
-    </span>
+{% include "network/share.html" %}
+<script src="{% static 'network/post_scroll.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    {% if page_post.has_next %}
-      <a class="btn btn-primary" href="?page={{ page_post.next_page_number }}">next</a>
-      <a class="btn btn-primary" href="?page={{ page_post.paginator.num_pages }}">last &raquo;</a>
-    {% endif %}
-  </span>
-</div>
 
-{% include "network/share.html" %}  
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const deletePostButtons = document.querySelectorAll('.delete-post');
 
-  </div>
-</div>
+    deletePostButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const post_id = button.getAttribute('data-delete-post-id');
 
+        fetch(`/post/${post_id}/delete/`, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // post deleted successfully
+            const postElement = button.parentElement;
+            if (postElement) {
+              postElement.remove();
+            }
+          } else {
+            // Display error message (data.message) if deletion was not successful
+            console.log(data.message);
+          }
+        })
+        .catch(error => {
+          console.error('An error occurred:', error);
+        });
+      });
+    });
+  });
+
+
+</script>
 {% endblock %}

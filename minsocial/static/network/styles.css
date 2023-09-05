@@ -1,4 +1,9 @@
-
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f2f2f2;
+}
 
 .search-form {
   margin-bottom: 20px;
@@ -23,33 +28,7 @@
   box-sizing: border-box;
 }
 
-.sidebar {
-  width: 250px;
-}
 
-/* Add media query for smaller screens (e.g., max-width: 768px) */
-@media screen and (max-width: 768px) {
-  /* Hide the sidebars on smaller screens */
-  .sidebar {
-    display: none;
-  }
-}
-* Styling for the left sidebar */
-.sidebar-left {
-  background-color: #f0f0f0; 
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-}
-
-/* Styling for the right sidebar */
-.sidebar-right {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  right: 0;
-}
 
 
 .like-button {
@@ -62,9 +41,9 @@
   color: white;
 }
 .card {
-  background-color: #00308F;
-  color: #FFCF70;
-  border-color: #FFCF70;;
+  background-color: white;
+  color: black;
+  border-color: black
 }
 
 /* The switch - the box around the slider */
@@ -97,7 +76,6 @@
 
 .slider:before {
   position: absolute;
-  content: "";
   height: 26px;
   width: 26px;
   left: 4px;
@@ -130,12 +108,6 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-/* Base styles for .index-container */
-.index-container {
-  background-color: white;
-  color: black;
-  min-height: 100vh; 
-}
 
 /* Styles for desktop screens (min-width: 769px) */
 @media screen and (min-width: 769px) {
@@ -146,16 +118,13 @@ input:checked + .slider:before {
 
 
 .card-body {
-  color: #FFCF70;
+  color: black
 }
 
-.submit-button {
-  color: #FFCF70;
-  border-color: #FFCF70;;
-}
 
 .card-title {
-  color: #FFCF70;
+  color: black;
+  font-weight: bold;
 }
 
 /* followers and follow count */
@@ -202,7 +171,7 @@ input:checked + .slider:before {
 .modal {
   display: none; /* Hide the modal */
   position: fixed;
-  z-index: 1;
+  z-index: 2000;
   left: 0;
   top: 0;
   width: 100%;
@@ -404,14 +373,6 @@ input:checked + .slider:before {
   }
 
 
-  .dropdown-menu .dropdown-item {
-    color: #333;
-}
-
-.navbar-nav .nav-item.dropdown {
-  display: block;
-  margin-right: 200px;
-}
 
 /* Custom CSS for mobile-only dropdown */
 @media (max-width: 767px) {
@@ -428,7 +389,7 @@ input:checked + .slider:before {
 }
 
 .container {
-  margin-bottom: 20px
+  margin-bottom: 20px;
 }
 
 .horizontal-container {
@@ -535,3 +496,365 @@ input:checked + .slider:before {
     margin: 0 auto; /* Center the images horizontally */
   }
 }
+
+.intro-container {
+  display: flex;
+  align-items: center;
+  margin-top: 100px;
+}
+
+.circle-container {
+  width: 300px;
+  height: 300px;
+  border: 0.5px solid #0805c1;
+  border-radius: 50%;
+  margin-left: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+
+.index-container {
+  position: fixed;
+  display: flex;
+  z-index: 1000;
+  margin-top: 30px;
+  align-items: center;
+  margin-left: 400px; /* Adjust as needed */
+  background-color: #f2f2f2;
+ 
+}
+
+
+#open-sidebar {
+  position: relative;
+  margin-top: 295%;
+  background-color: #4B9CD3;
+  border: 0.5px solid #0805c1;
+  cursor: pointer;
+  color: white;
+  border-radius: 5px;
+  padding: 1px 50px; /* Adjust padding to control space between text and button width */
+  font-size: 14px; /* Adjust font size as needed */
+  font-family: Arial, sans-serif; 
+  margin-left: -80px;
+}
+
+.head-shot {
+  z-index: 1000;
+  background-color: #f2f2f2;
+  position: fixed;
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 40%;
+}
+
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: -300px;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.chatlogo-container {
+  margin-top: -50px;
+  margin-left: 30px; /* Adjust as needed */
+}
+
+.index-circle-image {
+  width: 200px;
+  height: 200px;
+  border: 0.5px solid #0805c1;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+
+
+.profile-button {
+  background-color: #4B9CD3;
+  border: 0.5px solid #0805c1;
+  border-radius: 5px;
+  padding: 1px 50px;
+  color: white;
+  font-size: 14px; 
+  font-family: Arial, sans-serif;
+}
+
+.share-thought {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  position: relative; /* Add relative positioning to the container */
+}
+
+
+.index-post-circle-image {
+  width: 80px;
+  height: 60px;
+  border: 0.5px solid #0805c1;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #4B9CD3;
+  padding: 0; /* Remove padding */
+  margin-right: -10px; /* Adjust margin to overlap the input field */
+  position: relative; /* Add relative positioning to the circle */
+  z-index: 2; /* Ensure the circle is above the input field */
+}
+
+#create-post-field {
+  background-color: #4B9CD3;
+  border: 0.5px solid #0805c1;
+  border-radius: 20px;
+  padding: 20px 150px;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  margin: 0; /* Remove margin */
+  position: relative; /* Add relative positioning to the input field */
+  z-index: 1; /* Ensure the input field is below the circle */
+}
+
+#create-post-field::placeholder {
+  color: white; /* Set the color to white or any other desired color */
+}
+
+.feed-button::placeholder {
+  color: white; /* Set the color to white or any other desired color */
+}
+
+
+.feed-button,
+.search-button,
+.thought-button {
+  background-color: #4B9CD3;
+  border: 0.5px solid #0805c1;
+  cursor: pointer;
+  color: white;
+  border-radius: 5px;
+  padding: 4px 50px; /* Adjust padding to control space between text and button width */
+  margin-left: 20px;
+  font-size: 14px; /* Adjust font size as needed */
+  font-family: Arial, sans-serif; /* Add your desired font family */
+}
+
+.feed-and-search-button {
+  display: flex;
+  /* Vertically align items */
+}
+
+.feed-buttons {
+  flex: 6; /* Allow buttons to grow and fill available space */
+}
+
+.search-form {
+  flex: 2; /* Allow search input to grow and fill more space */
+  
+}
+
+
+
+.circle-image {
+  width: 80%;
+  height: auto;
+}
+
+.intro-text-container {
+  margin-left: 200px;
+}
+
+
+.signup-button,
+.login-button {
+  display: block;
+  width: 400px;
+  margin-top: 10px;
+  padding: 1px;
+  background-color: #4B9CD3;
+  color: white;
+  border: 0.5px solid #0805c1;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none; 
+}
+
+a {
+  color: inherit; /* Inherit the color from the parent element */
+  text-decoration: none; /* Remove underline */
+}
+
+/* Set a specific color for visited links (optional) */
+a:visited {
+  color: inherit; /* Inherit the color from the parent element */
+}
+
+/* Set a specific color for hover effect (optional) */
+a:hover {
+  color: #db3434; /* Change the color on hover */
+}
+
+.login-text-space {
+  margin-top: 50px;
+}
+
+/* Style for the footer container */
+footer {
+  
+  text-align: center;
+}
+
+/* Style for the footer buttons container */
+.intro-footer-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  
+}
+
+/* Style for individual footer buttons */
+.intro-footer-button {
+  padding: 1px 20px;
+  margin: 0 20px;
+  margin-left: 50px;
+  margin-top: 150px;
+  background-color: #4B9CD3;
+  color: white;
+  border: 0.5px solid #0805c1;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Hover effect for footer buttons */
+.intro-footer-button:hover {
+  background-color: #4B9CD3;
+  color: #fff;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .intro-container {
+    flex-direction: column;
+    margin-top: 50px;
+  }
+
+  .circle-container {
+    width: 200px;
+    height: 200px;
+    margin-left: 0;
+    margin-bottom: 20px;
+    align-self: center;
+  }
+
+  .intro-text-container {
+    margin-left: 0;
+    text-align: center;
+  }
+
+  .signup-button,
+  .login-button {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .login-text-space {
+    margin-top: 20px;
+  }
+
+  .intro-footer-buttons {
+    margin-top: 80px;
+    justify-content: center;
+    display: flex;
+  flex-direction: row;
+  align-items:center
+  
+    
+  }
+
+  .intro-footer-button {
+    padding: 1px 1px;
+  margin: 0 5px;
+  margin-left: 1px;
+  margin-top: 20px;
+  background-color: #4B9CD3;
+  color: white;
+  border: 0.5px solid #0805c1;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  }
+
+  footer {
+  
+    text-align: center;
+  }
+}
+
+/* post and sidebar css */
+
+.container {
+  display: flex;
+}
+
+
+.content {
+  flex: 1;
+  margin-top: 55%;
+  padding: 10px;
+  box-sizing: border-box;
+  margin-left: 120px;
+  width: 200%;
+}
+
+.post {
+  
+  padding: 10px;
+  margin-bottom: 20px;
+ 
+  
+}
+
+/* New styles for sliding sidebar */
+.sidebar {
+  position: absolute;
+  margin-top: 350px;
+  margin-left: 80px;
+  left: -70%; /* Start with the sidebar off-screen */
+  width: 20%;
+  background-color: #4B9CD3;
+  color: white;
+  border: 0.5px solid #0805c1;
+  text-align: center;
+  border-radius: 10%;
+  transition: left 0.3s ease;
+  font-family:Arial, Helvetica, sans-serif;
+  
+}
+
+
+.sidebar.open {
+  left: 0; /* Slide the sidebar into view */
+}
+
+.menu-link {
+  cursor: pointer;
+}
+
+/* Remove border and background from dropdown items */
+.dropdown-item {
+  border: none;
+  background-color: transparent;
+}
+
+/* end of sidebar and post css */
+

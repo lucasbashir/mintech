@@ -1,0 +1,38 @@
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const deletePostButtons = document.querySelectorAll('.delete-group-post');
+  
+      deletePostButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const group_post_id = button.getAttribute('data-delete-group-post-id');
+  
+          fetch(`/group_post/${group_post_id}/delete/`, {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': getCookie('csrftoken'),
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            }
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              // post deleted successfully
+              const postElement = button.parentElement;
+              if (postElement) {
+                postElement.remove();
+              }
+            } else {
+              // Display error message (data.message) if deletion was not successful
+              console.log(data.message);
+            }
+          })
+          .catch(error => {
+            console.error('An error occurred:', error);
+          });
+        });
+      });
+    });
+  
+  
+  </script> 

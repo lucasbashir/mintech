@@ -25,6 +25,7 @@
 </head>
 
 <body id="body">
+    {% if user.is_authenticated %}
     <div class="head-shot">
         <!-- This prevents the post from showing after the header -->
         
@@ -83,12 +84,13 @@
                 <button class="nav-link menu-link" id="open-sidebar">Open menu</button>
 
             </div>
-            
+            {% endif %}
+            {% if user.is_authenticated %}
             <div class="sidebar" id="sidebar">
                 <!-- Sidebar content here -->
                 <ul class="navbar-nav ml-auto">
                     
-                    {% if user.is_authenticated %}
+                    
                     <li class="nav-item">
                         <a class="nav-link"  href="{% url 'profile' user_id=user.id %}">{{ user.first_name }} {{user.last_name}}</a>
                     </li>

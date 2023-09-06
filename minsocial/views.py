@@ -526,7 +526,7 @@ def add_to_favorites(request, item_id, item_type):
         item = get_object_or_404(Video, pk=item_id)
         FavoriteVideo.objects.get_or_create(user=user, video=item)
 
-    return redirect('general_library')
+    return redirect('my_library')
 
 def my_library(request):
     if not request.user.is_authenticated:

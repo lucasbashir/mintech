@@ -2,7 +2,7 @@
 {% load my_filters %}
 {% load static %}
 
-<hr style="border-color: #FFCF70;">
+<hr style="border-color: black;">
 <div class="img-fluid react_space" id="react_space">
     <div class="reaction-button" id="reaction-buttons-{{ posts.id }}">
       {% if user.is_authenticated %}
@@ -101,7 +101,7 @@
     <div class="horizontal-container">
       <div class="">
         <button class="like-btn" data-post-id="{{ posts.id }}" style="background: none; border: none; padding: 0; width: 30px; height: 40px;">
-          <img src="/media/post_image/white.png" width="100%" height="100%" alt="reaction-button" title="reaction">
+          <img src="/media/post_image/black.png" width="100%" height="100%" alt="reaction-button" title="reaction">
         </button>
       </div>
 
@@ -119,15 +119,15 @@
     {% if posts.group_postShock.count > 0 %}
       😲
     {% endif %}
-    <small class="text-muted" style="color: #FFCF70;">{{ total_count }}</small>
+    <small class="text-muted" style="color: black;">{{ total_count }}</small>
     <button style="background: none; border: none; padding: 0; width: 24px; height: 35px;">
-      <img src="/media/post_image/comments.png" width="100%" height="100%" alt="Comment" title="Comment">
+      <img src="/media/post_image/com.png" width="100%" height="100%" alt="Comment" title="Comment">
     </button> 
      <small class="text-muted">{{ posts.group_postComment.count }}</small>
     
   </h3>
   <button style="background: none; border: none; padding: 0; width: 24px; height: 35px;" onclick="shareFile('https:\//mintechy.pythonanywhere.com/group_post_content/{{ posts.id }}')">
-    <img src="/media/post_image/shh.png" width="100%" height="100%" alt="Share" title="Share">
+    <img src="/media/post_image/shareblack.png" width="100%" height="100%" alt="Share" title="Share">
   </button>
 {% endwith %}
     </div>

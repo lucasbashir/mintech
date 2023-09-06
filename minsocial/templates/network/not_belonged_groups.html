@@ -3,28 +3,27 @@
 {% load my_filters %}
 {% load static %}
 {% block body %}
-
-
-    {% for group in groups_not_belonged %}
-    <div class="container">
-        <div class="card">
-          <div class="card-body">
-            <div class="d-flex align-items-center">
-                <h3><a href="{% url 'group_detail' group.id %}" style="color: white;">{{ group.name }}</a></h3>
-                <a href="{% url 'join_group' group_id=group.id %}" class="btn btn-primary ml-2">Join Group</a>
+<div style="margin-top: 20px;" class="container">
+    <div class="row">
+        {% for group in groups_not_belonged %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">
+                        <a href="{% url 'group_detail' group.id %}">{{ group.name }}</a>
+                    </h3>
+                    <p class="card-text">
+                        {% if group.description %}
+                        {% for paragraph in group.description|split_paragraphs %}
+                            {{ paragraph|urlize|safe }}
+                        {% endfor %}
+                        {% endif %}
+                    </p>
+                    <a href="{% url 'join_group' group_id=group.id %}" class="btn btn-primary">Join Group</a>
+                </div>
             </div>
-            
-            <br>
-            {% if group.description %}
-            {% for paragraph in group.description|split_paragraphs %}
-                
-                  <p style="color: white;">{{ paragraph|urlize }}</p>
-               
-              {% endfor %}
-              {% endif %}
-          </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-
+</div>
 {% endblock %}

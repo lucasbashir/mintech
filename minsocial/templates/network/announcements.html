@@ -4,10 +4,10 @@
 {% load static %}
 {% block body %}
 
-
+{% include 'network/sidebar.html' %}
 <div class="content">
 <div class="post">
-  <div style="margin-top: -150px; z-index: 2000; position: fixed;" class="announcement-button">
+  <div style="margin-top: -120px; z-index: 2000; position: fixed;" class="announcement-button">
 <div id="create-post-field-container">
     <input type="text" id="create-post-field" placeholder="New Announcement" onclick="openModal()"> 
   </div>

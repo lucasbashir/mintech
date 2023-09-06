@@ -5,16 +5,19 @@
 {% block body %}
 
 
-
-  <h3>{{group.name}}</h3>
-<div class="container">
+{% include 'network/sidebar.html' %}
+  <div class="content">
+    <div class="post">
     {% if user.is_authenticated %}
       <!-- Check if the user is authenticated -->
       {% if is_group_member %}
+      <div style="margin-top: -120px; z-index: 2000; position: fixed;" class="groupdetail-button">
       <div class="" id="create-post-field-container">
         <input style="margin-top: 20px; height: 50px; border-radius: 1rem;" type="text" id="create-post-field" class="form-control" placeholder="Say something to the group..." onclick="openModal()">
       </div>
-  
+    </div>
+  <br>
+  <h1>{{group.name}}</h1>
       <!-- Modal -->
       <div id="postModal" class="modal">
         <div class="modal-dialog">
@@ -42,7 +45,8 @@
     {% for posts in page_group_posts %}
     
     <section>
-      <div class="container">
+      <div>
+        <br>
         {% if is_admin or request.user == posts.user %}
         <button class="delete-group-post" data-delete-group-post-id="{{ posts.id }}">Delete</button>
         {% endif %}
@@ -112,7 +116,7 @@
 
           <!-- Display the number of likes for the post -->
           {% include 'network/group_likes.html' %}
-          <hr style="border-color: #FFCF70;">
+          <hr style="border-color: black;">
           
           
        
@@ -166,18 +170,24 @@
     </section>
   {% endfor %}
   {% else %}
-  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
+  <div style="display: flex; flex-direction: column; margin-left: -200px; margin-bottom: 50px; align-items: center; justify-content: center; height: 20vh;">
     <a href="{% url 'join_group' group_id=group.id %}" class="btn btn-primary ml-2">Join Group to get involved</a>
 </div>
 
       {% endif %}
     {% endif %}
 
-    </div>
+  </div>
+</div> 
     {% include "network/share.html" %}  
-    <script src="{% static 'network/group_post_scroll.js' %}"></script>
+    
     {% include "network/delete_group_post.html" %}
     {% include "network/delete_group_comment.html" %}
+    <style>
+      .share-thought {
+        visibility: hidden;
+      }
+    </style>
   
- 
+  
 {% endblock %}

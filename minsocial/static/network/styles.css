@@ -2,6 +2,7 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  z-index: 2000;
   background-color: #f2f2f2;
 }
 
@@ -43,7 +44,8 @@ body {
 .card {
   background-color: white;
   color: black;
-  border-color: black
+  border-color: black;
+  border-radius: 30px;
 }
 
 /* The switch - the box around the slider */
@@ -416,9 +418,37 @@ input:checked + .slider:before {
     display: flex;
     justify-content: center;
     gap: 10px;
-    color: white;
+    
   }
+/* CSS to style the category list */
+.category-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Add spacing between items */
+  list-style-type: none; /* Remove bullet points */
+}
 
+/* CSS to style each category item */
+.category-item {
+  text-align: center; /* Center-align items */
+  flex: 0 0 calc(50% - 20px); /* Limit item width to fit two items per line with spacing */
+}
+
+/* Additional styling for the category image */
+.category-item img {
+  display: block; /* Remove extra spacing around images */
+  margin: 0 auto; /* Center-align images horizontally */
+}
+
+/* CSS to style the category name */
+.category-item a {
+  display: block;
+  margin-top: 10px; /* Add some spacing between image and name */
+  text-align: center;
+  font-weight: bold; /* Make the name bold */
+}
+
+  
   @media screen and (max-width: 767px) {
     .library-upload {
       display: block;
@@ -523,8 +553,7 @@ input:checked + .slider:before {
   margin-top: 30px;
   align-items: center;
   margin-left: 400px; /* Adjust as needed */
-  background-color: #f2f2f2;
- 
+  
 }
 
 
@@ -534,7 +563,7 @@ input:checked + .slider:before {
   background-color: #4B9CD3;
   border: 0.5px solid #0805c1;
   cursor: pointer;
-  color: white;
+  color: red;
   border-radius: 5px;
   padding: 1px 50px; /* Adjust padding to control space between text and button width */
   font-size: 14px; /* Adjust font size as needed */
@@ -809,7 +838,7 @@ footer {
 
 .content {
   flex: 1;
-  margin-top: 55%;
+  margin-top: 22%;
   padding: 10px;
   box-sizing: border-box;
   margin-left: 120px;
@@ -848,6 +877,16 @@ footer {
 
 .menu-link {
   cursor: pointer;
+  margin-top: 280px;
+  background-color: #4B9CD3;
+  border: 0.5px solid #0805c1;
+  cursor: pointer;
+  color: white;
+  border-radius: 5px;
+  padding: 4px 50px; /* Adjust padding to control space between text and button width */
+  margin-left: -95px;
+  font-size: 14px; /* Adjust font size as needed */
+  font-family: Arial, sans-serif;
 }
 
 /* Remove border and background from dropdown items */
@@ -858,3 +897,38 @@ footer {
 
 /* end of sidebar and post css */
 
+/* External CSS file (e.g., styles.css) */
+.create-group-form {
+  width: 80%; /* Adjust the width as needed */
+  margin: 10% auto; /* Center the form vertically and horizontally */
+  padding: 20px;
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color:black
+}
+
+/* Style the form elements (input fields, labels, etc.) */
+.create-group-form input[type="text"],
+.create-group-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Style the submit button */
+.create-group-button {
+  background-color: #4B9CD3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.create-group-button:hover {
+  background-color: #357ABD; /* Change color on hover */
+}

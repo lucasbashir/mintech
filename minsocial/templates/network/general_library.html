@@ -1,34 +1,51 @@
 {% extends "network/layout.html" %}
 {% block body %}
+{% load static %}
+{% include 'network/sidebar.html' %}
 
-<div class="card">
-<div class="card-body">
-<h1> Welcome to the General Library</h1>
-<hr style="border-color: white;">
-<div class="library-upload">
-    <p>Upload Document</p>
-<form method="post" enctype="multipart/form-data" action="{% url 'upload_document' %}">
-    {% csrf_token %}
-    {{ doc_form.as_p }}
-    <button type="submit">Upload</button>
-</form>
+<div class="content">
+    <div class="post">
+        <div style="margin-top: -40px; z-index: 2000; position: absolute; margin-left: -4%;" class="announcement-button">
+            <div style="background-color:blanchedalmond" class="card">
+                <div class="card-body">
+                    <h1> Welcome to the General Library</h1>
+                    <hr style="border-color: black">
+                    <div class="library-upload">
+                        <p>Upload Document</p>
+                        <form method="post" enctype="multipart/form-data" action="{% url 'upload_document' %}">
+                            {% csrf_token %}
+                            {{ doc_form.as_p }}
+                            <button type="submit">Upload</button>
+                        </form>
 
-<p>Upload Video</p>
-<form method="post" enctype="multipart/form-data" action="{% url 'upload_video' %}">
-    {% csrf_token %}
-    {{ vid_form.as_p }}
-    <button type="submit">Upload</button>
-</form>
+                        <p>Upload Video</p>
+                        <form method="post" enctype="multipart/form-data" action="{% url 'upload_video' %}">
+                            {% csrf_token %}
+                            {{ vid_form.as_p }}
+                            <button type="submit">Upload</button>
+                        </form>
+                    </div>
+
+                    <hr style="border-color:black">
+                    <h2>Categories:</h2>
+<div class="category-list">
+    {% for category in categories %}
+        <div class="category-item">
+            <img src="{{ category.libraryimage_set.first.post_image.url }}" class="rounded-circle" width="70" height="70" alt="{{ category.categoryName }} Image">
+            <a href="{% url 'category_detail' category_name=category.categoryName %}">{{ category.categoryName }}</a>
+        </div>
+    {% endfor %}
 </div>
 
-<hr style="border-color: white;">
-        <h2>Categories:</h2>
-        <ul>
-            {% for category in categories %}
-                <li><a style="color: white;" href="{% url 'category_detail' category_name=category.categoryName %}">{{ category.categoryName }}</a></li>
-            {% endfor %}
-        </ul>
-
-
-   
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<style>
+    .share-thought {
+      visibility: hidden;
+    }
+  </style>
 {% endblock %}

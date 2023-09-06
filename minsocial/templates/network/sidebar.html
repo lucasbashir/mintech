@@ -1,5 +1,11 @@
 
 
+{% if user.is_authenticated %}
+    <div class="head-shot">
+        <!-- This prevents the post from showing after the header -->
+        
+    </div>
+    {% endif %}
 <div class="index-container">
     <div class="profile-container">
         {% if user.profile_pics %}
@@ -49,7 +55,7 @@
 
     <div class="container">
         <div class="nav-item">
-            <a class="nav-link menu-link">...</a>
+            <button id="menu-link" class="nav-link menu-link">Open Menu</button>
         </div>
         
         <div class="sidebar" id="sidebar">
@@ -68,13 +74,16 @@
                   <span class="slier round">Dark/Light</span>
               </label>
                 <li class="nav-item">
-                    <a class="nav-link">{{follower.count}} followers | {{following.count}} following</a>
+                    <a class="nav-link">{{user.follower.count}} followers | {{following.count}} following</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'index' %}">All Posts</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'following' %}">Following</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'create_group' %}">Create Group</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'general_library' %}">General Library</a>

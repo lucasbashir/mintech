@@ -147,7 +147,6 @@ class GroupShock(models.Model):
         return f"{self.user} reacts Shock on {self.post}"
     
 
-
 class LibraryCategory(models.Model):
     CATEGORY_CHOICES = [
         ('Science', 'Science'),
@@ -158,12 +157,20 @@ class LibraryCategory(models.Model):
         ('Finance', 'Finance'),
         ('Economics', 'Economics'),
         ('Philosophy', 'Philosophy'),
+        ('Others', 'Others'),
     ]
 
     categoryName = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
 
     def __str__(self):
         return self.categoryName
+
+class LibraryImage(models.Model):
+    content = models.ForeignKey(LibraryCategory, on_delete=models.CASCADE, related_name='libraryimage_set')
+    post_image = models.ImageField(upload_to='post_image/', null=True, blank=True)
+
+    def __str__(self):
+        return f"Image for {self.content}"
 
 class LibraryDocument(models.Model):
     title = models.CharField(max_length=100)

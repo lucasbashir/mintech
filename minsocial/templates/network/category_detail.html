@@ -1,10 +1,12 @@
 {% extends "network/layout.html" %}
 {% block body %}
 
+{% include 'network/sidebar.html' %}
 
-
-<div class="card">
-<div class="card-body">
+<div class="content">
+<div class="post">
+<div style="margin-top: -110px; z-index: 2000; position: absolute; background-color: #0039a6;" class="announcement-button" class="card">
+<div style="color: #FFCF70;" class="card-body">
 <h3>{{category_name}} Category</h3>
 
         <hr style="border-color: white;">
@@ -41,6 +43,14 @@
                 {% endif %}
             </div>
         {% endfor %}
+    </div>
+</div>
 <!-- Modal for Sharing -->
 {% include "network/share.html" %}
+
+<style>
+    .share-thought {
+      visibility: hidden;
+    }
+  </style>
 {% endblock %}

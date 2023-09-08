@@ -33,7 +33,7 @@ const profilePic = user.profile_pic
 
   const postContent = postData.scrollContent
 .split('\n')
-.slice(0, 3)  // Limit to 5 paragraphs
+.slice(0, 5)  // Limit to 5 paragraphs
 .map(paragraph => `<p>${paragraph}</p>`)
 .join('');
 

@@ -111,6 +111,8 @@ function showColumn(columnId) {
 }
 
 
+        
+
 // This function gets the value of the cookie with the specified name
 function getCookie(name){
             const value = `; ${document.cookie}`;
@@ -118,3 +120,4 @@ function getCookie(name){
             if(parts.length == 2) return parts.pop().split(';').shift();
         }
 
+      

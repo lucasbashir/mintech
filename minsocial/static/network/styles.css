@@ -291,14 +291,6 @@ input:checked + .slider:before {
 }
 
 
-
-@media (max-width: 768px) {
-  .container {
-    max-width: 100%;
-    padding: 0;
-  }
-}
-
  .btn-like {
     background-color: #dc3545;
     border-color: #dc3545;
@@ -545,6 +537,7 @@ input:checked + .slider:before {
   overflow: hidden;
 }
 
+/* beginning of index contaier */
 
 .index-container {
   position: fixed;
@@ -690,7 +683,7 @@ input:checked + .slider:before {
   
 }
 
-
+/* end of sidebar.html */
 
 .circle-image {
   width: 80%;
@@ -932,3 +925,250 @@ footer {
 .create-group-button:hover {
   background-color: #357ABD; /* Change color on hover */
 }
+
+
+@media (max-width: 768px) {
+
+  .index-container {
+    position: fixed;
+    display: flex;
+    z-index: 1000;
+    margin-top: 0px;
+    align-items: center;
+    margin-left: -25px; /* Adjust as needed */
+    
+  }
+  
+  
+  #open-sidebar {
+    position: relative;
+    margin-top: 295%;
+    background-color: #4B9CD3;
+    border: 0.5px solid #0805c1;
+    cursor: pointer;
+    color: red;
+    border-radius: 5px;
+    padding: 1px 50px; /* Adjust padding to control space between text and button width */
+    font-size: 14px; /* Adjust font size as needed */
+    font-family: Arial, sans-serif; 
+    margin-left: 0px;
+  }
+  
+  .head-shot {
+    z-index: 1000;
+    background-color: #f2f2f2;
+    position: fixed;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 15%;
+  }
+  
+  .profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: -60px;
+    margin-top: -25px;
+  }
+  
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 100px;
+  }
+  
+  .chatlogo-container {
+    
+    margin-left: -580px; /* Adjust as needed */
+  }
+  
+  .index-circle-image {
+    width: 20px;
+    height: 20px;
+    border: 0.5px solid #0805c1;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  
+  
+  
+  .profile-button {
+    visibility: hidden;
+  }
+  
+  .share-thought {
+    display: flex;
+    z-index: 4000px;
+    align-items: center;
+    margin-top: -57px;
+    position: absolute;
+    margin-left: -730px;
+     /* Add relative positioning to the container */
+  }
+  
+  
+  
+  .index-post-circle-image {
+    visibility: hidden; /* Ensure the circle is above the input field */
+  }
+  
+  #create-post-field {
+    background-color: #4B9CD3;
+    border: 0.5px solid #0805c1;
+    border-radius: 10px;
+    padding: 2px 5px;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    margin: 0; /* Remove margin */
+    position: relative; /* Add relative positioning to the input field */
+    z-index: 1; /* Ensure the input field is below the circle */
+  }
+  
+  #create-post-field::placeholder {
+    color: white; /* Set the color to white or any other desired color */
+  }
+  
+  .feed-button::placeholder {
+    color: white; /* Set the color to white or any other desired color */
+  }
+  
+  
+  .feed-button,
+  .search-button {
+    visibility: hidden;
+  }
+  .thought-button {
+    background-color: #a60626;
+    border: 0.5px solid #0805c1;
+    cursor: pointer;
+    color: white;
+    border-radius: 5px;
+    padding: 4px 50px; /* Adjust padding to control space between text and button width */
+    margin-left: 20px;
+    font-size: 14px; /* Adjust font size as needed */
+    font-family: Arial, sans-serif; /* Add your desired font family */
+  }
+  
+  .feed-and-search-button {
+    display: flex;
+    /* Vertically align items */
+  }
+  
+  .feed-buttons {
+    flex: 6; /* Allow buttons to grow and fill available space */
+  }
+  
+  .search-form {
+    flex: 2; /* Allow search input to grow and fill more space */
+    
+  }
+
+  .container {
+    display: flex;
+  }
+  
+  
+  .content {
+    flex: 1;
+    margin-top: 22%;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-left: 0px;
+    width: 100%;
+  }
+  
+  .post {
+    
+    padding: 0px;
+    margin-bottom: 0px;
+   
+    
+  }
+  
+  /* New styles for sliding sidebar */
+  .sidebar {
+    display: none;
+    position: absolute;
+    margin-top: 350px;
+    margin-left: 80px;
+    left: -70%; /* Start with the sidebar off-screen */
+    width: 20%;
+    background-color: #4B9CD3;
+    color: rgb(9, 9, 9);
+    border: 0.5px solid #0805c1;
+    text-align: center;
+    border-radius: 10%;
+    transition: left 0.3s ease;
+    font-family:Arial, Helvetica, sans-serif;
+    
+  }
+  
+  
+  .sidebar.open {
+    left: 0; /* Slide the sidebar into view */
+  }
+  
+  .menu-link {
+    display: none;
+    cursor: pointer;
+    margin-top: 280px;
+    background-color: #4B9CD3;
+    border: 0.5px solid #0805c1;
+    cursor: pointer;
+    color: white;
+    border-radius: 5px;
+    padding: 4px 50px; /* Adjust padding to control space between text and button width */
+    margin-left: -95px;
+    font-size: 14px; /* Adjust font size as needed */
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Remove border and background from dropdown items */
+  .dropdown-item {
+    border: none;
+    background-color: transparent;
+  }
+  
+  /* end of sidebar and post css */
+  
+  /* External CSS file (e.g., styles.css) */
+  .create-group-form {
+    width: 80%; /* Adjust the width as needed */
+    margin: 10% auto; /* Center the form vertically and horizontally */
+    padding: 20px;
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color:black
+  }
+  
+  /* Style the form elements (input fields, labels, etc.) */
+  .create-group-form input[type="text"],
+  .create-group-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Style the submit button */
+  .create-group-button {
+    background-color: #4B9CD3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .create-group-button:hover {
+    background-color: #357ABD; /* Change color on hover */
+  }
+  
+}
+
+

@@ -3,6 +3,7 @@
 {% load my_filters %}
 {% load static %}
 {% block body %}
+
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const deleteCommentButtons = document.querySelectorAll('.delete-comment');
@@ -41,8 +42,9 @@
 
 
 </script>
-
-<div class="container">
+{% include 'network/sidebar.html' %}
+<div class="content">
+  <div class="post">
   <div class="card">
     <div class="card-body">
       <div class="d-flex align-items-center">
@@ -151,6 +153,7 @@
       </form>
       {% endif %}
     </div>
+  </div>
 
     {% include "network/share.html" %}    
 

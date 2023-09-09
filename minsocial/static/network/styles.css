@@ -368,19 +368,7 @@ input:checked + .slider:before {
 
 
 
-/* Custom CSS for mobile-only dropdown */
-@media (max-width: 767px) {
-    .navbar-nav .nav-item {
-        display: none;
-    }
 
-   
-
-    .navbar-nav .nav-item.dropdown .dropdown-menu {
-        position: relative;
-        display: block;
-    }
-}
 
 .container {
   margin-bottom: 20px;
@@ -968,8 +956,8 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-left: -60px;
-    margin-top: -25px;
+    margin-left: 20px;
+    margin-top: -50px;
   }
   
   .button-container {
@@ -981,12 +969,12 @@ footer {
   
   .chatlogo-container {
     
-    margin-left: -580px; /* Adjust as needed */
+    margin-left: -500px; /* Adjust as needed */
   }
   
   .index-circle-image {
-    width: 20px;
-    height: 20px;
+    width: 80px;
+    height: 80px;
     border: 0.5px solid #0805c1;
     border-radius: 50%;
     overflow: hidden;
@@ -1004,7 +992,7 @@ footer {
     align-items: center;
     margin-top: -57px;
     position: absolute;
-    margin-left: -730px;
+    margin-left: -575px;
      /* Add relative positioning to the container */
   }
   
@@ -1072,7 +1060,7 @@ footer {
   
   .content {
     flex: 1;
-    margin-top: 22%;
+    margin-top: 25%;
     padding: 10px;
     box-sizing: border-box;
     margin-left: 0px;
@@ -1089,40 +1077,30 @@ footer {
   
   /* New styles for sliding sidebar */
   .sidebar {
-    display: none;
     position: absolute;
     margin-top: 350px;
     margin-left: 80px;
     left: -70%; /* Start with the sidebar off-screen */
     width: 20%;
     background-color: #4B9CD3;
-    color: rgb(9, 9, 9);
+    color: white;
     border: 0.5px solid #0805c1;
     text-align: center;
     border-radius: 10%;
     transition: left 0.3s ease;
     font-family:Arial, Helvetica, sans-serif;
+    z-index: 6000;
     
   }
   
   
   .sidebar.open {
-    left: 0; /* Slide the sidebar into view */
+    right: 0; /* Slide the sidebar into view */
   }
   
+ 
   .menu-link {
     display: none;
-    cursor: pointer;
-    margin-top: 280px;
-    background-color: #4B9CD3;
-    border: 0.5px solid #0805c1;
-    cursor: pointer;
-    color: white;
-    border-radius: 5px;
-    padding: 4px 50px; /* Adjust padding to control space between text and button width */
-    margin-left: -95px;
-    font-size: 14px; /* Adjust font size as needed */
-    font-family: Arial, sans-serif;
   }
   
   /* Remove border and background from dropdown items */

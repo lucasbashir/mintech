@@ -9,16 +9,18 @@
 <div class="index-container">
     <div class="profile-container">
         {% if user.profile_pics %}
-            <a href="{% url 'profile' user_id=user.id %}">
-                <img src="{{ user.profile_pics.url }}" class="index-circle-image">
-            </a>
-        {% else %}
-            <a href="{% url 'profile' user_id=user.id %}">
-                <img src="/media/post_image/nodp.jpg" class="index-circle-image">
-            </a>
-        {% endif %}
+    <a href="{% url 'profile' user_id=user.id %}" id="mobile-menu-link">
+        <img src="{{ user.profile_pics.url }}" class="index-circle-image">
+    </a>
+{% else %}
+    <a href="{% url 'profile' user_id=user.id %}" id="mobile-menu-link">
+        <img src="/media/post_image/nodp.jpg" class="index-circle-image">
+    </a>
+{% endif %}
+
         <button class="profile-button">{{ user.first_name }} {{user.last_name}}</button>
     </div>
+
     <div class="button-container">
       <div class="feed-and-search-button">
         <div class="feed-buttons">
@@ -48,15 +50,17 @@
         
     </div>
     <div class="chatlogo-container">
-        <img src="media/post_image/chatlogo.jpg" alt="Chat Logo" class="index-circle-image">
+        <img id="menu-link" src="media/post_image/chatlogo.jpg" alt="Chat Logo" class="index-circle-image">
     </div>
 </div>
 
 
     <div class="container">
+        <!-- hidden open menu
         <div class="nav-item">
-            <button id="menu-link" class="nav-link menu-link">Open Menu</button>
+            <button  class="nav-link menu-link">Open Menu</button>
         </div>
+        -->
         
         <div class="sidebar" id="sidebar">
             <!-- Sidebar content here -->

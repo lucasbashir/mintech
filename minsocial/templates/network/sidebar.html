@@ -73,10 +73,12 @@
                 <li class="nav-item">
                     <a class="nav-link"  href="{% url 'profile' user_id=user.id %}">@{{ user.username }}</a>
                 </li>
+                <li class="nav-item">
                 <label style="margin-left: 110px;" class="switch">
                   <input onclick="toggleBackgroundColor()" type="checkbox" id="toggleSwitch">
                   <span class="slier round">Dark/Light</span>
               </label>
+              </li>
                 <li class="nav-item">
                     <a class="nav-link">{{user.follower.count}} followers | {{following.count}} following</a>
                 </li>

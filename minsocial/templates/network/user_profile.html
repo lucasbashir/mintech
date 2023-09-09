@@ -6,7 +6,7 @@
 
 {% include 'network/sidebar.html' %}
 <div class="content">
-<div class="post">
+  <div class="post">
 {% if user == userProfile %}
 <!-- My Groups Modal -->
 <div class="modal" id="my-groups-modal">
@@ -170,7 +170,8 @@ function openMyGroupsModal() {
   }
 </script>
 
-<div>
+<div class="content">
+<div class="post">
   <div class="card">
     <div class="card-body">
       <div class="d-flex align-items-center">
@@ -217,10 +218,7 @@ function openMyGroupsModal() {
 <button href="#" id="groups-i-joined-btn" class="btn btn-primary">Joined Groups</button>
 <br>
 <button onclick="navigateToAllGroups()" class="btn btn-primary" id="all-btn">Check other groups</button>
-
-
-
-
+        </div>
 </div>
 {% endif %}
         
@@ -231,7 +229,9 @@ function openMyGroupsModal() {
 <br>
 <br>
 
+
 <div id="posts">
+  <br>
   {% for posts in page_post %}
   <section>
     <div>
@@ -310,6 +310,9 @@ function openMyGroupsModal() {
   </section>
 {% endfor %}
 </div>
+</div>
+</div>
+
 
 {% include 'network/newpost-modal.html' %}
   <style>
@@ -456,7 +459,6 @@ function openMyGroupsModal() {
 
 
 </script>
-</div>
-</div>
+
 
   {% endblock %}

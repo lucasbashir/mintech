@@ -6,6 +6,9 @@ body {
   background-color: #f2f2f2;
 }
 
+.slier {
+  margin-left: -100px;
+}
 .search-form {
   margin-bottom: 20px;
 }
@@ -210,7 +213,7 @@ input:checked + .slider:before {
 .reaction-modal {
   display: none; /* Hide the modal */
   position: fixed;
-  z-index: 1;
+  z-index: 10000;
   left: 0;
   top: 0;
   width: 100%;
@@ -837,7 +840,7 @@ footer {
 /* New styles for sliding sidebar */
 .sidebar {
   position: absolute;
-  margin-top: 350px;
+  margin-top: 280px;
   margin-left: 80px;
   left: -70%; /* Start with the sidebar off-screen */
   width: 20%;
@@ -983,7 +986,7 @@ footer {
   
   
   .profile-button {
-    visibility: hidden;
+    display: none;
   }
   
   .share-thought {
@@ -1077,22 +1080,26 @@ footer {
   
   /* New styles for sliding sidebar */
   .sidebar {
-    position: absolute;
-    margin-top: 350px;
-    margin-left: 80px;
-    left: -70%; /* Start with the sidebar off-screen */
-    width: 20%;
+    position: fixed;
+    margin-top: 110px;
+    margin-left: 155px;
+    left: -700%; /* Start with the sidebar off-screen */
+    width: 60%;
+    height: 100%;
     background-color: #4B9CD3;
     color: white;
     border: 0.5px solid #0805c1;
     text-align: center;
-    border-radius: 10%;
-    transition: left 0.3s ease;
+    border-radius: 5%;
+    border-style: dashed;
+    transition: right 0.3s ease;
     font-family:Arial, Helvetica, sans-serif;
     z-index: 6000;
-    
   }
   
+  .slier {
+    margin-left: -100px;
+  }
   
   .sidebar.open {
     right: 0; /* Slide the sidebar into view */
@@ -1145,6 +1152,10 @@ footer {
   
   .create-group-button:hover {
     background-color: #357ABD; /* Change color on hover */
+  }
+  
+  .profile-info {
+    background-color: red;
   }
   
 }

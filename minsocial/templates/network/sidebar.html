@@ -9,7 +9,7 @@
 <div class="index-container">
     <div class="profile-container">
         {% if user.profile_pics %}
-    <a href="{% url 'profile' user_id=user.id %}" id="mobile-menu-link">
+    <a href="{% url 'profile' user_id=user.id %}" id="">
         <img src="{{ user.profile_pics.url }}" class="index-circle-image">
     </a>
 {% else %}
@@ -50,7 +50,7 @@
         
     </div>
     <div class="chatlogo-container">
-        <img id="menu-link" src="media/post_image/chatlogo.jpg" alt="Chat Logo" class="index-circle-image">
+        <img src="media/post_image/chatlogo.jpg" alt="Chat Logo" class="index-circle-image">
     </div>
 </div>
 

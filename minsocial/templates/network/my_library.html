@@ -1,19 +1,20 @@
 {% extends "network/layout.html" %}
 {% block body %}
+{% load static %}
 
 {% include 'network/sidebar.html' %}
 <div class="content">
     <div class="post">
-        <div style="margin-top: -110px; z-index: 2000; position: absolute; background-color: #0039a6;" class="announcement-button" class="card">
-            <div style="color: #FFCF70;" class="card-body">
+        <div style="margin-top: 20px; z-index: 2000; position: absolute; background-color: white;" class="announcement-button" class="card">
+            <div style="color: black;" class="card-body">
 <h1>My Library</h1>
-<hr style="border-color: white;">
+<hr style="border-color: black;">
 
 <h2>Favorite Documents</h2>
 {% for favorite_document in favorite_documents %}
 <div class="document-border">
     <p>Uploaded by {{ favorite_document.document.uploader.username }} on {{ favorite_document.document.upload_date }}</p>
-    <a href="{{ favorite_document.document.file.url }}"><span style="color: white;">TITLE: {{ favorite_document.document.title }}</span></a>
+    <a href="{{ favorite_document.document.file.url }}"><span>TITLE: {{ favorite_document.document.title }}</span></a>
     <br>
     <p>Views: {{ favorite_document.document.views }}</p>
     <button class="btn-primary" onclick="shareFile('https:\//mintechy.pythonanywhere.com{{ favorite_document.document.file.url }}')">Share</button>

@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-3zkcgwwlprtcd2rul+*i7j2kn^qt33s4-m=c)4omq+ph*u$pdj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['mintechy.pythonanywhere.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -75,7 +75,7 @@ AUTH_USER_MODEL = "minsocial.User"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-"""
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -94,7 +94,7 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
+"""
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 

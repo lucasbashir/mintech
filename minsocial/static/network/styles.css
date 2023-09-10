@@ -6,6 +6,13 @@ body {
   background-color: #f2f2f2;
 }
 
+.general-border {
+  margin-top: -40px; 
+  z-index: 2000; 
+  position: absolute; 
+  margin-left: -4%;
+}
+
 .slier {
   margin-left: -100px;
 }
@@ -500,7 +507,21 @@ input:checked + .slider:before {
   font-weight: bold;
 }
 
-
+.rotated-text {
+  transform: rotate(270deg);
+  background-color: white;
+    color: #333;
+    position: fixed;
+    border-radius: 10px;
+    top: 50%;
+    right: 5px;
+    background-color:rgb(50, 3, 56);
+    color: white;
+    font-family:Arial, Helvetica, sans-serif;
+    cursor: pointer;
+    font-size: larger;
+    z-index: 4000;
+}
 
 /* Adjust the image size for larger screens if needed */
 @media (min-width: 992px) {
@@ -1158,6 +1179,30 @@ footer {
     background-color: red;
   }
   
+  .general-border {
+    margin-top: 10px; 
+    z-index: 2000; 
+    position: absolute; 
+    margin-left: -4%;
+    height: 160%;
+  }
+
+  .rotated-text {
+    transform: rotate(270deg);
+    background-color: white;
+      color: #333;
+      position: fixed;
+      top: 50%;
+      right: -40px;
+      background-color:black;
+      color: white;
+      font-family:Arial, Helvetica, sans-serif;
+      cursor: pointer;
+      font-size: larger;
+      z-index: 10000;
+      
+  }
+
 }
 
 

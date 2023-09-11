@@ -29,10 +29,15 @@
               <div class="ml-3">
                 <h5 class="card-title mb-1">
                   <!-- Display a link to the user's profile -->
-                  <a class="card-title" style="text-decoration: none;" href="{% url 'profile' user_id=posts.user.id %}">{{posts.user.first_name}} {{posts.user.last_name}}</a>
+                  <a class="card-title" style="text-decoration: none;" href="{% url 'profile' user_id=posts.user.id %}">
+                    {{ posts.user.first_name|truncatechars:15 }} {{ posts.user.last_name|truncatechars:15 }}</a>
                 </h5>
                 <p class="mb-0">
+                  {% if posts.user.username|length > 15 %}
+                  <p>@{{posts.user.username | slice:":15"}}...</p>
+                  {% else %}
                   <p>@{{posts.user.username}}</p>
+                  {% endif %}
                 </p>
               </div>
             </div>

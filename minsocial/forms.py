@@ -27,26 +27,20 @@ class RegistrationForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username', 'email', 'password', 'confirmation', 'profile_pics']
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-    def clean_first_name(self):
-        first_name = self.cleaned_data['first_name']
-        return bleach.clean(first_name)
-
-    def clean_last_name(self):
-        last_name = self.cleaned_data['last_name']
-        return bleach.clean(last_name)
-
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        return bleach.clean(username)
-
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        return bleach.clean(email)
+        # Add placeholders for first_name, last_name, and username fields
+        self.fields['first_name'].widget.attrs['placeholder'] = 'Max 15 characters'
+        self.fields['last_name'].widget.attrs['placeholder'] = 'Max 15 characters'
+        self.fields['username'].widget.attrs['placeholder'] = ''
 
     def clean(self):
         cleaned_data = super().clean()
-        username = cleaned_data.get('username')
+        username = cleaned_data.get('username')[:15]  # Limit to 15 characters
+        first_name = cleaned_data.get('first_name')[:15]  # Limit to 15 characters
+        last_name = cleaned_data.get('last_name')[:15]  # Limit to 15 characters
         email = cleaned_data.get('email')
         password = cleaned_data.get('password')
         confirmation = cleaned_data.get('confirmation')
@@ -61,5 +55,10 @@ class RegistrationForm(forms.ModelForm):
 
         if password and confirmation and password != confirmation:
             raise forms.ValidationError("Passwords must match.")
+
+        # Update the cleaned_data with the truncated values
+        self.cleaned_data['username'] = username
+        self.cleaned_data['first_name'] = first_name
+        self.cleaned_data['last_name'] = last_name
 
         return cleaned_data

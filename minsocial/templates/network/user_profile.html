@@ -170,7 +170,7 @@ function openMyGroupsModal() {
   }
 </script>
 
-<div class="content">
+<div class="">
 <div class="post">
   <div class="card">
     <div class="card-body">
@@ -181,10 +181,10 @@ function openMyGroupsModal() {
           <img src="/media/post_image/hand.gif" class="rounded-circle" width="70" height="70" style="margin-top: 1px;">
           {% endif %}
         <div class="ml-3">
-          <h4 class="card-title mb-0">
+          <h4 class="">
             {{ userProfile.first_name }} {{ userProfile.last_name }}
           </h4>
-          <p class="mb-0">
+          <p class="m">
            Username: {{ userProfile.username }}
           </p>
           <br>
@@ -231,8 +231,8 @@ function openMyGroupsModal() {
 
 
 <div id="posts">
-  <br>
   {% for posts in page_post %}
+  <br>
   <section>
     <div>
       <div class="card">

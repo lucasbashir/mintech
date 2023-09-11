@@ -3,7 +3,7 @@
 {% if user.is_authenticated %}
     <div class="head-shot">
         <!-- This prevents the post from showing after the header -->
-        
+
     </div>
     {% endif %}
 <div class="index-container">
@@ -18,7 +18,14 @@
     </a>
 {% endif %}
 
-        <button class="profile-button">{{ user.first_name }} {{user.last_name}}</button>
+<button class="profile-button">
+    {% if user.first_name|length > 15 %}
+    {{ user.first_name | slice:":15" }}...
+    {% else %}
+        {{ user.first_name }}
+    {% endif %}
+</button>
+
     </div>
 
     <div class="button-container">
@@ -29,7 +36,7 @@
         </div>
         <div class="search-form">
             <form action="{% url 'search' %}" method="get">
-                <input style="padding: 0.5%;" class="feed-button" type="text" name="q" placeholder="Search something" />
+                <input class="feed-button" type="text" name="q" placeholder="Search" />
             </form>
         </div>
     </div>
@@ -44,7 +51,7 @@
                 <img src="/media/post_image/nodp.jpg" class="index-post-circle-image">
             </a>
         {% endif %}
-            <input type="text" id="create-post-field" placeholder="Want to share your insight?" onclick="openModal()">
+            <input type="text" id="create-post-field" placeholder="share insight..." onclick="openModal()">
         </div>
         
         
@@ -68,17 +75,33 @@
                 
                 {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link"  href="{% url 'profile' user_id=user.id %}">{{ user.first_name }} {{user.last_name}}</a>
+                    <a class="nav-link"  href="{% url 'profile' user_id=user.id %}">
+                        {% if user.first_name|length > 15 %}
+                        {{ user.first_name | slice:":15"}}...
+                        {% else %}
+                        {{ user.first_name }}
+                        {% endif %}
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link"  href="{% url 'profile' user_id=user.id %}">@{{ user.username }}</a>
+                    <a class="nav-link"  href="{% url 'profile' user_id=user.id %}">
+                        {% if user.username|length > 15 %}
+                        @{{ user.username | slice:":15"}}...
+                        {% else %}
+                        @{{ user.username}}
+                        {% endif %}
+                    </a>
                 </li>
                 <li class="nav-item">
-                <label style="margin-left: 110px;" class="switch">
-                  <input onclick="toggleBackgroundColor()" type="checkbox" id="toggleSwitch">
-                  <span class="slier round">Dark/Light</span>
-              </label>
-              </li>
+                    <label class="switch-label">
+                      Dark/Light
+                      <label class="switch">
+                        <input onclick="toggleBackgroundColor()" type="checkbox" id="toggleSwitch">
+                        <span class="slider round"></span>
+                      </label>
+                    </label>
+                  </li>
+                  
                 <li class="nav-item">
                     <a class="nav-link">{{user.follower.count}} followers | {{following.count}} following</a>
                 </li>

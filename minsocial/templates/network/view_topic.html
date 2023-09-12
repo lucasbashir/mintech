@@ -4,7 +4,7 @@
 {% load static %}
 {% block body %}
 
-<div class="card">
+<div class="crd">
   <div class="card-body">
     <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
       <h1>{{ topic.title }}</h1>
@@ -12,7 +12,7 @@
       <p>Created by <a href="{% url 'profile' user_id=topic.creator.id %}">{{ topic.creator.username }}</a> on {{ topic.created_at }}</p>
     </div>
       {% if topic.forum_topic_post_images.exists %}
-      <hr style="border-color: #FFCF70;">
+      <hr>
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
           <ol class="carousel-indicators">
             {% for image in topic.forum_topic_post_images.all %}
@@ -39,7 +39,7 @@
 
       
     </div>
-    <hr style="border-color: #FFCF70;">
+    <hr>
     {% for post in posts %}
     <div class="container">
       <div class="card">
@@ -55,7 +55,7 @@
       </div>
     </div>
     {% endfor %}
-    <hr style="border-color: #FFCF70;">
+    <hr>
     <form method="post" action="{% url 'add_forum_post' topic_id=topic.id %}">
       {% csrf_token %}
       <div class="form-group">

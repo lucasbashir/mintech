@@ -39,26 +39,20 @@
         </div>
     </div>
 
-    <!-- Add pagination links -->
-    <div class="pagination">
-        <span class="step-links">
-            {% if page_topics.has_previous %}
-            <a class="btn-primary" href="?page=1">&laquo; first</a>
-            <a class="btn btn-primary" href="?page={{ page_topics.previous_page_number }}">previous</a>
-            {% endif %}
-
-            <span class="current-page">
-                Page {{ page_topics.number }} of {{ page_topics.paginator.num_pages }}.
-            </span>
-
-            {% if page_topics.has_next %}
-            <a class="btn btn-primary" href="?page={{ page_topics.next_page_number }}">next</a>
-            <a class="btn btn-primary" href="?page={{ page_topics.paginator.num_pages }}">last &raquo;</a>
-            {% endif %}
-        </span>
-    </div>
 </div>
-
+<div class="pagination">
+    <span class="step-links">
+        {% if page_topics.has_previous %}
+        <a class="btn btn-primary" href="?page=1"> <<<< </a>
+        <a class="btn btn-primary" href="?page={{ page_topics.previous_page_number }}">&raquo;</a>
+        {% endif %}
+        
+        {% if page_topics.has_next %}
+        <a class="btn btn-primary" href="?page={{ page_topics.next_page_number }}">&laquo;</a>
+        <a class="btn btn-primary" href="?page={{ page_topics.paginator.num_pages }}"><span style="color: black;"> >>>></span></a>
+        {% endif %}
+    </span>
+  </div>
 <style>
     .topic-details {
         margin-top: 10px;

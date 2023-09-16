@@ -19,7 +19,7 @@
         {% csrf_token %}
         <input type="hidden" name="likePost" value="{{ posts.id }}"/>
         <button style="background: none; border: none;">
-          <img src="/media/post_image/hand.gif" class="rounded-circle" width="50" height="50" alt="Like"/>
+          <img src="/media/post_image/black.png" class="rounded-circle" width="50" height="50" alt="Like"/>
         </button>
       </form>
     {% endif %}
@@ -152,7 +152,7 @@
       <div class="reaction-column">
         <p class="desktop-only">Like</p>
         <button onclick="showColumn('like-column-{{ posts.id }}')" style="background: none; border: none;">
-          <img src="/media/post_image/hand.gif" class="rounded-circle" width="30" height="30" alt="Like reaction"/>{{posts.post_like.count}}
+          <img src="/media/post_image/black.png" class="rounded-circle" width="30" height="30" alt="Like reaction"/>{{posts.post_like.count}}
         </button>
         <div id="like-column-{{ posts.id }}">
           {% for like_reactions in posts.post_like.all %}

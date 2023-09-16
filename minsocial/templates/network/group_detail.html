@@ -11,13 +11,13 @@
     {% if user.is_authenticated %}
       <!-- Check if the user is authenticated -->
       {% if is_group_member %}
-      <div style="margin-top: -120px; z-index: 2000; position: fixed;" class="groupdetail-button">
+      <div id="announcement-button" class="announcement-button">
       <div class="" id="create-post-field-container">
-        <input style="margin-top: 20px; height: 50px; border-radius: 1rem;" type="text" id="create-post-field" class="form-control" placeholder="Say something to the group..." onclick="openModal()">
+        <input type="text" id="create-post-field" class="form-control" placeholder="Say something to the group..." onclick="openModal()">
       </div>
     </div>
   <br>
-  <h1>{{group.name}}</h1>
+  
       <!-- Modal -->
       <div id="postModal" class="modal">
         <div class="modal-dialog">
@@ -47,9 +47,6 @@
     <section>
       <div>
         <br>
-        {% if is_admin or request.user == posts.user %}
-        <button class="delete-group-post" data-delete-group-post-id="{{ posts.id }}">Delete</button>
-        {% endif %}
         <div class="card">
           <div class="card-body">
             <div class="d-flex align-items-center">
@@ -59,7 +56,7 @@
                 </a>
               {% else %}
                 <a href="{% url 'profile' user_id=posts.user.id %}">
-                  <img src="/media/post_image/hand.gif" class="rounded-circle" width="70" height="70">
+                  <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="70" height="70">
                 </a>
               {% endif %}
               <div class="ml-3">
@@ -112,7 +109,11 @@
         
           </div>
           
-          <p class="card-text"><small class="text-muted">{{ posts.timestamp }}</small></p>
+          <!-- Add a delete button for each post -->
+          <p class="card-text"><small class="text-muted">{{ posts.timestamp }}</small> 
+            {% if is_admin or request.user == posts.user %} 
+            {% include 'network/delete_group_post.html' %}</p>
+            {% endif %}
 
           <!-- Display the number of likes for the post -->
           {% include 'network/group_likes.html' %}
@@ -133,7 +134,7 @@
                   </a>
                 {% else %}
                   <a href="{% url 'profile' user_id=comment.author.id %}">
-                    <img src="/media/post_image/hand.gif" class="rounded-circle" width="70" height="70">
+                    <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="70" height="70">
                   </a>
                 {% endif %}
                 <strong><a href="{% url 'profile' user_id=comment.author.id %}" style="color: black;">@{{ comment.author.username }}</a> <span style="color: black;"> wrote:</span></strong>
@@ -181,8 +182,22 @@
 </div> 
     {% include "network/share.html" %}  
     
-    {% include "network/delete_group_post.html" %}
+    
     {% include "network/delete_group_comment.html" %}
+
+    <div class="pagination">
+      <span class="step-links">
+          {% if page_group_posts.has_previous %}
+          <a class="btn btn-primary" href="?page=1"> <<<< </a>
+          <a class="btn btn-primary" href="?page={{ page_group_posts.previous_page_number }}">&raquo;</a>
+          {% endif %}
+          
+          {% if page_group_posts.has_next %}
+          <a class="btn btn-primary" href="?page={{ page_group_posts.next_page_number }}">&laquo;</a>
+          <a class="btn btn-primary" href="?page={{ page_group_posts.paginator.num_pages }}"><span style="color: black;"> >>>></span></a>
+          {% endif %}
+      </span>
+    </div>
     <style>
       .share-thought {
         visibility: hidden;

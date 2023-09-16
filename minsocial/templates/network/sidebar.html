@@ -31,8 +31,8 @@
     <div class="button-container">
       <div class="feed-and-search-button">
         <div class="feed-buttons">
-            <button class="feed-button">My News Feed</button>
-            <button class="feed-button">Following Feed</button>
+            <a href="{% url 'index' %}" class="feed-button"><span style="color: white;"> My News Feed</a></span>
+            <a href="{% url 'following' %}" class="feed-button"><span style="color: white;"> Following Feed</span></a>
         </div>
         <div class="search-form">
             <form action="{% url 'search' %}" method="get">

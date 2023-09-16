@@ -5,11 +5,14 @@
 {% block body %}
 
 
- 
-<div class="container">
-  {% if is_admin or request.user == posts.user %}
-        <button class="delete-group-post" data-delete-group-post-id="{{ posts.id }}">Delete</button>
-        {% endif %}
+{% include 'network/sidebar.html' %}
+<div class="content">
+  <div class="post">
+      <div id="announcement-button" class="announcement-button">
+      <div class="" id="create-post-field-container">
+        <input type="text" id="create-post-field" class="form-control" placeholder="Say something to the group..." onclick="openModal()">
+      </div>
+    </div>
   <div class="card">
     <div class="card-body">
       <div class="d-flex align-items-center">
@@ -19,7 +22,7 @@
       </a>
       {% else %}
       <a href="{% url 'profile' user_id=posts.user.id %}">
-        <img src="/media/post_image/hand.gif" class="rounded-circle" width="70" height="70">
+        <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="70" height="70">
       </a>
       {% endif %}
         <div class="ml-3">
@@ -69,24 +72,25 @@
         
       
 
-      <!-- Display the timestamp of the post -->
-      <p class="card-text"><small class="text-muted">{{ posts.timestamp }}</small></p>
+            <p class="card-text"><small class="text-muted">{{ posts.timestamp }}</small> 
+              {% if is_admin or request.user == posts.user %} 
+              {% include 'network/delete_group_post.html' %}</p>
+              {% endif %}
+  
       <!--display post reactions-->
       {% include 'network/group_likes.html' %}
       <hr style="border-color: #FFCF70;">
       <ul class="list-group">
         {% for comment in posts.group_postComment.all %}
           <li class="list-group-item">
-            {% if is_admin or request.user == posts.author %}      
-        <button class="delete-group-comment" data-comment-id="{{ comment.id }}">Delete</button>
-        {% endif %}
+            
             {% if comment.author.profile_pics %}
               <a href="{% url 'profile' user_id=comment.author.id %}">
                 <img src="{{ comment.author.profile_pics.url }}" class="rounded-circle" width="70" height="70">
               </a>
             {% else %}
               <a href="{% url 'profile' user_id=comment.author.id %}">
-                <img src="/media/post_image/hand.gif" class="rounded-circle" width="70" height="70">
+                <img src="/media/post_image/nodp.jpgf" class="rounded-circle" width="70" height="70">
               </a>
             {% endif %}
             <strong><a href="{% url 'profile' user_id=comment.author.id %}" style="color: black;">@{{ comment.author.username }}</a> <span style="color: black;"> wrote:</span></strong>
@@ -118,9 +122,15 @@
         </div>
       </form>
     </div>
-
+    </div>
+    
       
 {% include 'network/share.html' %}
-{% include "network/delete_group_post.html" %}
+
     {% include "network/delete_group_comment.html" %}
+    <style>
+      .share-thought {
+        visibility: hidden;
+      }
+    </style>
 {% endblock %}

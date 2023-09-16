@@ -178,7 +178,7 @@ function openMyGroupsModal() {
         {% if userProfile.profile_pics %}
           <img src="{{ userProfile.profile_pics.url }}" class="rounded-circle" width="150" height="150"> 
           {% else %} 
-          <img src="/media/post_image/hand.gif" class="rounded-circle" width="70" height="70" style="margin-top: 1px;">
+          <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="70" height="70" style="margin-top: 1px;">
           {% endif %}
         <div class="ml-3">
           <h4 class="">
@@ -245,7 +245,7 @@ function openMyGroupsModal() {
               </a>
             {% else %}
               <a href="{% url 'profile' user_id=posts.user.id %}">
-                <img src="/media/post_image/hand.gif" class="rounded-circle" width="70" height="70">
+                <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="70" height="70">
               </a>
             {% endif %}
             <div class="ml-3">
@@ -295,10 +295,11 @@ function openMyGroupsModal() {
             {% endif %}
 
         </div>
-        <p class="card-text"><small class="text-muted">{{ posts.timestamp }}</small></p>
- {% if request.user == posts.user %}
-        <button class="delete-post" data-delete-post-id="{{ posts.id }}">Delete</button>
-        {% endif %}
+        <!-- Add a delete button for each post -->
+        <p class="card-text"><small class="text-muted">{{ posts.timestamp }}</small> 
+          {% if request.user == posts.user %} 
+          {% include 'network/delete-post.html' %}</p>
+          {% endif %}
         <!-- Display the number of likes for the post -->
         {% include 'network/likes.html' %}
         <hr style="border-color: black;">
@@ -406,60 +407,19 @@ function openMyGroupsModal() {
 <!-- Add pagination links -->
 <div class="pagination">
   <span class="step-links">
-    {% if page_post.has_previous %}
-      <a class="btn btn-primary" href="?page=1">&laquo; first</a>
-      <a class="btn btn-primary" href="?page={{ page_post.previous_page_number }}">previous</a>
-    {% endif %}
-
-    <span class="current-page">
-      Page {{ page_post.number }} of {{ page_post.paginator.num_pages }}.
-    </span>
-
-    {% if page_post.has_next %}
-      <a class="btn btn-primary" href="?page={{ page_post.next_page_number }}">next</a>
-      <a class="btn btn-primary" href="?page={{ page_post.paginator.num_pages }}">last &raquo;</a>
-    {% endif %}
+      {% if page_post.has_previous %}
+      <a class="btn btn-primary" href="?page=1"> <<<< </a>
+      <a class="btn btn-primary" href="?page={{ page_post.previous_page_number }}">&raquo;</a>
+      {% endif %}
+      
+      {% if page_post.has_next %}
+      <a class="btn btn-primary" href="?page={{ page_post.next_page_number }}">&laquo;</a>
+      <a class="btn btn-primary" href="?page={{ page_post.paginator.num_pages }}"><span style="color: black;"> >>>></span></a>
+      {% endif %}
   </span>
 </div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const deletePostButtons = document.querySelectorAll('.delete-post');
 
-    deletePostButtons.forEach(button => {
-      button.addEventListener('click', function() {
-        const post_id = button.getAttribute('data-delete-post-id');
-
-        fetch(`/post/${post_id}/delete/`, {
-          method: 'POST',
-          headers: {
-            'X-CSRFToken': getCookie('csrftoken'),
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          }
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            // post deleted successfully
-            const postElement = button.parentElement;
-            if (postElement) {
-              postElement.remove();
-            }
-          } else {
-            // Display error message (data.message) if deletion was not successful
-            console.log(data.message);
-          }
-        })
-        .catch(error => {
-          console.error('An error occurred:', error);
-        });
-      });
-    });
-  });
-
-
-</script>
 
 
   {% endblock %}

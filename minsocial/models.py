@@ -29,7 +29,7 @@ class Comment(models.Model):
     message = models.CharField(max_length=10000)
 
     def __str__(self):
-        return f"{str(self.author)} commented on {self.post}"
+        return f"{str(self.author)} wrote {self.message} on {self.post}"
     
 class Follow(models.Model):
     following = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="following_user")

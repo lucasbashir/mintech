@@ -11,6 +11,7 @@ body {
   z-index: 2000; 
   position: absolute; 
   margin-left: -4%;
+  height: 1000px;
 }
 
 
@@ -19,7 +20,7 @@ body {
 }
 
 .search-form input[type="text"] {
-  padding: 5px;
+  padding: 1px;
   width: 200px;
 }
 
@@ -132,8 +133,12 @@ input:checked + .slider:before {
 .card-title {
   color: black;
   font-weight: bold;
+  font-size: small;
 }
 
+.mb-0 {
+  font-size: smaller;
+}
 /* followers and follow count */
 .text-black{
   margin-top: 20px;
@@ -832,6 +837,9 @@ footer {
   display: flex;
 }
 
+#announcement-button{
+  margin-top: -120px; z-index: 2000; position: fixed;margin-left: 150px;
+}
 
 .content {
   flex: 1;
@@ -1116,7 +1124,10 @@ footer {
     right: 0; /* Slide the sidebar into view */
   }
   
- 
+ #announcement-button {
+  margin-top: -20px; z-index: 2000; position: fixed;margin-left: 50px;
+ }
+
   .menu-link {
     display: none;
   }
@@ -1174,7 +1185,7 @@ footer {
     z-index: 2000; 
     position: absolute; 
     margin-left: -4%;
-    height: 160%;
+    height: 180%;
   }
 
   .rotated-text {

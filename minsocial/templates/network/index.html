@@ -6,112 +6,111 @@
 
 {% include 'network/sidebar.html' %}
 
-        <div class="content"> 
-                    
-            <div class="post">  
-                            
-<div id="posts">
-    {% for posts in page_post %}
-    <br>
-    <section>
-        <div class="card">
-          <div class="card-body">
-            <div class="d-flex align-items-center">
-              {% if posts.user.profile_pics %}
-                <a href="{% url 'profile' user_id=posts.user.id %}">
-                  <img src="{{ posts.user.profile_pics.url }}" class="rounded-circle" width="70" height="70">
-                </a>
-              {% else %}
-                <a href="{% url 'profile' user_id=posts.user.id %}">
-                  <img src="/media/post_image/hand.gif" class="rounded-circle" width="70" height="70">
-                </a>
-              {% endif %}
-              <div class="ml-3">
-                <h5 class="card-title mb-1">
-                  <!-- Display a link to the user's profile -->
-                  <a class="card-title" style="text-decoration: none;" href="{% url 'profile' user_id=posts.user.id %}">
-                    {{ posts.user.first_name|truncatechars:15 }} {{ posts.user.last_name|truncatechars:15 }}</a>
-                </h5>
-                <p class="mb-0">
-                  {% if posts.user.username|length > 15 %}
-                  <p>@{{posts.user.username | slice:":15"}}...</p>
-                  {% else %}
-                  <p>@{{posts.user.username}}</p>
-                  {% endif %}
-                </p>
-              </div>
-            </div>
-            <br>
-            <br>
-            <div class="card-text" id="content_{{ posts.id }}">
-              {% for paragraph in posts.postContent|split_paragraphs|slice:":5" %} {# Limit to 5 paragraphs #}
-                <p>{{ paragraph|urlize }}</p>
-              {% endfor %}
-              {% if posts.postContent|split_paragraphs|length >= 5 %}
-                <a href="{% url 'post_content' post_id=posts.id %}">
-                  <p class="read-more" data-post="{{ posts.id }}">Read full content >>></p>
-                </a>
-              {% endif %}
-            
-             {% if posts.post_images.all %}
-              <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                <ol class="carousel-indicators">
-                  {% for image in posts.post_images.all %}
-                    <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
-                  {% endfor %}
-                </ol>
-                <div class="carousel-inner">
-                  {% for image in posts.post_images.all %}
-                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                      <img class="d-block w-100" src="{{ image.post_image.url }}" alt="Post Image">
+<div class="content"> 
+    <div class="post">  
+        <div id="posts">
+            {% for posts in page_post %}
+            <section>
+                <br>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            {% if posts.user.profile_pics %}
+                            <a href="{% url 'profile' user_id=posts.user.id %}">
+                                <img src="{{ posts.user.profile_pics.url }}" class="rounded-circle" width="70" height="70">
+                            </a>
+                            {% else %}
+                            <a href="{% url 'profile' user_id=posts.user.id %}">
+                                <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="70" height="70">
+                            </a>
+                            {% endif %}
+                            <div class="ml-3">
+                                <h5 class="card-title mb-1">
+                                    <!-- Display a link to the user's profile -->
+                                    <a class="card-title" style="text-decoration: none;" href="{% url 'profile' user_id=posts.user.id %}">
+                                        {{ posts.user.first_name|truncatechars:15 }} {{ posts.user.last_name|truncatechars:15 }}</a>
+                                </h5>
+                                <div class="mb-0">
+                                    {% if posts.user.username|length > 15 %}
+                                    <p>@{{posts.user.username | slice:":15"}}...</p>
+                                    {% else %}
+                                    <p>@{{posts.user.username}}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="card-text" id="content_{{ posts.id }}">
+                            {% for paragraph in posts.postContent|split_paragraphs|slice:":5" %} {# Limit to 5 paragraphs #}
+                            <p>{{ paragraph|urlize }}</p>
+                            {% endfor %}
+                            {% if posts.postContent|split_paragraphs|length >= 5 %}
+                            <a href="{% url 'post_content' post_id=posts.id %}">
+                                <p class="read-more" data-post="{{ posts.id }}">Read full content >>></p>
+                            </a>
+                            {% endif %}
+                            {% if posts.post_images.all %}
+                            <div id="carouselExampleIndicators-{{ posts.id }}" class="carousel slide" data-ride="carousel">
+                                <ol class="carousel-indicators">
+                                    {% for image in posts.post_images.all %}
+                                    <li data-target="#carouselExampleIndicators-{{ posts.id }}" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
+                                    {% endfor %}
+                                </ol>
+                                <div class="carousel-inner">
+                                    {% for image in posts.post_images.all %}
+                                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                        <img class="d-block w-100" src="{{ image.post_image.url }}" alt="Post Image">
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <a class="carousel-control-prev" href="#carouselExampleIndicators-{{ posts.id }}" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#carouselExampleIndicators-{{ posts.id }}" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <!-- Add a delete button for each post -->
+                        <p class="card-text"><small class="text-muted">{{ posts.timestamp }}</small> 
+                          {% if request.user == posts.user %} 
+                          {% include 'network/delete-post.html' %}</p>
+                          {% endif %}
+
+                        <!-- Display the number of likes for the post -->
+                        {% include 'network/likes.html' %}
+                        <hr style="border-color: black;">
+
+                        <!-- Urlize comments, read more comments, and display comments -->
+                        {% include 'network/comments.html' %}
                     </div>
-                  {% endfor %}
                 </div>
-                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span class="sr-only">Next</span>
-                </a>
-              </div>
-              {% endif %}
-              
-              {% if request.user == posts.user %}
-          <button class="delete-post" data-delete-post-id="{{ posts.id }}">Delete</button>
-          {% endif %}
-            
-  
-  
-  
-            
-          </div>
-          <p class="card-text"><small class="text-muted">{{ posts.timestamp }}</small></p>
-          
-          <!-- Display the number of likes for the post -->
-          {% include 'network/likes.html' %}
-          <hr style="border-color: black;">
-          
-          <!--Urlize comments, read more comments, and display comments-->
-          {% include 'network/comments.html' %}
-          
+            </section>
+            {% endfor %}
         </div>
-      </div>
-   
-    </section>
-  {% endfor %}
-  </div>
-            </div>
-            
     </div>
+</div>
 
-    {% include 'network/newpost-modal.html' %}
-    {% include 'network/share.html' %}
+<!-- Your pagination code here -->
+{% include 'network/newpost-modal.html' %}
+{% include 'network/share.html' %}
+<div class="pagination">
+<span class="step-links">
+  {% if page_post.has_previous %}
+  <a class="btn btn-primary" href="?page=1"> <<<< </a>
+  <a class="btn btn-primary" href="?page={{ page_post.previous_page_number }}">&raquo;</a>
+  {% endif %}
+  
+  {% if page_post.has_next %}
+  <a class="btn btn-primary" href="?page={{ page_post.next_page_number }}">&laquo;</a>
+  <a class="btn btn-primary" href="?page={{ page_post.paginator.num_pages }}"><span style="color: black;"> >>>></span></a>
+  {% endif %}
+</span>
+</div>
 
-   
-        
 
 {% endblock %}
-
-    

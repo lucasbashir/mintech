@@ -1,3 +1,5 @@
+import json
+from django.core import serializers
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponseForbidden
@@ -36,7 +38,7 @@ def index(request):
         return render(request, "network/register.html")
 
     post = Post.objects.all().order_by("id").reverse().select_related("user")
-    paginator = Paginator(post, 20) # Show 20 contacts per page.
+    paginator = Paginator(post, 30) # Show 20 contacts per page.
     page_number = request.GET.get('page')
     page_post = paginator.get_page(page_number)
     user = request.user
@@ -65,6 +67,8 @@ def index(request):
     })
 
 def load_posts(request):
+    ...
+    """
     start = int(request.GET.get("start") or 0)
     end = int(request.GET.get("end") or (start + 9))
 
@@ -98,9 +102,9 @@ def load_posts(request):
     
     time.sleep(1)  # Introducing a delay for demonstration purposes (remove in production)
     
-    return JsonResponse({
-        "posts": post_data,
-    })
+    #return JsonResponse({
+        #"posts": post_data,
+    #})"""
 
 def group_load_posts(request):
     start = int(request.GET.get("start") or 0)
@@ -337,7 +341,7 @@ def group_detail(request, group_id):
     user = request.user
     group = get_object_or_404(Group, pk=group_id)
     group_posts = GroupPost.objects.filter(group=group).order_by("-timestamp").select_related("user")
-    paginator = Paginator(group_posts, 10)
+    paginator = Paginator(group_posts, 30)
     page_number = request.GET.get('page')
     page_group_posts = paginator.get_page(page_number)
 
@@ -415,6 +419,7 @@ def group_post_content(request, post_id):
     post = GroupPost.objects.get(pk=post_id)
     allComments = GroupComment.objects.filter(post=post)
     user = request.user
+    
     
 
     return render(request, "network/group_post_content.html", {
@@ -578,7 +583,7 @@ def forum(request):
         return render(request, "network/error.html")
     
     topic_list = ForumTopic.objects.all().order_by('-created_at')
-    paginator = Paginator(topic_list, 10)  # Show 10 topics per page.
+    paginator = Paginator(topic_list, 30)  # Show 10 topics per page.
 
     page_number = request.GET.get('page')
     page_topics = paginator.get_page(page_number)
@@ -640,7 +645,7 @@ def announcements(request):
         return render(request, "network/error.html")
     
     announcement_list = Announcement.objects.all().order_by('-created_at')
-    paginator = Paginator(announcement_list, 10)  # Show 10 announcements per page.
+    paginator = Paginator(announcement_list, 30)  # Show 10 announcements per page.
 
     page_number = request.GET.get('page')
     page_announcements = paginator.get_page(page_number)
@@ -666,7 +671,7 @@ def profile(request, user_id):
     my_groups = Group.objects.filter(creator=request.user)
     groups_i_joined = request.user.group_members.all()
     post = Post.objects.filter(user=user).order_by("id").reverse()
-    paginator = Paginator(post, 20) # Show 20 contacts per page.
+    paginator = Paginator(post, 2) # Show 20 contacts per page.
     page_number = request.GET.get('page')
     page_post = paginator.get_page(page_number)
     user_like = request.user
@@ -746,19 +751,34 @@ class CustomPasswordResetView(PasswordResetView):
     template_name = 'network/reset_password.html'
 
 
+
 @login_required
 def addComment(request, post_id):
     if not request.user.is_authenticated:
         return render(request, "network/error.html")
     if request.method == 'POST':
-        message = request.POST.get('newComment')
-        if not message.strip():
-            messages.error(request, "Comment cannot be empty.")
-            return redirect('index')
+        # Retrieve the JSON data from the request body
+        data = json.loads(request.body.decode('utf-8'))
+        message = data.get('newComment')
+        print(message)
+        
         post = Post.objects.get(id=post_id)
         author = request.user
         comment = Comment.objects.create(author=author, post=post, message=message)
-        return HttpResponseRedirect(reverse("post_content",args=(post_id, )))
+        
+        # Create a dictionary with comment data to return as JSON
+        comment_data = {
+            'id': comment.id,
+            'author_username': comment.author.username,
+            'message': comment.message,
+            # Add other comment properties here as needed.
+        }
+
+        return JsonResponse({'success': True, 'data': comment_data})
+    else:
+        return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+
 
 
 
@@ -990,7 +1010,7 @@ def following(request):
     # Get the posts by the users the current user is following
     followingPosts = Post.objects.filter(user__in=[f.follower for f in following]).order_by('-timestamp')
 
-    paginator = Paginator(followingPosts, 20)  # Show 20 contacts per page.
+    paginator = Paginator(followingPosts, 30)  # Show 20 contacts per page.
     page_number = request.GET.get('page')
     page_post = paginator.get_page(page_number)
 

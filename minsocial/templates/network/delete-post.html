@@ -25,7 +25,7 @@
                         <script>
                             function deletePost(postId) {
                             // Send an AJAX request to delete the post using the postId
-                            fetch(`/group_post/${postId}/delete/`,  {
+                            fetch(`/post/${postId}/delete/`, {
                                 method: 'POST',
                                 headers: {
                                     'X-CSRFToken': getCookie('csrftoken'),
@@ -54,4 +54,3 @@
                         }
                         
                         </script>                       
-

@@ -9,7 +9,7 @@
             <div style="background-color: white" class="card">
                 <div class="card-body">
                     <h1> Welcome to the General Library</h1>
-                    <hr style="border-color: black">
+                    <hr>
                     <div class="library-upload">
                         <p>Upload Document</p>
                         <form method="post" enctype="multipart/form-data" action="{% url 'upload_document' %}">
@@ -26,16 +26,19 @@
                         </form>
                     </div>
 
-                    <hr style="border-color:black">
+                    <hr>
                     <h2>Categories:</h2>
-<div class="category-list">
-    {% for category in categories %}
-        <div class="category-item">
-            <img src="{{ category.libraryimage_set.first.post_image.url }}" class="rounded-circle" width="70" height="70" alt="{{ category.categoryName }} Image">
-            <a href="{% url 'category_detail' category_name=category.categoryName %}">{{ category.categoryName }}</a>
-        </div>
-    {% endfor %}
-</div>
+                    <br>
+                    <div class="category-list">
+                        {% for category in categories %}
+                            <div class="category-item">
+                                <img src="{{ category.libraryimage_set.first.post_image.url }}" class="rounded-circle" width="40" height="40" alt="{{ category.categoryName }} Image">
+                                <a href="{% url 'category_detail' category_name=category.categoryName %}">{{ category.categoryName }}</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    
+                    
 
                 </div>
             </div>

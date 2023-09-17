@@ -7,11 +7,12 @@ body {
 }
 
 .general-border {
-  margin-top: -40px; 
+  margin-top: -180px; 
   z-index: 2000; 
   position: absolute; 
-  margin-left: -4%;
+  margin-left: 2.5%;
   height: 1000px;
+  width: 50%;
 }
 
 
@@ -420,23 +421,25 @@ input:checked + .slider:before {
 
 /* CSS to style each category item */
 .category-item {
-  text-align: center; /* Center-align items */
+  display: flex;
+  align-items: center; /* Vertically center-align items */
   flex: 0 0 calc(50% - 20px); /* Limit item width to fit two items per line with spacing */
 }
 
 /* Additional styling for the category image */
 .category-item img {
   display: block; /* Remove extra spacing around images */
-  margin: 0 auto; /* Center-align images horizontally */
+  margin-right: 10px; /* Add spacing between image and name */
+  max-width: 70px; /* Limit the width of the image */
 }
 
 /* CSS to style the category name */
 .category-item a {
-  display: block;
-  margin-top: 10px; /* Add some spacing between image and name */
-  text-align: center;
+  text-align: left; /* Align the name to the left of the image */
   font-weight: bold; /* Make the name bold */
+  font-size: small;
 }
+
 
   
   @media screen and (max-width: 767px) {
@@ -1186,6 +1189,7 @@ footer {
     position: absolute; 
     margin-left: -4%;
     height: 180%;
+    width: 90%;
   }
 
   .rotated-text {

@@ -1112,7 +1112,7 @@ footer {
   
   /* New styles for sliding sidebar */
   .sidebar {
-    position: fixed;
+    position: absolute;
     margin-top: 110px;
     margin-left: 155px;
     left: -700%; /* Start with the sidebar off-screen */

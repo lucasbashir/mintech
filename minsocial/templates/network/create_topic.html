@@ -1,6 +1,8 @@
 <!-- forum/create_topic.html -->
 {% extends "network/layout.html" %}
 {% block body %}
+
+
   <h1>Create New Topic</h1>
   <br>
   <form method="post" enctype="multipart/form-data">
@@ -17,4 +19,5 @@
   </form>
   <a href="{% url 'forum' %}">Back to Forum</a>
 </div>
+
 {% endblock %}

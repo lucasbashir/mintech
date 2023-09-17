@@ -1,0 +1,113 @@
+<div class="button-container">
+    <div class="feed-and-search-button">
+      <div class="feed-buttons">
+          <a href="{% url 'index' %}" class="feed-button"><span style="color: white;"> My News Feed</a></span>
+          <a href="{% url 'following' %}" class="feed-button"><span style="color: white;"> Following Feed</span></a>
+      </div>
+      <div class="search-form">
+          <form action="{% url 'search' %}" method="get">
+              <input class="feed-button" type="text" name="q" placeholder="Search" />
+          </form>
+      </div>
+  </div>
+  
+      <div class="share-thought">
+          {% if user.profile_pics %}
+          <a href="{% url 'profile' user_id=user.id %}">
+              <img src="{{ user.profile_pics.url }}" class="index-post-circle-image">
+          </a>
+      {% else %}
+          <a href="{% url 'profile' user_id=user.id %}">
+              <img src="/media/post_image/nodp.jpg" class="index-post-circle-image">
+          </a>
+      {% endif %}
+          <input type="text" id="create-post-field" placeholder="share insight..." onclick="openModal()">
+      </div>
+      
+      
+  </div>
+  <div class="chatlogo-container">
+      <img src="/media/post_image/chatlogo.jpg" alt="Chat Logo" class="index-circle-image">
+  </div>
+</div>
+
+
+  <div class="container">
+      <!-- hidden open menu
+      <div class="nav-item">
+          <button  class="nav-link menu-link">Open Menu</button>
+      </div>
+      -->
+      
+      <div class="sidebar" id="sidebar">
+          <!-- Sidebar content here -->
+          <ul class="navbar-nav ml-auto">
+              
+              {% if user.is_authenticated %}
+              <li class="nav-item">
+                  <a class="nav-link"  href="{% url 'profile' user_id=user.id %}">
+                      {% if user.first_name|length > 15 %}
+                      {{ user.first_name | slice:":15"}}...
+                      {% else %}
+                      {{ user.first_name }}
+                      {% endif %}
+                  </a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link"  href="{% url 'profile' user_id=user.id %}">
+                      {% if user.username|length > 15 %}
+                      @{{ user.username | slice:":15"}}...
+                      {% else %}
+                      @{{ user.username}}
+                      {% endif %}
+                  </a>
+              </li>
+              <br>
+              <li class="nav-item">
+                  <label class="switch-label">
+                    Dark/Light
+                    <label class="switch">
+                      <input onclick="toggleBackgroundColor()" type="checkbox" id="toggleSwitch">
+                      <span class="slider round"></span>
+                    </label>
+                  </label>
+                </li>
+                
+              <li class="nav-item">
+                  <a class="nav-link">{{user.follower.count}} followers | {{following.count}} following</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'index' %}">All Posts</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'following' %}">Following</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'create_group' %}">Create Group</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'general_library' %}">General Library</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'my_library' %}">My Library</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'announcements' %}">Announcements</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'forum' %}">Forum</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'network_logout' %}">Logout</a>
+              </li>
+              {% else %}
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'network_login' %}">Login</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'network_register' %}">Register</a>
+              </li>
+              {% endif %}
+              <!-- Add more sidebar items here -->
+          </ul>
+      </div>

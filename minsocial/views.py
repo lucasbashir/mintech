@@ -668,8 +668,6 @@ def profile(request, user_id):
     if not request.user.is_authenticated:
         return render(request, "network/error.html")
     user = User.objects.get(pk=user_id)
-    my_groups = Group.objects.filter(creator=request.user)
-    groups_i_joined = request.user.group_members.all()
     post = Post.objects.filter(user=user).order_by("id").reverse()
     paginator = Paginator(post, 2) # Show 20 contacts per page.
     page_number = request.GET.get('page')
@@ -697,8 +695,6 @@ def profile(request, user_id):
         "follower": follower,
         "username": user.username,
         "isFollowing": newFollowing,
-        "my_groups": my_groups,
-        "groups_i_joined": groups_i_joined,
     })
 
 

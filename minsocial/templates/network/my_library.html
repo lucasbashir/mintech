@@ -5,12 +5,12 @@
 {% include 'network/sidebar.html' %}
 <div class="content">
     <div class="post">
-        <div style="margin-top: 20px; z-index: 2000; position: absolute; background-color: white;" class="announcement-button" class="card">
-            <div style="color: black;" class="card-body">
-<h1>My Library</h1>
-<hr style="border-color: black;">
+        <div id="library-border" class="announcement-button">
+            <div class="card-body">
+<h3>My Library</h3>
+<hr>
 
-<h2>Favorite Documents</h2>
+<h3>Favorite Documents</h3>
 {% for favorite_document in favorite_documents %}
 <div class="document-border">
     <p>Uploaded by {{ favorite_document.document.uploader.username }} on {{ favorite_document.document.upload_date }}</p>
@@ -21,7 +21,7 @@
 </div>
 {% endfor %}
 
-<h2>Favorite Videos</h2>
+<h3>Favorite Videos</h3>
 {% for favorite_video in favorite_videos %}
 <div class="video-border">
     <p>{{ favorite_video.video.title }} - {{ favorite_video.video.uploader.username }} {{favorite_video.video.upload_date}}</p>

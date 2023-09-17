@@ -339,7 +339,19 @@ input:checked + .slider:before {
   gap: 10px;
 }
 
+#library-border {
+  margin-top: -179px;
+   margin-left: 90px;
+    z-index: 2000;
+     position: absolute; background-color: white;
+} 
 
+#category-border {
+  margin-top: -179px;
+   margin-left: 90px;
+    z-index: 2000;
+     position: absolute; background-color: white;
+}
 
 .create-post-text {
   width: 100%;
@@ -459,15 +471,10 @@ input:checked + .slider:before {
 
   video {
     height: 240px;
-    width: 300px;
+    width: 250px;
   }
 
-  .document-border {
-    border: 0px solid #ccc;
-    border-radius: 0px;
-    padding: 0px;
-    margin-bottom: 0px;
-}
+
 
 .video-border {
     border: 0px solid #ccc;
@@ -1126,7 +1133,23 @@ footer {
   .sidebar.open {
     right: 0; /* Slide the sidebar into view */
   }
+
+#category-border {
+  margin-top: 1px;
+   margin-right: 80px;
+   margin-left: 0;
+    z-index: 2000;
+     position: absolute; background-color: white;
+}
   
+#library-border {
+  margin-top: 1px;
+   margin-right: 80px;
+   margin-left: 0;
+    z-index: 2000;
+     position: absolute; background-color: white;
+} 
+
  #announcement-button {
   margin-top: -20px; z-index: 2000; position: fixed;margin-left: 50px;
  }

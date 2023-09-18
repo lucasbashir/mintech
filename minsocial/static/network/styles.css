@@ -340,14 +340,14 @@ input:checked + .slider:before {
 }
 
 #library-border {
-  margin-top: -179px;
+  margin-top: -140px;
    margin-left: 90px;
     z-index: 2000;
      position: absolute; background-color: white;
 } 
 
 #category-border {
-  margin-top: -179px;
+  margin-top: -140px;
    margin-left: 90px;
     z-index: 2000;
      position: absolute; background-color: white;
@@ -660,7 +660,7 @@ input:checked + .slider:before {
   background-color: #4B9CD3;
   border: 0.5px solid #0805c1;
   border-radius: 20px;
-  padding: 20px 150px;
+  padding: 2px 150px;
   font-size: 14px;
   font-family: Arial, sans-serif;
   margin: 0; /* Remove margin */
@@ -851,9 +851,13 @@ footer {
   margin-top: -120px; z-index: 2000; position: fixed;margin-left: 150px;
 }
 
+#group-button{
+  margin-top: -160px; z-index: 2000; position: fixed;margin-left: 150px;
+}
+
 .content {
   flex: 1;
-  margin-top: 22%;
+  margin-top: 20%;
   padding: 10px;
   box-sizing: border-box;
   margin-left: 120px;
@@ -870,8 +874,8 @@ footer {
 
 /* New styles for sliding sidebar */
 .sidebar {
-  position: absolute;
-  margin-top: 280px;
+  position: fixed;
+  margin-top: 2px;
   margin-left: 0px;
   left: -70%; /* Start with the sidebar off-screen */
   width: 20%;
@@ -1152,7 +1156,11 @@ footer {
 } 
 
  #announcement-button {
-  margin-top: -20px; z-index: 2000; position: fixed;margin-left: 50px;
+  margin-top: -80px; z-index: 2000; position: fixed;margin-left: 50px;
+ }
+
+ #group-button {
+  margin-top: -60px; z-index: 2000; position: fixed;margin-left: 50px;
  }
 
   .menu-link {

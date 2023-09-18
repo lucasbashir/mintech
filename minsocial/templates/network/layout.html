@@ -25,7 +25,9 @@
 </head>
 
 <body id="body">
+    {% if user.is_authenticated %}
     <button id="menu-link" class="rotated-text">Open Menu</button>
+    {% endif %}
     <div class="body">
         {% block body %}{% endblock %}
     </div>

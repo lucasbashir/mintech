@@ -4,19 +4,20 @@
 {% load static %}
 {% block body %}
 
+<div class="container">
 {% include 'network/sidebar.html' %}
 <div class="content">
 <div class="post">
   <div id="announcement-button"  class="announcement-button">
 <div id="create-post-field-container">
-    <input type="text" id="create-post-field" placeholder="New Announcement" onclick="openModal()"> 
+    <input type="text" id="create-post-field" placeholder="New Announcement" onclick="openModal('announcementModal')"> 
   </div>
 </div>
   <!-- Modal -->
-  <div id="postModal" class="modal">
+  <div id="announcementModal" class="modal">
     <div class="modal-dialog">
       <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
+        <span class="close" onclick="closeModal('announcementModal')">&times;</span>
         <form action="{% url 'new_announcement' %}" method="POST" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="form-group">
@@ -127,7 +128,7 @@
       {% endif %}
   </span>
 </div>
-
+</div>
   <style>
     .share-thought {
       visibility: hidden;

@@ -51,7 +51,7 @@
                 <img src="/media/post_image/nodp.jpg" class="index-post-circle-image">
             </a>
         {% endif %}
-            <input type="text" id="create-post-field" placeholder="share insight..." onclick="openModal()">
+            <input type="text" id="create-post-field" placeholder="share insight..." onclick="openModal('postModal')">
         </div>
         
         
@@ -109,7 +109,30 @@
     </div>
   </div>
   
+  <!-- Groups Joined Modal -->
+  <div style="z-index: 15000;" class="modal" id="groups-joined-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 style="color: blue;" class="modal-title">Groups</h5>
+          <button type="button" class="close" data-dismiss="modal" onclick="closeModal('groups-joined-modal')">&times;</button>
+        </div>
+        <div class="modal-body">
+          <ul>
+            {% for group in groups_joined %}
+              <li><a style="color: blue;" href="{% url 'group_detail' group.pk %}">{{ group.name }}</a>
+                
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div> 
+
   
+ 
+
         <br>
         
 
@@ -154,15 +177,7 @@
                     </label>
                   </li>
                   
-                <li class="nav-item">
-                    <a class="nav-link">{{user.follower.count}} followers | {{following.count}} following</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'index' %}">All Posts</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'following' %}">Following</a>
-                </li>
+                
                 <li class="nav-item">
                 <a class="nav-link" id="my-groups-btn" href="#">My Groups</a>
                 </li>
@@ -214,10 +229,7 @@
               window.location.href = '{% url "all_groups" %}';
             }
 
-            function closeModal(modalId) {
-              var modal = document.getElementById(modalId);
-              modal.style.display = 'none'; /* Hide the modal */
-            }
+            
           
             
               

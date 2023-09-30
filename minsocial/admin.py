@@ -3,6 +3,8 @@ from .models import *
 # Register your models here
 
 admin.site.register(LibraryImage)
+admin.site.register(SharePost)
+admin.site.register(GroupShare)
 admin.site.register(User)
 admin.site.register(PostImage)
 admin.site.register(Announcement)

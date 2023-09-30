@@ -1,9 +1,10 @@
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
-from . import views
+from . import views, custom_context_processors
 
 urlpatterns = [
     path("", views.index, name="index"),
+    path('user_connections', custom_context_processors.user_connections, name='user_connections'),
     path("load_posts/", views.load_posts, name="load_posts"), 
     path("group_load_posts/", views.group_load_posts, name="group_load_posts"), 
     path("terms", views.terms, name="terms"),
@@ -33,6 +34,8 @@ urlpatterns = [
     path("unfollow", views.unfollow, name="unfollow"),
     path("following", views.following, name="following"),
     path("like_count", views.like_count, name="like_count"),
+    path('share_post', views.share_post, name='share_post'),
+    path('group_share', views.group_share, name="group_share"),
     path("edit/<int:post_id>", views.edit, name="edit"),
     path("remove_like/<int:post_id>", views.remove_like, name="remove_like"),
     path("add_like/<int:post_id>", views.add_like, name="add_like"),

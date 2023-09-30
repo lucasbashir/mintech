@@ -27,13 +27,80 @@
         }
     }
 
-    function shareWithinWebsite() {
-        if (fileUrl) {
-            // Your custom logic to share the file within the website goes here
-            // For example, you can use an API to notify other users about the shared file
-            // and display a success message after sharing.
-            alert("Shared within the website!");
-        }
-    }
+   
+    let share_id = ''; // Declare share_id as a global variable
+    let friend_id = '';
 
-    
+function share(postId) {
+    share_id = postId; // Set the global share_id variable
+    console.log(share_id)
+    openModal('shareModal');
+}
+
+function friendShare(friendId) {
+    const postId = share_id; // Access the global share_id variable
+    const friend_id = friendId
+    if (!postId) {
+        console.error("postId is not defined.");
+        return;
+    }
+    console.log(postId)
+    console.log(friend_id)
+    const data = {
+        post_id: postId,
+        friendID: friend_id
+    };
+    fetch("/share_post", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie('csrftoken'),
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => {
+        if (response.ok) {
+            alert("Post shared successfully!");
+            closeModal('shareModal')
+        } else {
+            alert("Error sharing post.");
+        }
+    })
+    .catch(error => {
+        console.error("Fetch error:", error);
+    });
+}
+
+function groupShare(groupId) {
+    const postId = share_id; // Access the global share_id variable
+    const group_id = groupId
+    if (!postId) {
+        console.error("postId is not defined.");
+        return;
+    }
+    console.log(postId)
+    console.log(group_id)
+    const data = {
+        post_id: postId,
+        groupID: group_id
+    };
+    fetch("/group_share", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie('csrftoken'),
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => {
+        if (response.ok) {
+            alert("Post shared successfully!");
+            closeModal('shareModal')
+        } else {
+            alert("Error sharing post.");
+        }
+    })
+    .catch(error => {
+        console.error("Fetch error:", error);
+    });
+}

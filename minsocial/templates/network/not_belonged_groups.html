@@ -3,6 +3,7 @@
 {% load my_filters %}
 {% load static %}
 {% block body %}
+{% include 'network/open-sidebar.html' %}
 <div style="margin-top: 20px;" class="container">
     <div class="row">
         {% for group in groups_not_belonged %}
@@ -12,7 +13,7 @@
                     <h3 class="card-title">
                         <a href="{% url 'group_detail' group.id %}">{{ group.name }}</a>
                     </h3>
-                    <p class="card-text">
+                    <p class="crd-text">
                         {% if group.description %}
                         {% for paragraph in group.description|split_paragraphs %}
                             {{ paragraph|urlize|safe }}

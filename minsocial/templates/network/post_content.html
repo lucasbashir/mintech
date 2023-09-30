@@ -4,6 +4,8 @@
 {% load static %}
 {% block body %}
 
+
+<div class="container">
 {% include 'network/sidebar.html' %}
 <div class="content">
   <div class="post">
@@ -12,11 +14,11 @@
       <div class="d-flex align-items-center">
         {% if posts.user.profile_pics %}
       <a href="{% url 'profile' user_id=posts.user.id %}">
-        <img src="{{ posts.user.profile_pics.url }}" class="rounded-circle" width="70" height="70">
+        <img src="{{ posts.user.profile_pics.url }}" class="rounded-circle" width="30" height="30">
       </a>
       {% else %}
       <a href="{% url 'profile' user_id=posts.user.id %}">
-        <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="70" height="70">
+        <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="30" height="30">
       </a>
       {% endif %}
         <div class="ml-3">
@@ -24,9 +26,13 @@
           <!-- Display a link to the user's profile -->
           <a class="card-title" style="text-decoration: none;" href="{% url 'profile' user_id=posts.user.id %}">{{posts.user.first_name}} {{posts.user.last_name}}
           </h5>
-          <p class="mb-0">
-            <p>@{{posts.user.username}}</p></a>
-          </p>
+          <div class="mb-0">
+            {% if posts.user.username|length > 15 %}
+            <p>@{{posts.user.username | slice:":15"}}...</p>
+            {% else %}
+            <p>@{{posts.user.username}} <small class="text-muted">{{ posts.timestamp }}</small> </p>
+            {% endif %}
+        </div>
         </div>
           </div>
           <br>
@@ -65,7 +71,7 @@
       
 
       <!-- Add a delete button for each post -->
-      <p class="card-text"><small class="text-muted">{{ posts.timestamp }}</small> 
+      
         {% if request.user == posts.user %} 
         {% include 'network/delete-post.html' %}</p>
         {% endif %}
@@ -75,22 +81,23 @@
       <ul class="list-group">
         {% for comment in posts.postComment.all %}
         <li class="list-group-item">
-          {% if request.user == comment.author or request.user == posts.user %}
-        <button class="delete-comment" data-comment-id="{{ comment.id }}">Delete</button>
-        {% endif %}
+         
           {% if comment.author.profile_pics %}
       <a href="{% url 'profile' user_id=comment.author.id %}">
-        <img src="{{ comment.author.profile_pics.url }}" class="rounded-circle" width="70" height="70">
+        <img src="{{ comment.author.profile_pics.url }}" class="rounded-circle" width="30" height="30">
       </a>
       {% else %}
       <a href="{% url 'profile' user_id=comment.author.id %}">
-        <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="70" height="70">
+        <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="30" height="30">
       </a>
       {% endif %}
           <strong style="color: black;"><a href="{% url 'profile' user_id=comment.author.id %}"><span style="color: black;">@{{ comment.author.username }}</span></a> wrote:</strong>
-          <div class="card-text" id="content_{{ comment.id }}">
+          {% if request.user == comment.author or request.user == posts.user %}
+          <button style="width: 50px; padding: 2px 5px; font-size: 8px;" class="btn btn-danger delete-comment" data-comment-id="{{ comment.id }}">Delete</button>
+          {% endif %}
+          <div id="content_{{ comment.id }}">
             {% for paragraph in comment.message|split_paragraphs %}
-            <p style="color: black;">{{ paragraph|urlize }}</p>
+            <p><small>{{ paragraph|urlize }}</small></p>
             {% endfor %}
           </div>
         </li>
@@ -121,6 +128,6 @@
   </div>
 
     {% include "network/share.html" %}    
-
+  </div>
 {% endblock %}
 

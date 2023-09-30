@@ -1,6 +1,7 @@
 {% extends "network/layout.html" %}
 {% block body %}
 
+<div class="container">
 {% include 'network/sidebar.html' %}
 
 <div class="content" style="color: black;">
@@ -47,7 +48,7 @@
 </div>
 <!-- Modal for Sharing -->
 {% include "network/share.html" %}
-
+</div>
 <style>
     .share-thought {
       visibility: hidden;

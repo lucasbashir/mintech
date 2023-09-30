@@ -65,6 +65,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'minsocial.custom_context_processors.my_groups_and_joined',
+                'minsocial.custom_context_processors.user_connections',
             ],
         },
     },

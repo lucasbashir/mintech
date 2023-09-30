@@ -5,24 +5,25 @@
 {% block body %}
 
 
+<div class="container">
 {% include 'network/sidebar.html' %}
   <div class="content">
     <div class="post">
     {% if user.is_authenticated %}
       <!-- Check if the user is authenticated -->
       {% if is_group_member %}
-      <div id="group-button" class="announcement-button">
+      <div id="group-button">
       <div class="" id="create-post-field-container">
-        <input type="text" id="create-post-field" class="form-control" placeholder="post..." onclick="openModal()">
+        <input type="text" id="create-post-field" class="form-control" placeholder="post..." onclick="openModal('groupModal')">
       </div>
     </div>
   <br>
   
       <!-- Modal -->
-      <div id="postModal" class="modal">
+      <div id="groupModal" class="modal">
         <div class="modal-dialog">
           <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
+            <span class="close" onclick="closeModal('groupModal')">&times;</span>
             <form action="{% url 'group_newPost' group_id=group_id %}" method="POST" enctype="multipart/form-data">
               {% csrf_token %}
               <div class="form-group">
@@ -42,6 +43,75 @@
     <br>
     <!-- Display group posts -->
     <div id="posts">
+      <!-- Add a button to open the modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" onclick="openModal('sharedGroup')">
+  See shared posts
+</button>
+
+<!-- Create the modal -->
+<div style="z-index: 15000;" class="modal" id="sharedGroup">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="sharedPostsModalLabel">Shared posts</h5>
+        <button type="button" class="close" data-dismiss="modal" onclick="closeModal('sharedGroup')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Display the shared posts here -->
+        {% if shared %}
+          {% for posts in shared %}
+          <br>
+          <a href="{% url 'profile' posts.sharer.id %}">
+          <h6>{{posts.sharer.first_name}} {{posts.sharer.last_name}}</a> <a href="{% url 'post_content' posts.shared_post.id %}">share a post</a></h6>
+          
+          
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex align-items-center">
+                  
+                  {% if posts.shared_post.user.profile_pics %}
+                    <a href="{% url 'profile' user_id=posts.shared_post.user.id %}">
+                      <img src="{{ posts.shared_post.user.profile_pics.url }}" class="rounded-circle" width="40" height="40">
+                    </a>
+                  {% else %}
+                    <a href="{% url 'profile' user_id=posts.shared_post.user.id %}">
+                      <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="40" height="40">
+                    </a>
+                  {% endif %}
+                  <div class="ml-3">
+                    <h5 class="card-title mb-1">
+                      <a class="card-title" style="text-decoration: none;" href="{% url 'profile' user_id=posts.shared_post.user.id %}">{{posts.shared_post.user.first_name}} {{posts.shared_post.user.last_name}}</a>
+                    </h5>
+                    <p class="mb-0">
+                      <p>@{{posts.shared_post.user.username}}</p>
+                    </p>
+                  </div>
+                </div>
+                <br>
+                <br>
+                <div class="card-text" id="content_{{ posts.shared_post.id }}">
+                  {% for paragraph in posts.shared_post.postContent|split_paragraphs|slice:":5" %} {# Limit to 5 paragraphs #}
+                    <p>{{ paragraph|urlize }}</p>
+                  {% endfor %}
+                  {% if posts.shared_post.postContent|split_paragraphs|length >= 5 %}
+                    <a href="{% url 'post_content' post_id=posts.shared_post.id %}">
+                      <p class="read-more" data-post="{{ posts.shared_post.id }}">Read full content >>></p>
+                    </a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+         
+          {% endfor %}
+        {% endif %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
     {% for posts in page_group_posts %}
     
     <section>
@@ -52,11 +122,11 @@
             <div class="d-flex align-items-center">
               {% if posts.user.profile_pics %}
                 <a href="{% url 'profile' user_id=posts.user.id %}">
-                  <img src="{{ posts.user.profile_pics.url }}" class="rounded-circle" width="70" height="70">
+                  <img src="{{ posts.user.profile_pics.url }}" class="rounded-circle" width="30" height="30">
                 </a>
               {% else %}
                 <a href="{% url 'profile' user_id=posts.user.id %}">
-                  <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="70" height="70">
+                  <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="30" height="30">
                 </a>
               {% endif %}
               <div class="ml-3">
@@ -64,9 +134,13 @@
                   <!-- Display a link to the user's profile -->
                   <a class="card-title" style="text-decoration: none;" href="{% url 'profile' user_id=posts.user.id %}">{{posts.user.first_name}} {{posts.user.last_name}}</a>
                 </h5>
-                <p class="mb-0">
-                  <p>@{{posts.user.username}}</p>
-                </p>
+                <div class="mb-0">
+                  {% if posts.user.username|length > 15 %}
+                  <p>@{{posts.user.username | slice:":15"}}...</p>
+                  {% else %}
+                  <p>@{{posts.user.username}} <small class="text-muted">{{ posts.timestamp }}</small> </p>
+                  {% endif %}
+              </div>
               </div>
             </div>
             <br>
@@ -110,7 +184,7 @@
           </div>
           
           <!-- Add a delete button for each post -->
-          <p class="card-text"><small class="text-muted">{{ posts.timestamp }}</small> 
+          
             {% if is_admin or request.user == posts.user %} 
             {% include 'network/delete_group_post.html' %}</p>
             {% endif %}
@@ -125,22 +199,22 @@
           <ul class="list-group">
             {% for comment in posts.group_postComment.all %}
               <li class="list-group-item">
-          {% if is_admin or request.user == comment.author %}      
-        <button class="delete-group-comment" data-comment-id="{{ comment.id }}">Delete</button>
-        {% endif %}
+          
                 {% if comment.author.profile_pics %}
                   <a href="{% url 'profile' user_id=comment.author.id %}">
-                    <img src="{{ comment.author.profile_pics.url }}" class="rounded-circle" width="70" height="70">
+                    <img src="{{ comment.author.profile_pics.url }}" class="rounded-circle" width="20" height="20">
                   </a>
                 {% else %}
                   <a href="{% url 'profile' user_id=comment.author.id %}">
-                    <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="70" height="70">
+                    <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="20" height="20">
                   </a>
                 {% endif %}
-                <strong><a href="{% url 'profile' user_id=comment.author.id %}" style="color: black;">@{{ comment.author.username }}</a> <span style="color: black;"> wrote:</span></strong>
-                <div class="card-text" id="content_{{ comment.id }}">
+                <strong><a href="{% url 'profile' user_id=comment.author.id %}" style="color: black;">{{ comment.author.username }}</a> <span style="color: black;"> wrote:</span>{% if is_admin or request.user == comment.author %}      
+                  <button  style="width: 50px; padding: 2px 5px; font-size: 8px;" class="btn btn-danger delete-group-comment" data-comment-id="{{ comment.id }}">Delete</button>
+                  {% endif %}</strong>
+                <div id="content_{{ comment.id }}">
                   {% for paragraph in comment.message|split_paragraphs %}
-                    <p style="color: black;">{{ paragraph|urlize }}</p>
+                  <p><small>{{ paragraph|urlize }}</small></p>
                   {% endfor %}
                 </div>
               </li>
@@ -185,6 +259,8 @@
     
     {% include "network/delete_group_comment.html" %}
 
+    
+
     <div class="pagination">
       <span class="step-links">
           {% if page_group_posts.has_previous %}
@@ -198,6 +274,7 @@
           {% endif %}
       </span>
     </div>
+  </div>
     <style>
       .share-thought {
         visibility: hidden;

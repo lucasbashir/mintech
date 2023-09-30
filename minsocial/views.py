@@ -2,7 +2,7 @@ import json
 from django.core import serializers
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.http import HttpResponseRedirect
@@ -36,12 +36,23 @@ def index(request):
     """This is the index page"""
     if not request.user.is_authenticated:
         return render(request, "network/register.html")
+    user = User.objects.get(pk=request.user.id)
 
-    post = Post.objects.all().order_by("id").reverse().select_related("user")
+    # Get users followed by the current user
+    following = Follow.objects.filter(follower=user).values_list('following', flat=True)
+
+    # Get users who are following the current user
+    followers = Follow.objects.filter(following=user).values_list('follower', flat=True)
+
+    # Find users who both follow the current user and are followed by the current user
+    friends = set(following).intersection(followers)
+    print(friends)
+    # Get the posts by the users who are friends with the current user
+    post = Post.objects.filter(user__in=friends).order_by('-timestamp')
+
     paginator = Paginator(post, 30) # Show 20 contacts per page.
     page_number = request.GET.get('page')
     page_post = paginator.get_page(page_number)
-    user = request.user
     suggested_groups = Group.objects.all()
     groups = Group.objects.filter(members=user)
     is_member = groups.exists()  # Check if the user is a member of at least one group
@@ -65,6 +76,50 @@ def index(request):
         "following": following,
         "follower": follower,
     })
+
+@login_required
+def share_post(request):
+    if request.method == "POST":
+        sharer_id = request.user.id
+        try:
+            data = json.loads(request.body)  # Parse JSON data from the request body
+            post_id = data.get("post_id")
+            friend_id = data.get("friendID")
+            post = Post.objects.get(id=post_id)
+            sharer = User.objects.get(id=sharer_id)
+            shared_to = User.objects.get(id=friend_id)
+            
+            # Create a SharePost instance with the current timestamp
+            share = SharePost(sharer=sharer, shared_post=post, shared_to=shared_to, timestamp=timezone.now())
+            share.save()
+            
+            return JsonResponse({"message": "Post shared successfully!"})
+        except Exception as e:
+            print("Error:", e)
+            return JsonResponse({"error": "Error sharing post."}, status=400)
+
+
+@login_required
+def group_share(request):
+    if request.method == "POST":
+        sharer_id = request.user.id
+        try:
+            data = json.loads(request.body)  # Parse JSON data from the request body
+            post_id = data.get("post_id")
+            group_id = data.get("groupID")
+            post = Post.objects.get(id=post_id)
+            sharer = User.objects.get(id=sharer_id)
+            shared_to = Group.objects.get(id=group_id)
+            
+            # Create a SharePost instance with the current timestamp
+            share = GroupShare(sharer=sharer, shared_post=post, shared_to=shared_to, timestamp=timezone.now())
+            share.save()
+            
+            return JsonResponse({"message": "Post shared successfully!"})
+        except Exception as e:
+            print("Error:", e)
+            return JsonResponse({"error": "Error sharing post."}, status=400)        
+        
 
 def load_posts(request):
     ...
@@ -341,6 +396,7 @@ def group_detail(request, group_id):
     user = request.user
     group = get_object_or_404(Group, pk=group_id)
     group_posts = GroupPost.objects.filter(group=group).order_by("-timestamp").select_related("user")
+    shared_group_posts = GroupShare.objects.filter(shared_to=group).order_by("-timestamp")
     paginator = Paginator(group_posts, 30)
     page_number = request.GET.get('page')
     page_group_posts = paginator.get_page(page_number)
@@ -361,6 +417,7 @@ def group_detail(request, group_id):
         "group_id": group_id,
         "is_group_member": is_group_member,
         "is_admin": is_admin,
+        "shared": shared_group_posts,
     }
 
     return render(request, "network/group_detail.html", context)
@@ -667,11 +724,22 @@ def like_count(request):
 def profile(request, user_id):
     if not request.user.is_authenticated:
         return render(request, "network/error.html")
+
     user = User.objects.get(pk=user_id)
-    post = Post.objects.filter(user=user).order_by("id").reverse()
-    paginator = Paginator(post, 2) # Show 20 contacts per page.
+
+    # Get the user's own posts
+    user_posts = Post.objects.filter(user=user).order_by("-timestamp")
+
+    # Filter shared posts to include only those shared to the current user's profile
+    shared_posts = Post.objects.filter(sharepost__shared_to=user).order_by("-sharepost__timestamp")
+
+    # Combine user's own posts and shared posts
+    all_posts = (user_posts | shared_posts).distinct()
+
+    paginator = Paginator(all_posts, 30)  # Show 30 posts per page.
     page_number = request.GET.get('page')
     page_post = paginator.get_page(page_number)
+
     user_like = request.user
 
     following = Follow.objects.filter(following=user)
@@ -688,7 +756,7 @@ def profile(request, user_id):
 
     return render(request, "network/user_profile.html", {
         "userProfile": user,
-        "post": post,
+        "post": user_posts,
         "user_like": user_like,
         "page_post": page_post,
         "following": following,
@@ -696,6 +764,8 @@ def profile(request, user_id):
         "username": user.username,
         "isFollowing": newFollowing,
     })
+
+
 
 
 @login_required

@@ -1,6 +1,9 @@
 {% extends "network/layout.html" %}
 {% block body %}
 {% load static %}
+
+
+<div class="container">
 {% include 'network/sidebar.html' %}
 
 <div class="content">
@@ -33,7 +36,7 @@
                         {% for category in categories %}
                             <div class="category-item">
                                 <img src="{{ category.libraryimage_set.first.post_image.url }}" class="rounded-circle" width="40" height="40" alt="{{ category.categoryName }} Image">
-                                <a href="{% url 'category_detail' category_name=category.categoryName %}">{{ category.categoryName }}</a>
+                                <a class="cat-text" href="{% url 'category_detail' category_name=category.categoryName %}">{{ category.categoryName }}</a>
                             </div>
                         {% endfor %}
                     </div>
@@ -45,6 +48,7 @@
             
         </div>
     </div>
+</div>
 </div>
 <style>
     .share-thought {

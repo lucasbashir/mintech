@@ -3,8 +3,10 @@
 {% load my_filters %}
 {% load static %}
 {% block body %}
+{% include 'network/open-sidebar.html' %}
 
-<div class="crd">
+<div class="container">
+<div class="topic-card">
   <div class="card-body">
     <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
       <h1>{{ topic.title }}</h1>
@@ -72,6 +74,7 @@
     </form>
     <a href="{% url 'forum' %}">Back to Forum</a>
   </div>
+</div>
 </div>
 
 {% endblock %}

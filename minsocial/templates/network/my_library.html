@@ -2,6 +2,8 @@
 {% block body %}
 {% load static %}
 
+
+<div class="container">
 {% include 'network/sidebar.html' %}
 <div class="content" style="color: black;">
     <div class="post">
@@ -41,6 +43,7 @@
 </div>
 <!-- Modal for Sharing -->
 {% include "network/share.html" %}
+</div>
 <style>
     .share-thought {
       visibility: hidden;

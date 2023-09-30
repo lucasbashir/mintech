@@ -4,18 +4,11 @@
 {% load static %}
 {% block body %}
 
+
+<div class="container">
 {% include 'network/sidebar.html' %}
 <div class="content">
   <div class="post">
-<br>
-
-  <div class="horizontal-container">
-Posts from users you follow... <label style="margin-top: 15px;" class="switch">
-  
-</div>
-
-<br>
-<br>
 <div id="posts">
   {% for posts in page_post %}
   <br>
@@ -26,11 +19,11 @@ Posts from users you follow... <label style="margin-top: 15px;" class="switch">
           <div class="d-flex align-items-center">
             {% if posts.user.profile_pics %}
               <a href="{% url 'profile' user_id=posts.user.id %}">
-                <img src="{{ posts.user.profile_pics.url }}" class="rounded-circle" width="70" height="70">
+                <img src="{{ posts.user.profile_pics.url }}" class="rounded-circle" width="40" height="40">
               </a>
             {% else %}
               <a href="{% url 'profile' user_id=posts.user.id %}">
-                <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="70" height="70">
+                <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="40" height="40">
               </a>
             {% endif %}
             <div class="ml-3">
@@ -38,9 +31,13 @@ Posts from users you follow... <label style="margin-top: 15px;" class="switch">
                 <!-- Display a link to the user's profile -->
                 <a class="card-title" style="text-decoration: none;" href="{% url 'profile' user_id=posts.user.id %}">{{posts.user.first_name}} {{posts.user.last_name}}</a>
               </h5>
-              <p class="mb-0">
-                <p>@{{posts.user.username}}</p>
-              </p>
+              <div class="mb-0">
+                {% if posts.user.username|length > 15 %}
+                <p>@{{posts.user.username | slice:":15"}}...</p>
+                {% else %}
+                <p>@{{posts.user.username}} <small class="text-muted">{{ posts.timestamp }}</small> </p>
+                {% endif %}
+            </div>
             </div>
           </div>
           <br>
@@ -82,7 +79,7 @@ Posts from users you follow... <label style="margin-top: 15px;" class="switch">
             {% endif %}
 
         </div>
-        <p class="card-text"><small class="text-muted">{{ posts.timestamp }}</small></p>
+       
 
         <!-- Display the number of likes for the post -->
         {% include 'network/likes.html' %}
@@ -115,5 +112,5 @@ Posts from users you follow... <label style="margin-top: 15px;" class="switch">
       {% endif %}
   </span>
 </div>
-
+</div>
 {% endblock %}

@@ -7,12 +7,12 @@ body {
 }
 
 .general-border {
-  margin-top: -180px; 
+  margin-top: -140px; 
   z-index: 2000; 
   position: absolute; 
-  margin-left: 2.5%;
+  margin-left: 15%;
   height: 1000px;
-  width: 50%;
+  width: 45.5%;
 }
 
 
@@ -56,8 +56,13 @@ body {
   color: black;
   border-color: black;
   border-radius: 30px;
+  width: 100%;
 }
 
+
+.card-text {
+  margin-top: -30px;
+}
 /* Slider with left and right motion */
 .switch {
   position: relative;
@@ -341,14 +346,22 @@ input:checked + .slider:before {
 
 #library-border {
   margin-top: -140px;
-   margin-left: 90px;
+   margin-left: 200px;
     z-index: 2000;
      position: absolute; background-color: white;
 } 
 
+.topic-card {
+  background-color: white;
+  color: black;
+  border-color: black;
+  border-radius: 30px;
+  width: 100%;
+}
+
 #category-border {
   margin-top: -140px;
-   margin-left: 90px;
+   margin-left: 200px;
     z-index: 2000;
      position: absolute; background-color: white;
 }
@@ -427,7 +440,7 @@ input:checked + .slider:before {
 .category-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px; /* Add spacing between items */
+  gap: 30px; /* Add spacing between items */
   list-style-type: none; /* Remove bullet points */
 }
 
@@ -452,6 +465,9 @@ input:checked + .slider:before {
   font-size: small;
 }
 
+.cat-text {
+  margin-top: -20px;
+}
 
   
   @media screen and (max-width: 767px) {
@@ -852,16 +868,20 @@ footer {
 }
 
 #group-button{
-  margin-top: -160px; z-index: 2000; position: fixed;margin-left: 150px;
+  margin-top: -120px; z-index: 2000; position: fixed;margin-left: 130px;
 }
 
 .content {
   flex: 1;
-  margin-top: 20%;
+  margin-top: 25%;
   padding: 10px;
   box-sizing: border-box;
   margin-left: 120px;
   width: 200%;
+}
+
+.rounded-circle {
+  margin-top: -20px;
 }
 
 .post {
@@ -1240,6 +1260,26 @@ footer {
       
   }
 
+  .card {
+    background-color: white;
+    color: black;
+    border-color: black;
+    border-radius: 30px;
+    width: 100%;
+  }
+
+  .rounded-circle {
+    margin-top: -30px;
+  }
+
+  .card-text {
+    margin-top: -50px;
+  }
+
+  .cat-text {
+    margin-top: -20px;
+  }
+  
 }
 
 

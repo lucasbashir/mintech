@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 
 class User(AbstractUser):
     profile_pics = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
@@ -84,16 +85,40 @@ class Group(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+
+
+
+
+class SharePost(models.Model):
+    sharer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='shared_posts')
+    shared_post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True, default=None)
+    shared_to = models.ForeignKey(User, on_delete=models.CASCADE, null=True, default=None)
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"{self.sharer} shared {self.shared_post} to {self.shared_to}"
+
+
+class GroupShare(models.Model):
+    sharer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='group_share')
+    shared_post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True, default=None)
+    shared_to = models.ForeignKey(Group, on_delete=models.CASCADE, null=True, default=None)
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"{self.sharer} shared {self.shared_post} to {self.shared_to}"
+    
+
 class GroupPost(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="group_posts")
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="group_post_user")
     postContent = models.TextField(blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
-    
+    groupshare = models.ForeignKey(GroupShare, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return f"{self.postContent}"
-    
+        return f"{self.postContent} by {self.user}"
+           
 class GroupPostImage(models.Model):
     postContent = models.ForeignKey(GroupPost, on_delete=models.CASCADE, related_name="group_post_images")
     post_image = models.ImageField(upload_to='post_image/', null=True, blank=True)

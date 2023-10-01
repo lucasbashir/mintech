@@ -149,6 +149,10 @@
                 
                 {% if user.is_authenticated %}
                 <li class="nav-item">
+                  <a class="nav-link" href="{% url 'index' %}">Home</a>
+                  </li> 
+                  
+                <li class="nav-item">
                     <a class="nav-link"  href="{% url 'profile' user_id=user.id %}">
                         {% if user.first_name|length > 15 %}
                         {{ user.first_name | slice:":15"}}...

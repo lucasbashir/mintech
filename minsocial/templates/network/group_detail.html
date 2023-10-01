@@ -44,12 +44,12 @@
     <!-- Display group posts -->
     <div id="posts">
       <!-- Add a button to open the modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" onclick="openModal('sharedGroup')">
+<button id="shareGroup" class="btn btn-primary" data-bs-toggle="modal" onclick="openModal('sharedGroup')">
   See shared posts
 </button>
 
 <!-- Create the modal -->
-<div style="z-index: 15000;" class="modal" id="sharedGroup">
+<div class="modal" id="sharedGroup">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -106,7 +106,7 @@
         {% endif %}
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button  type="button" class="btn btn-secondary" onclick="closeModal('sharedGroup')">Close</button>
       </div>
     </div>
   </div>
@@ -280,6 +280,6 @@
         visibility: hidden;
       }
     </style>
-  
+</div>
   
 {% endblock %}

@@ -974,7 +974,7 @@ footer {
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 920px) {
 
   .index-container {
     position: fixed;
@@ -1176,11 +1176,15 @@ footer {
 } 
 
  #announcement-button {
-  margin-top: -80px; z-index: 2000; position: fixed;margin-left: 50px;
+  margin-top: -10px; z-index: 2000; position: fixed;margin-left: 50px;
  }
 
  #group-button {
-  margin-top: -60px; z-index: 2000; position: fixed;margin-left: 50px;
+  margin-top: -20px; z-index: 2000; position: fixed;margin-left: 50px;
+ }
+
+ #shareGroup {
+  margin-top: 20px;
  }
 
   .menu-link {

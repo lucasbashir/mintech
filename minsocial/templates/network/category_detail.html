@@ -40,7 +40,7 @@
                 <p>Views: {{ video.views }}</p>
                 {% if user.is_authenticated %}
                     <a href="{% url 'add_to_favorites' item_id=video.id item_type='video' %}"><span>Add to Favorites</span></a>
-                    <button class="btn-primary" onclick="shareFile('https:\//mintechy.pythonanywhere.com{{ video.file.url }}')">Share</button>
+                    <button class="btn-primary" onclick="shareFiles('https:\//mintechy.pythonanywhere.com{{ video.file.url }}')">Share</button>
                 {% endif %}
             </div>
         {% endfor %}

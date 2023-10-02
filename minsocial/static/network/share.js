@@ -1,6 +1,21 @@
 
     let fileUrl; // Variable to store the file URL
 
+    function shareFiles(url) {
+        fileUrl = url; // Set the file URL to the variable
+        const modal = document.getElementById("shareModals");
+        modal.style.display = "block";
+        const closeModalBtn = modal.querySelector(".close");
+        closeModalBtn.onclick = function() {
+            modal.style.display = "none";
+        };
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
+    }
+
     function shareFile(url) {
         fileUrl = url; // Set the file URL to the variable
         const modal = document.getElementById("shareModal");

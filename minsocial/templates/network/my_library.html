@@ -34,7 +34,7 @@
         Your browser does not support the video tag.
     </video>
     <p>Views: {{ favorite_video.video.views }}</p>
-    <button class="btn-primary" onclick="shareFile('https:\//mintechy.pythonanywhere.com{{ favorite_video.video.file.url }}')">Share</button>
+    <button class="btn-primary" onclick="shareFiles('https:\//mintechy.pythonanywhere.com{{ favorite_video.video.file.url }}')">Share</button>
 </div>
 {% endfor %}
 </div>

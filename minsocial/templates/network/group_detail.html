@@ -62,7 +62,7 @@
           {% for posts in shared %}
           <br>
           <a href="{% url 'profile' posts.sharer.id %}">
-          <h6>{{posts.sharer.first_name}} {{posts.sharer.last_name}}</a> <a href="{% url 'post_content' posts.shared_post.id %}">share a post</a></h6>
+          <h6>{{posts.sharer.first_name}} {{posts.sharer.last_name}}</a> <a href="{% url 'post_content' posts.shared_post.id %}">shared a post</a></h6>
           
           
             <div class="card">
@@ -191,7 +191,7 @@
 
           <!-- Display the number of likes for the post -->
           {% include 'network/group_likes.html' %}
-          <hr style="border-color: black;">
+          <hr>
           
           
        
@@ -209,7 +209,7 @@
                     <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="20" height="20">
                   </a>
                 {% endif %}
-                <strong><a href="{% url 'profile' user_id=comment.author.id %}" style="color: black;">{{ comment.author.username }}</a> <span style="color: black;"> wrote:</span>{% if is_admin or request.user == comment.author %}      
+                <strong><a href="{% url 'profile' user_id=comment.author.id %}">{{ comment.author.username }}</a> wrote:{% if is_admin or request.user == comment.author %}      
                   <button  style="width: 50px; padding: 2px 5px; font-size: 8px;" class="btn btn-danger delete-group-comment" data-comment-id="{{ comment.id }}">Delete</button>
                   {% endif %}</strong>
                 <div id="content_{{ comment.id }}">
@@ -219,7 +219,7 @@
                 </div>
               </li>
             {% empty %}
-              <li class="list-group-item " style="color: black;">No comment yet.</li>
+              <li class="list-group-item ">No comment yet.</li>
             {% endfor %}
           </ul>
     
@@ -270,7 +270,7 @@
           
           {% if page_group_posts.has_next %}
           <a class="btn btn-primary" href="?page={{ page_group_posts.next_page_number }}">&laquo;</a>
-          <a class="btn btn-primary" href="?page={{ page_group_posts.paginator.num_pages }}"><span style="color: black;"> >>>></span></a>
+          <a class="btn btn-primary" href="?page={{ page_group_posts.paginator.num_pages }}">>>>>></a>
           {% endif %}
       </span>
     </div>

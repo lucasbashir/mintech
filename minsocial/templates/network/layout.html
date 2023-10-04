@@ -35,33 +35,99 @@
 
 <script>
     const body = document.getElementById('body');
-    const toggleSwitch = document.getElementById('toggleSwitch');
+const toggleSwitch = document.getElementById('toggleSwitch');
+const headShot = document.getElementById('head-shot');
+const cards = document.querySelectorAll('.card'); // Select all elements with class "card"
+const listGroups = document.querySelectorAll('.list-group-item'); // Select all elements with class "list-group"
+const hrElements = document.querySelectorAll('hr'); // Select all <hr> elements
+const modals = document.querySelectorAll('.modal'); // Select all elements with class "modal"
 
-    function toggleBackgroundColor() {
-        if (toggleSwitch.checked) {
-            body.style.backgroundColor = 'black';
-            body.style.color = '#f2f2f2';
-            localStorage.setItem('backgroundColor', 'black');
-        } else {
-            body.style.backgroundColor = '#f2f2f2';
-            body.style.color = 'black';
-            localStorage.setItem('backgroundColor', '#f2f2f2');
-        }
+function toggleBackgroundColor() {
+    if (toggleSwitch.checked) {
+        // Set background color to black
+        const newBackgroundColor = 'black';
+        const newTextColor = 'white';
+        
+        body.style.backgroundColor = newBackgroundColor;
+        body.style.color = newTextColor;
+        headShot.style.backgroundColor = newBackgroundColor;
+        headShot.style.color = newTextColor;
+
+        // Apply styles to all elements with class "card"
+        cards.forEach((card) => {
+            card.style.backgroundColor = newBackgroundColor;
+            card.style.color = newTextColor;
+            card.style.borderColor = newTextColor; // Set border color to white
+        });
+
+        // Apply styles to all elements with class "list-group"
+        listGroups.forEach((listGroup) => {
+            listGroup.style.backgroundColor = newBackgroundColor;
+            listGroup.style.color = newTextColor;
+        });
+
+        // Apply styles to all <hr> elements
+        hrElements.forEach((hr) => {
+            hr.style.borderColor = newTextColor; // Change hr border color to white
+        });
+
+        // Apply styles to all elements with class "modal"
+        modals.forEach((modal) => {
+            modal.style.backgroundColor = newBackgroundColor;
+            modal.style.color = newTextColor;
+        });
+
+        localStorage.setItem('backgroundColor', newBackgroundColor);
+    } else {
+        // Set background color to white
+        const newBackgroundColor = 'white';
+        const newTextColor = 'black';
+
+        body.style.backgroundColor = newBackgroundColor;
+        body.style.color = newTextColor;
+        headShot.style.backgroundColor = newBackgroundColor;
+        headShot.style.color = newTextColor;
+
+        // Apply styles to all elements with class "card"
+        cards.forEach((card) => {
+            card.style.backgroundColor = newBackgroundColor;
+            card.style.color = newTextColor;
+            card.style.borderColor = newTextColor; // Set border color to black
+        });
+
+        // Apply styles to all elements with class "list-group"
+        listGroups.forEach((listGroup) => {
+            listGroup.style.backgroundColor = newBackgroundColor;
+            listGroup.style.color = newTextColor;
+        });
+
+        // Apply styles to all <hr> elements
+        hrElements.forEach((hr) => {
+            hr.style.borderColor = newTextColor; // Change hr border color to black
+        });
+
+        // Apply styles to all elements with class "modal"
+        modals.forEach((modal) => {
+            modal.style.backgroundColor = newBackgroundColor;
+            modal.style.color = newTextColor;
+        });
+
+        localStorage.setItem('backgroundColor', newBackgroundColor);
     }
+}
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const savedBackgroundColor = localStorage.getItem('backgroundColor');
+document.addEventListener('DOMContentLoaded', () => {
+    const savedBackgroundColor = localStorage.getItem('backgroundColor');
 
-        if (savedBackgroundColor === 'black') {
-            body.style.backgroundColor = 'black';
-            body.style.color = '#f2f2f2';
-            toggleSwitch.checked = true;
-        } else {
-            body.style.backgroundColor = '#f2f2f2';
-            body.style.color = 'black';
-            toggleSwitch.checked = false;
-        }
-    });
+    if (savedBackgroundColor === 'black') {
+        toggleSwitch.checked = true;
+    }
+    
+    toggleBackgroundColor(); // Call the function to apply initial styles
+
+    toggleSwitch.addEventListener('change', toggleBackgroundColor);
+});
+
 
     
         const menuLink = document.querySelector('#menu-link');

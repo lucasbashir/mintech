@@ -41,7 +41,7 @@
 
 
 <!-- Modal -->
-<div id="editBioModal" class="custom-modal">
+<div id="editBioModal" class="modal">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -253,7 +253,7 @@
           {% endif %}
         <!-- Display the number of likes for the post -->
         {% include 'network/likes.html' %}
-        <hr style="border-color: black;">
+        <hr>
 
         <!--Urlize comments, read more comments, and display comments-->
         {% include 'network/comments.html' %}
@@ -365,7 +365,7 @@
       
       {% if page_post.has_next %}
       <a class="btn btn-primary" href="?page={{ page_post.next_page_number }}">&laquo;</a>
-      <a class="btn btn-primary" href="?page={{ page_post.paginator.num_pages }}"><span style="color: black;"> >>>></span></a>
+      <a class="btn btn-primary" href="?page={{ page_post.paginator.num_pages }}">>>>></a>
       {% endif %}
   </span>
 </div>

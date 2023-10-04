@@ -26,24 +26,24 @@
         {% endfor %}
         {% if comment.message|split_paragraphs|length > 3 %}
           <a href="{% url 'post_content' post_id=posts.id %}">
-            <p style="color: black;" class="btn btn-link read-more" data-post="{{ posts.id }}">Read full comment &gt;&gt;&gt;</p>
+            <p class="btn btn-link read-more" data-post="{{ posts.id }}">Read full comment &gt;&gt;&gt;</p>
           </a>
         {% endif %}
       </div>
     </li>
   {% empty %}
-    <li class="list-group-item" style="color: black;">No comment yet.</li>
+    <li class="list-group-item">No comment yet.</li>
   {% endfor %}
   {% if posts.postComment.all|length > 3 %}
   <li class="list-group-item">
     <a href="{% url 'post_content' post_id=posts.id %}">
-      <p style="color: black;" class="btn btn-link read-more" data-post="{{ posts.id }}">Read more comments >>></p>
+      <p class="btn btn-link read-more" data-post="{{ posts.id }}">Read more comments >>></p>
     </a>
   </li>
   {% endif %}
 </ul>
 <br>
-<hr style="border-color: black;">
+<hr>
 {% if user.is_authenticated %}
 <div class="form-group">
   <span class="comment-field">

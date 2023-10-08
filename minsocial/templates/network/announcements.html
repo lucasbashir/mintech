@@ -9,11 +9,13 @@
 {% include 'network/sidebar.html' %}
 <div class="content">
 <div class="post">
+  {% if request.user.is_superuser %}
   <div id="announcement-button"  class="announcement-button">
 <div id="create-post-field-container">
     <input type="text" id="create-post-field" placeholder="New Announcement" onclick="openModal('announcementModal')"> 
   </div>
 </div>
+{% endif %}
   <!-- Modal -->
   <div id="announcementModal" class="modal">
     <div class="modal-dialog">

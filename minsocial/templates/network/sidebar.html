@@ -17,14 +17,16 @@
         <img src="/media/post_image/nodp.jpg" class="index-circle-image">
     </a>
 {% endif %}
-
+<a href="{% url 'profile' user_id=user.id %}">
 <button class="profile-button">
     {% if user.first_name|length > 15 %}
+    
     {{ user.first_name | slice:":15" }}...
     {% else %}
         {{ user.first_name }}
     {% endif %}
 </button>
+</a>
 
     </div>
 

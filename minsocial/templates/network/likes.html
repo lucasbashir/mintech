@@ -19,7 +19,7 @@
         {% csrf_token %}
         <input type="hidden" name="likePost" value="{{ posts.id }}"/>
         <button style="background: none; border: none;">
-          <img src="/media/post_image/black.png" class="rounded-circle" width="50" height="50" alt="Like"/>
+          <img style="background-color: white;" src="/media/post_image/black.png" class="rounded-circle" width="30" height="30" alt="Like"/>
         </button>
       </form>
     {% endif %}
@@ -59,7 +59,7 @@
         {% csrf_token %}
         <input type="hidden" name="likePost" value="{{ posts.id }}" />
         <button style="background: none; border: none;">
-          <img src="/media/post_image/sad_emoji.gif" width="50" height="50" alt="Sad"/>
+          <img src="/media/post_image/sad_emoji.gif" class="rounded-circle" width="50" height="50" alt="Sad"/>
         </button>
       </form>
     {% endif %}

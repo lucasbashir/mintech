@@ -3,9 +3,9 @@
 {% load my_filters %}
 {% load static %}
 {% block body %}
-{% include 'network/open-sidebar.html' %}
+{% include 'network/sidebar.html' %}
 
-<div class="container">
+<div style="z-index: 1000;" class="container">
 <div class="contnt" style="width: 500%;">
   <div class="post">
   <div class="card">
@@ -128,5 +128,10 @@
 
     {% include "network/share.html" %}    
   </div>
+  <style>
+    .index-container{
+      visibility: hidden;
+    }
+  </style>
 {% endblock %}
 

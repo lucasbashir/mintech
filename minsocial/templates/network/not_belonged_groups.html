@@ -3,8 +3,8 @@
 {% load my_filters %}
 {% load static %}
 {% block body %}
-{% include 'network/open-sidebar.html' %}
-<div style="margin-top: 20px;" class="container">
+{% include 'network/sidebar.html' %}
+<div style="margin-top: 20px; z-index: 1000;" class="container">
     <div class="row">
         {% for group in groups_not_belonged %}
         <div class="col-md-6 mb-4">
@@ -27,4 +27,10 @@
         {% endfor %}
     </div>
 </div>
+
+<style>
+    .index-container{
+        visibility: hidden;
+    }
+</style>
 {% endblock %}

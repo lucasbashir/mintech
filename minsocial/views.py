@@ -1,3 +1,6 @@
+from django.db.models import F, ExpressionWrapper, DateTimeField, Value
+from datetime import datetime
+from django.db.models.functions import Coalesce
 import json
 from django.core import serializers
 from django.contrib.auth import authenticate, login, logout
@@ -728,13 +731,18 @@ def profile(request, user_id):
     user = User.objects.get(pk=user_id)
 
     # Get the user's own posts
-    user_posts = Post.objects.filter(user=user).order_by("-timestamp")
 
-    # Filter shared posts to include only those shared to the current user's profile
-    shared_posts = Post.objects.filter(sharepost__shared_to=user).order_by("-sharepost__timestamp")
 
-    # Combine user's own posts and shared posts
-    all_posts = (user_posts | shared_posts).distinct()
+# Combine original post and shared post timestamps into a single queryset
+    joined_posts = (
+        Post.objects.filter(user=user)
+        .annotate(combined_timestamp=Coalesce(F("sharepost__timestamp"), F("timestamp"), Value(datetime.min, output_field=DateTimeField())))
+        | Post.objects.filter(sharepost__shared_to=user)
+    )
+
+# Order the queryset by the combined timestamp in descending order
+    all_posts = joined_posts.distinct().order_by("-combined_timestamp")
+
 
     paginator = Paginator(all_posts, 30)  # Show 30 posts per page.
     page_number = request.GET.get('page')
@@ -756,7 +764,7 @@ def profile(request, user_id):
 
     return render(request, "network/user_profile.html", {
         "userProfile": user,
-        "post": user_posts,
+        
         "user_like": user_like,
         "page_post": page_post,
         "following": following,
@@ -882,7 +890,7 @@ def newPost(request):
         for image in post_images:
             PostImage.objects.create(postContent=post, post_image=image)
         
-        return HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("profile", args=[user.id]))
 
 
 @login_required

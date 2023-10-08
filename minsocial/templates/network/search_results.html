@@ -92,11 +92,11 @@
                     <div class="d-flex align-items-center">
                         {% if user.profile_pics %}
                         <a href="{% url 'profile' user_id=user.id %}">
-                            <img src="{{ user.profile_pics.url }}" class="rounded-circle" width="70" height="70">
+                            <img src="{{ user.profile_pics.url }}" class="rounded-circle" width="40" height="40">
                         </a>
                         {% else %}
                         <a href="{% url 'profile' user_id=user.id %}">
-                            <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="70" height="70">
+                            <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="40" height="40">
                         </a>
                         {% endif %}
                         <div class="ml-3">
@@ -147,11 +147,11 @@
                                         <div class="d-flex align-items-center">
                                             {% if post.user.profile_pics %}
                                             <a href="{% url 'profile' user_id=post.user.id %}">
-                                                <img src="{{ post.user.profile_pics.url }}" class="rounded-circle" width="70" height="70">
+                                                <img src="{{ post.user.profile_pics.url }}" class="rounded-circle" width="40" height="40">
                                             </a>
                                             {% else %}
                                             <a href="{% url 'profile' user_id=post.user.id %}">
-                                                <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="70" height="70">
+                                                <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="40" height="40">
                                             </a>
                                             {% endif %}
                                             <div class="ml-3">
@@ -164,32 +164,26 @@
                                                 <p class="mb-0">
                                                     <p>@{{ post.user.username }}</p>
                                                 </p>
+                                                <br>
+                                                 <p class="card-text"><small class="text-muted">{{ post.timestamp }}</small></p>
                                             </div>
+                                            <!-- Display the timestamp of the post -->
+                                       
                                         </div>
                                         <br>
                                         <br>
     
                                         <!-- Display the content of the post -->
                                         <div class="card-text" id="content_{{ post.id }}">
+                                            <br>
                                             {% for paragraph in post.postContent|split_paragraphs %}
                                             <p>{{ paragraph|urlize }}</p>
                                             {% endfor %}
     
-                                            {% if post.post_image %}
-                                            <div class="card-body">
-                                                <div class="image-container">
-                                                    <img src="{{ post.post_image.url }}" class="img-fluid desktop-image" alt="Post Image">
-                                                </div>
-                                            </div>
-                                            {% else %}
-                                            <a href="{% url 'profile' user_id=post.user.id %}">
-                                                <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="70" height="70">
-                                            </a>
-                                            {% endif %}
+                                            
                                         </div>
     
-                                        <!-- Display the timestamp of the post -->
-                                        <p class="card-text"><small class="text-muted">{{ post.timestamp }}</small></p>
+                                        
                                         <a href="{% url 'post_content' post.id %}">View Post</a>
     
                                     </div>
@@ -227,6 +221,7 @@
                         <div class="modal-body">
                             <ul>
                                 {% for group in groups %}
+                                <br>
                                     <li>
                                         <h5>{{ group.name }}</h5>
                                         
@@ -269,11 +264,11 @@
                                             <div class="d-flex align-items-center">
                                                 {% if post.user.profile_pics %}
                                                 <a href="{% url 'profile' user_id=post.user.id %}">
-                                                    <img src="{{ post.user.profile_pics.url }}" class="rounded-circle" width="70" height="70">
+                                                    <img src="{{ post.user.profile_pics.url }}" class="rounded-circle" width="40" height="40">
                                                 </a>
                                                 {% else %}
                                                 <a href="{% url 'profile' user_id=post.user.id %}">
-                                                    <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="70" height="70">
+                                                    <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="40" height="40">
                                                 </a>
                                                 {% endif %}
                                                 <div class="ml-3">
@@ -282,8 +277,11 @@
                                                         <a class="card-title" style="text-decoration: none; color: black;" href="{% url 'profile' user_id=post.user.id %}">
                                                             {{ post.user.first_name }} {{ post.user.last_name }}
                                                         </a>
+                                                        
+                                            
                                                     </h5>
-                                                   
+                                                   <br>
+                                                    <p class="card-text"><small class="text-muted">{{ post.timestamp }}</small></p>
                                                 </div>
                                             </div>
                                             <br>
@@ -295,21 +293,10 @@
                                                 <p>{{ paragraph|urlize }}</p>
                                                 {% endfor %}
         
-                                                {% if post.post_image %}
-                                                <div class="card-body">
-                                                    <div class="image-container">
-                                                        <img src="{{ post.post_image.url }}" class="img-fluid desktop-image" alt="Post Image">
-                                                    </div>
-                                                </div>
-                                                {% else %}
-                                                <a href="{% url 'profile' user_id=post.user.id %}">
-                                                    <img src="/media/post_image/nodp.jpg" class="rounded-circle" width="70" height="70">
-                                                </a>
-                                                {% endif %}
+                                                
                                             </div>
         
-                                            <!-- Display the timestamp of the post -->
-                                            <p class="card-text"><small class="text-muted">{{ post.timestamp }}</small></p>
+                                            
                                             <a href="{% url 'group_post_content' post.id %}">View Post</a>
         
                                         </div>
@@ -353,7 +340,7 @@
                                         <h5>{{ announcement.poster.username }}</h5>
                                         <p>{{ announcement.content }}</p>
                                         <p>Posted on: {{ announcement.created_at }}</p>
-                                        <a href="{% url 'announcements' %}">View Announcements</a>
+                                        <a href="{% url 'announcements' %}">View Announcement</a>
                                             </div>
                                         </div>
                                     </div>

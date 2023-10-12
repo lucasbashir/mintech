@@ -81,7 +81,7 @@ function commentAdd(postId) {
       // Create a new comment element with the actual comment content
       const commentList = document.getElementById(`comment-list-${postId}`);
       const newCommentHtml = `
-        <li class="list-group-item">
+        <li class="list-group-item" style="background-color: black; color: white;">
           <strong>${data.data.author_username}</strong>
           <div class="comment-content">${data.data.message}</div>
         </li>

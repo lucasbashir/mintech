@@ -38,7 +38,7 @@ from .forms import GroupForm, LibraryDocumentForm, VideoForm, RegistrationForm
 def index(request):
     """This is the index page"""
     if not request.user.is_authenticated:
-        return render(request, "network/register.html")
+        return HttpResponseRedirect(reverse('network_login'))
     user = User.objects.get(pk=request.user.id)
 
     # Get users followed by the current user

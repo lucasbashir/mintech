@@ -182,9 +182,17 @@
                       </label>
                     </label>
                   </li>
-                  
-                
+                  <li class="nav-item">
+                  <a href="{% url 'following' %}" class="nav-link">Following</a>
+                </li>
                 <li class="nav-item">
+                <div class="search-form">
+                  <form action="{% url 'search' %}" method="get">
+                      <input class="mav-link" type="text" name="q" placeholder="Search" />
+                  </form>
+              </div>
+                </li>
+                  <li class="nav-item">
                 <a class="nav-link" id="my-groups-btn" href="#">My Groups</a>
                 </li>
                 <li class="nav-item">

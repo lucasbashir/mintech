@@ -36,6 +36,9 @@ class RegistrationForm(forms.ModelForm):
         self.fields['last_name'].widget.attrs['placeholder'] = 'Max 15 characters'
         self.fields['username'].widget.attrs['placeholder'] = ''
 
+        # Set the email field as required
+        self.fields['email'].required = True
+
     def clean(self):
         cleaned_data = super().clean()
         username = cleaned_data.get('username')[:15]  # Limit to 15 characters
@@ -50,8 +53,10 @@ class RegistrationForm(forms.ModelForm):
             raise forms.ValidationError("Username already taken.")
 
         # Check if the email already exists in the database
-        if User.objects.filter(email=email).exists():
+        a = User.objects.filter(email=email)
+        if a.exists():
             raise forms.ValidationError("Email already registered.")
+        
 
         if password and confirmation and password != confirmation:
             raise forms.ValidationError("Passwords must match.")
